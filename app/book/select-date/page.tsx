@@ -48,10 +48,6 @@ export default function SelectDatePage() {
     router.push(`/book/select-slot?type=${consultationTypeId}&date=${date.toISOString()}`)
   }
 
-  const handleBack = () => {
-    router.push("/book")
-  }
-
   if (!consultationType) {
     return null
   }
@@ -110,18 +106,6 @@ export default function SelectDatePage() {
               ))}
             </div>
           </div>
-        </div>
-      </div>
-
-      {/* フッター（戻るボタン） */}
-      <div className="border-t-2 border-border bg-panel px-4 py-3">
-        <div className="w-full sm:max-w-4xl mx-auto">
-          <button
-            onClick={handleBack}
-            className="w-full py-3 px-4 rounded-md border-2 border-border text-text hover:bg-panel-muted transition-all text-base"
-          >
-            ← 相談種別選択に戻る
-          </button>
         </div>
       </div>
     </div>

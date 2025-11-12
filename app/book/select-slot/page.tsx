@@ -132,6 +132,7 @@ export default function SelectSlotPage() {
   }
 
   const handleBack = () => {
+    // 日付選択ページに戻る（相談種別IDを保持）
     router.push(`/book/select-date?type=${consultationTypeId}`)
   }
 
