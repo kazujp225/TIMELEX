@@ -156,16 +156,16 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-4 sm:space-y-8">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-10 border-2 border-primary/10">
-        <div className="flex items-center gap-4 mb-2">
-          <div className="text-5xl">👋</div>
+      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-2xl sm:rounded-3xl p-4 sm:p-10 border-2 border-primary/10">
+        <div className="flex items-center gap-3 sm:gap-4 mb-2">
+          <div className="text-3xl sm:text-5xl">👋</div>
           <div>
-            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-foreground">
               {getTimeOfDay()}
             </h1>
-            <p className="text-muted-foreground mt-2 text-lg">
+            <p className="text-muted-foreground mt-1 sm:mt-2 text-base sm:text-lg">
               {session?.user?.name || session?.user?.email || "ゲスト"}
             </p>
           </div>
@@ -173,7 +173,7 @@ export default function StaffDashboard() {
       </div>
 
       {/* Stats Grid */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-3 sm:gap-6 md:grid-cols-3">
         <Card className="border-2 border-l-4 border-l-primary bg-gradient-to-br from-primary/5 to-transparent hover:shadow-lg transition-all">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">

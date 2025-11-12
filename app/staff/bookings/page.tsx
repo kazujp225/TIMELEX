@@ -245,7 +245,7 @@ export default function BookingsListPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-8 ">
       <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-10 border-2 border-primary/10">
         <div className="flex items-center gap-4 mb-2">
           <div className="text-5xl">📋</div>

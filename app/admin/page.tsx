@@ -96,7 +96,7 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-4 sm:space-y-8">
       <div>
         <h1 className="text-4xl font-bold">管理者ダッシュボード</h1>
         <p className="text-muted-foreground mt-3 text-lg">

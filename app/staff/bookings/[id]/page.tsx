@@ -110,7 +110,7 @@ export default function BookingDetailPage() {
 
   if (!booking) {
     return (
-      <div className="space-y-8 max-w-7xl">
+      <div className="space-y-8 ">
         <Card className="border-2">
           <CardContent className="pt-6">
             <div className="text-center py-20">
@@ -129,7 +129,7 @@ export default function BookingDetailPage() {
   const isPast = new Date(booking.start_time) < new Date()
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-8 ">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>

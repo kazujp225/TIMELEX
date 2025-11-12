@@ -110,7 +110,7 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-6xl">
+    <div className="space-y-4 sm:space-y-8 ">
       <div>
         <h1 className="text-4xl font-bold">システム設定</h1>
         <p className="text-muted-foreground mt-3 text-lg">
