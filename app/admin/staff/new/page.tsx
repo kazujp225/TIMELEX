@@ -136,7 +136,7 @@ export default function NewStaffPage() {
                 <SelectTrigger className="h-14 text-base">
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="w-full min-w-[300px]">
                   <SelectItem value="Asia/Tokyo">日本標準時 (JST)</SelectItem>
                   <SelectItem value="America/New_York">東部標準時 (EST)</SelectItem>
                   <SelectItem value="America/Los_Angeles">太平洋標準時 (PST)</SelectItem>

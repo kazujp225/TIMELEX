@@ -150,7 +150,7 @@ export function BookingCalendar({
               <SelectTrigger className="h-14 text-base">
                 <SelectValue placeholder="選択してください" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="w-full min-w-[300px]">
                 {consultationTypes.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.name}（{type.duration_minutes}分）
