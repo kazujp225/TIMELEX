@@ -179,40 +179,40 @@ export default function QuestionnairesPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl animate-in fade-in duration-500">
+    <div className="space-y-4 sm:space-y-8 animate-in fade-in duration-500">
       {/* ヘッダー */}
-      <div className="flex items-center justify-between gap-6">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold text-[#2D2D2D]">アンケート管理</h1>
-          <p className="text-lg text-[#666666] mt-2">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold text-[#2D2D2D]">アンケート管理</h1>
+          <p className="text-base sm:text-lg text-[#666666] mt-2 sm:mt-3">
             事前アンケートの作成・編集・管理
           </p>
         </div>
         <Link href="/admin/questionnaires/new">
-          <Button className="gap-2 transition-all duration-200 hover:scale-105 hover:shadow-md h-12 px-8 text-base">
-            <Plus className="h-5 w-5" />
+          <Button className="gap-2 transition-all duration-200 hover:scale-105 hover:shadow-md h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base w-full sm:w-auto">
+            <Plus className="h-4 sm:h-5 w-4 sm:w-5" />
             新規作成
           </Button>
         </Link>
       </div>
 
       {/* フィルタ・検索 */}
-      <div className="flex flex-col sm:flex-row gap-4">
+      <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
         <div className="relative flex-1">
-          <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-[#999999] transition-colors" />
+          <Search className="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 sm:h-5 w-4 sm:w-5 text-[#999999] transition-colors" />
           <Input
             placeholder="アンケート名・説明で検索..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="pl-12 h-14 text-base transition-all duration-200 focus:ring-2 focus:ring-[#6EC5FF]/20"
+            className="pl-10 sm:pl-12 h-12 sm:h-14 text-sm sm:text-base transition-all duration-200 focus:ring-2 focus:ring-[#6EC5FF]/20"
           />
         </div>
 
         <Select value={statusFilter} onValueChange={(v: any) => setStatusFilter(v)}>
-          <SelectTrigger className="w-full sm:w-48 h-14 text-base">
+          <SelectTrigger className="w-full sm:w-48 h-12 sm:h-14 text-sm sm:text-base">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[200px] overflow-y-auto">
             <SelectItem value="all">全てのステータス</SelectItem>
             <SelectItem value="active">有効のみ</SelectItem>
             <SelectItem value="inactive">無効のみ</SelectItem>
@@ -220,10 +220,10 @@ export default function QuestionnairesPage() {
         </Select>
 
         <Select value={typeFilter} onValueChange={setTypeFilter}>
-          <SelectTrigger className="w-full sm:w-56 h-14 text-base">
+          <SelectTrigger className="w-full sm:w-56 h-12 sm:h-14 text-sm sm:text-base">
             <SelectValue />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="max-h-[200px] overflow-y-auto">
             <SelectItem value="all">全ての種別</SelectItem>
             <SelectItem value="null">全種別共通</SelectItem>
             {MOCK_CONSULTATION_TYPES.map((type) => (
@@ -266,16 +266,16 @@ export default function QuestionnairesPage() {
             ))}
           </div>
         ) : filteredQuestionnaires.length === 0 ? (
-          <div className="py-20 text-center animate-in fade-in duration-300">
-            <div className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gray-100 mb-6">
-              <Search className="h-10 w-10 text-[#999999]" />
+          <div className="py-12 sm:py-20 px-4 text-center animate-in fade-in duration-300">
+            <div className="inline-flex items-center justify-center w-16 sm:w-20 h-16 sm:h-20 rounded-full bg-gray-100 mb-4 sm:mb-6">
+              <Search className="h-8 sm:h-10 w-8 sm:w-10 text-[#999999]" />
             </div>
-            <p className="text-[#999999] text-xl font-semibold mb-2">
+            <p className="text-[#999999] text-lg sm:text-xl font-semibold mb-2">
               {searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "条件に一致するアンケートが見つかりません"
                 : "アンケートがまだ作成されていません"}
             </p>
-            <p className="text-base text-[#CCCCCC] mb-8">
+            <p className="text-sm sm:text-base text-[#CCCCCC] mb-6 sm:mb-8">
               {searchQuery || statusFilter !== "all" || typeFilter !== "all"
                 ? "検索条件を変更してお試しください"
                 : "最初のアンケートを作成して、事前質問を設定しましょう"}
@@ -284,9 +284,9 @@ export default function QuestionnairesPage() {
               <Link href="/admin/questionnaires/new">
                 <Button
                   variant="outline"
-                  className="transition-all duration-200 hover:scale-105 hover:shadow-md h-12 px-8 text-base"
+                  className="transition-all duration-200 hover:scale-105 hover:shadow-md h-10 sm:h-12 px-6 sm:px-8 text-sm sm:text-base"
                 >
-                  <Plus className="h-5 w-5 mr-2" />
+                  <Plus className="h-4 sm:h-5 w-4 sm:w-5 mr-2" />
                   最初のアンケートを作成
                 </Button>
               </Link>
@@ -297,47 +297,47 @@ export default function QuestionnairesPage() {
             {filteredQuestionnaires.map((questionnaire, index) => (
               <div
                 key={questionnaire.id}
-                className="p-6 hover:bg-gray-50 transition-all duration-200 animate-in fade-in slide-in-from-bottom-4"
+                className="p-4 sm:p-6 hover:bg-gray-50 transition-all duration-200 animate-in fade-in slide-in-from-bottom-4"
                 style={{
                   animationDelay: `${index * 50}ms`,
                   animationFillMode: "backwards",
                 }}
               >
-                <div className="flex items-start justify-between gap-6">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-xl font-semibold text-[#2D2D2D] truncate">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-3 mb-2">
+                      <h3 className="text-lg sm:text-xl font-semibold text-[#2D2D2D]">
                         {questionnaire.name}
                       </h3>
                       {questionnaire.is_active ? (
-                        <span className="px-3 py-1 text-sm font-semibold bg-[#4CAF50]/10 text-[#4CAF50] rounded transition-all duration-200">
+                        <span className="px-2 sm:px-3 py-1 text-xs sm:text-sm font-semibold bg-[#4CAF50]/10 text-[#4CAF50] rounded transition-all duration-200">
                           有効
                         </span>
                       ) : (
-                        <span className="px-3 py-1 text-sm bg-gray-100 text-gray-600 rounded transition-all duration-200">
+                        <span className="px-2 sm:px-3 py-1 text-xs sm:text-sm bg-gray-100 text-gray-600 rounded transition-all duration-200">
                           無効
                         </span>
                       )}
                     </div>
 
                     {questionnaire.description && (
-                      <p className="text-base text-[#666666] mb-3">
+                      <p className="text-sm sm:text-base text-[#666666] mb-2 sm:mb-3">
                         {questionnaire.description}
                       </p>
                     )}
 
-                    <div className="flex flex-wrap items-center gap-4 text-sm text-[#999999]">
+                    <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-[#999999]">
                       <span>
                         📋 質問数: {questionnaire.questions.length}
                       </span>
-                      <span>•</span>
+                      <span className="hidden sm:inline">•</span>
                       <span>
                         🎯 対象:{" "}
                         {questionnaire.consultation_type
                           ? questionnaire.consultation_type.name
                           : "全種別"}
                       </span>
-                      <span>•</span>
+                      <span className="hidden sm:inline">•</span>
                       <span>
                         作成日:{" "}
                         {new Date(questionnaire.created_at).toLocaleDateString("ja-JP")}
@@ -345,37 +345,37 @@ export default function QuestionnairesPage() {
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2 sm:gap-3">
                     <Button
                       variant="ghost"
-                      className="h-12 w-12 transition-all duration-200 hover:scale-110"
+                      className="h-10 sm:h-12 w-10 sm:w-12 transition-all duration-200 hover:scale-110"
                       onClick={() => handleToggleActive(questionnaire.id)}
                       title={questionnaire.is_active ? "無効化" : "有効化"}
                     >
                       {questionnaire.is_active ? (
-                        <ToggleRight className="h-5 w-5 text-[#4CAF50] transition-colors" />
+                        <ToggleRight className="h-4 sm:h-5 w-4 sm:w-5 text-[#4CAF50] transition-colors" />
                       ) : (
-                        <ToggleLeft className="h-5 w-5 text-[#999999] transition-colors" />
+                        <ToggleLeft className="h-4 sm:h-5 w-4 sm:w-5 text-[#999999] transition-colors" />
                       )}
                     </Button>
 
                     <Link href={`/admin/questionnaires/${questionnaire.id}`}>
                       <Button
                         variant="ghost"
-                        className="h-12 w-12 transition-all duration-200 hover:scale-110"
+                        className="h-10 sm:h-12 w-10 sm:w-12 transition-all duration-200 hover:scale-110"
                         title="編集"
                       >
-                        <Edit className="h-5 w-5 transition-colors" />
+                        <Edit className="h-4 sm:h-5 w-4 sm:w-5 transition-colors" />
                       </Button>
                     </Link>
 
                     <Button
                       variant="ghost"
-                      className="h-12 w-12 transition-all duration-200 hover:scale-110"
+                      className="h-10 sm:h-12 w-10 sm:w-12 transition-all duration-200 hover:scale-110"
                       onClick={() => handleDelete(questionnaire.id)}
                       title="削除"
                     >
-                      <Trash2 className="h-5 w-5 text-[#FF7676] transition-colors" />
+                      <Trash2 className="h-4 sm:h-5 w-4 sm:w-5 text-[#FF7676] transition-colors" />
                     </Button>
                   </div>
                 </div>
@@ -387,7 +387,7 @@ export default function QuestionnairesPage() {
 
       {/* 件数表示 */}
       {filteredQuestionnaires.length > 0 && (
-        <div className="text-base text-[#999999] text-center font-medium">
+        <div className="text-sm sm:text-base text-[#999999] text-center font-medium">
           {filteredQuestionnaires.length}件のアンケート
           {(searchQuery || statusFilter !== "all" || typeFilter !== "all") &&
             ` (全${questionnaires.length}件中)`}

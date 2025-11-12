@@ -80,58 +80,58 @@ export default function StaffManagementPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
+    <div className="space-y-4 sm:space-y-8">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold">スタッフ管理</h1>
-          <p className="text-muted-foreground mt-3 text-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">スタッフ管理</h1>
+          <p className="text-muted-foreground mt-2 sm:mt-3 text-base sm:text-lg">
             スタッフの追加・編集・削除を行います
           </p>
         </div>
 
-        <Button asChild className="h-14 px-8 text-base font-semibold">
+        <Button asChild className="h-12 sm:h-14 px-6 sm:px-8 text-sm sm:text-base font-semibold w-full sm:w-auto">
           <Link href="/admin/staff/new">+ スタッフを追加</Link>
         </Button>
       </div>
 
       {/* Filters */}
       <Card className="border-2">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">絞り込み</CardTitle>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">絞り込み</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 md:grid-cols-2">
             <div className="space-y-2">
-              <label className="text-base font-semibold block">検索</label>
+              <label className="text-sm sm:text-base font-semibold block">検索</label>
               <Input
                 placeholder="名前またはメールアドレス"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="h-14 text-base"
+                className="h-12 sm:h-14 text-sm sm:text-base"
               />
             </div>
 
             <div className="space-y-2">
-              <label className="text-base font-semibold block">ステータス</label>
-              <div className="flex gap-3">
+              <label className="text-sm sm:text-base font-semibold block">ステータス</label>
+              <div className="flex gap-2 sm:gap-3">
                 <Button
                   variant={statusFilter === "all" ? "default" : "outline"}
                   onClick={() => setStatusFilter("all")}
-                  className="h-12 px-6 text-base"
+                  className="h-10 sm:h-12 px-3 sm:px-6 text-sm sm:text-base flex-1"
                 >
                   全て
                 </Button>
                 <Button
                   variant={statusFilter === "active" ? "default" : "outline"}
                   onClick={() => setStatusFilter("active")}
-                  className="h-12 px-6 text-base"
+                  className="h-10 sm:h-12 px-3 sm:px-6 text-sm sm:text-base flex-1"
                 >
                   アクティブ
                 </Button>
                 <Button
                   variant={statusFilter === "inactive" ? "default" : "outline"}
                   onClick={() => setStatusFilter("inactive")}
-                  className="h-12 px-6 text-base"
+                  className="h-10 sm:h-12 px-3 sm:px-6 text-sm sm:text-base flex-1"
                 >
                   無効
                 </Button>
@@ -143,8 +143,8 @@ export default function StaffManagementPage() {
 
       {/* Staff List */}
       <Card className="border-2">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">スタッフ一覧（{filteredStaff.length}人）</CardTitle>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">スタッフ一覧（{filteredStaff.length}人）</CardTitle>
         </CardHeader>
         <CardContent>
           {filteredStaff.length === 0 ? (

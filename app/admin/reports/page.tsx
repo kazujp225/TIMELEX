@@ -70,21 +70,21 @@ export default function ReportsPage() {
   }
 
   return (
-    <div className="space-y-8 max-w-7xl">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-6">
+    <div className="space-y-4 sm:space-y-8">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold">レポート・分析</h1>
-          <p className="text-muted-foreground mt-2 text-lg">
+          <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">レポート・分析</h1>
+          <p className="text-muted-foreground mt-2 sm:mt-3 text-base sm:text-lg">
             予約データの分析とレポート生成
           </p>
         </div>
 
-        <div className="flex gap-4">
+        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
           <Select value={period} onValueChange={(value: any) => setPeriod(value)}>
-            <SelectTrigger className="w-48 h-12 text-base">
+            <SelectTrigger className="w-full sm:w-48 h-12 sm:h-14 text-sm sm:text-base">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent className="max-h-[200px] overflow-y-auto">
               <SelectItem value="week">週次</SelectItem>
               <SelectItem value="month">月次</SelectItem>
               <SelectItem value="quarter">四半期</SelectItem>
@@ -92,33 +92,33 @@ export default function ReportsPage() {
             </SelectContent>
           </Select>
 
-          <Button onClick={exportCSV} className="h-12 px-8 text-base">CSVエクスポート</Button>
+          <Button onClick={exportCSV} className="h-10 sm:h-12 px-6 sm:px-8 text-sm sm:text-base w-full sm:w-auto">CSVエクスポート</Button>
         </div>
       </div>
 
       {/* Overview */}
-      <div className="grid gap-6 md:grid-cols-5">
+      <div className="grid gap-3 sm:gap-6 grid-cols-2 md:grid-cols-5">
         <Card className="border-2">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-base font-semibold">総予約数</CardDescription>
-            <CardTitle className="text-4xl">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardDescription className="text-xs sm:text-base font-semibold">総予約数</CardDescription>
+            <CardTitle className="text-2xl sm:text-4xl">
               {reportData?.totalBookings || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground font-medium">{period}期間</p>
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">{period}期間</p>
           </CardContent>
         </Card>
 
         <Card className="border-2">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-base font-semibold">確定</CardDescription>
-            <CardTitle className="text-4xl text-success">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardDescription className="text-xs sm:text-base font-semibold">確定</CardDescription>
+            <CardTitle className="text-2xl sm:text-4xl text-success">
               {reportData?.confirmedBookings || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
               {reportData?.totalBookings
                 ? Math.round(
                     (reportData.confirmedBookings / reportData.totalBookings) * 100
@@ -130,14 +130,14 @@ export default function ReportsPage() {
         </Card>
 
         <Card className="border-2">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-base font-semibold">キャンセル</CardDescription>
-            <CardTitle className="text-4xl text-destructive">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardDescription className="text-xs sm:text-base font-semibold">キャンセル</CardDescription>
+            <CardTitle className="text-2xl sm:text-4xl text-destructive">
               {reportData?.cancelledBookings || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
               {reportData?.totalBookings
                 ? Math.round(
                     (reportData.cancelledBookings / reportData.totalBookings) * 100
@@ -149,14 +149,14 @@ export default function ReportsPage() {
         </Card>
 
         <Card className="border-2">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-base font-semibold">新規顧客</CardDescription>
-            <CardTitle className="text-4xl text-primary">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardDescription className="text-xs sm:text-base font-semibold">新規顧客</CardDescription>
+            <CardTitle className="text-2xl sm:text-4xl text-primary">
               {reportData?.newCustomers || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
               {reportData?.totalBookings
                 ? Math.round(
                     (reportData.newCustomers / reportData.totalBookings) * 100
@@ -168,14 +168,14 @@ export default function ReportsPage() {
         </Card>
 
         <Card className="border-2">
-          <CardHeader className="pb-3">
-            <CardDescription className="text-base font-semibold">継続顧客</CardDescription>
-            <CardTitle className="text-4xl text-accent">
+          <CardHeader className="pb-2 sm:pb-3">
+            <CardDescription className="text-xs sm:text-base font-semibold">継続顧客</CardDescription>
+            <CardTitle className="text-2xl sm:text-4xl text-accent">
               {reportData?.returningCustomers || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-sm text-muted-foreground font-medium">
+            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
               {reportData?.totalBookings
                 ? Math.round(
                     (reportData.returningCustomers / reportData.totalBookings) * 100
@@ -189,25 +189,25 @@ export default function ReportsPage() {
 
       {/* Inquiry Source Breakdown */}
       <Card className="border-2">
-        <CardHeader>
-          <CardTitle className="text-2xl">お問い合わせ元別</CardTitle>
-          <CardDescription className="text-base">流入経路の内訳</CardDescription>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">お問い合わせ元別</CardTitle>
+          <CardDescription className="text-sm sm:text-base">流入経路の内訳</CardDescription>
         </CardHeader>
         <CardContent>
           {!reportData?.inquirySourceBreakdown ||
           reportData.inquirySourceBreakdown.length === 0 ? (
-            <p className="text-center py-12 text-muted-foreground text-lg">
+            <p className="text-center py-8 sm:py-12 text-muted-foreground text-base sm:text-lg">
               データがありません
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {reportData.inquirySourceBreakdown.map((item) => (
-                <div key={item.name} className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">{item.name}</span>
-                  <div className="flex items-center gap-6">
-                    <div className="w-64 bg-muted rounded-full h-3">
+                <div key={item.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-6">
+                  <span className="text-base sm:text-lg font-semibold">{item.name}</span>
+                  <div className="flex items-center gap-3 sm:gap-6">
+                    <div className="flex-1 sm:w-64 bg-muted rounded-full h-2 sm:h-3">
                       <div
-                        className="bg-primary h-3 rounded-full"
+                        className="bg-primary h-2 sm:h-3 rounded-full"
                         style={{
                           width: `${
                             reportData.totalBookings
@@ -217,7 +217,7 @@ export default function ReportsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-base text-muted-foreground w-24 text-right font-medium">
+                    <span className="text-sm sm:text-base text-muted-foreground w-20 sm:w-24 text-right font-medium whitespace-nowrap">
                       {item.count}件 (
                       {reportData.totalBookings
                         ? Math.round((item.count / reportData.totalBookings) * 100)
@@ -234,25 +234,25 @@ export default function ReportsPage() {
 
       {/* Consultation Type Breakdown */}
       <Card className="border-2">
-        <CardHeader>
-          <CardTitle className="text-2xl">相談種別別</CardTitle>
-          <CardDescription className="text-base">相談内容の内訳</CardDescription>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">相談種別別</CardTitle>
+          <CardDescription className="text-sm sm:text-base">相談内容の内訳</CardDescription>
         </CardHeader>
         <CardContent>
           {!reportData?.consultationTypeBreakdown ||
           reportData.consultationTypeBreakdown.length === 0 ? (
-            <p className="text-center py-12 text-muted-foreground text-lg">
+            <p className="text-center py-8 sm:py-12 text-muted-foreground text-base sm:text-lg">
               データがありません
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {reportData.consultationTypeBreakdown.map((item) => (
-                <div key={item.name} className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">{item.name}</span>
-                  <div className="flex items-center gap-6">
-                    <div className="w-64 bg-muted rounded-full h-3">
+                <div key={item.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-6">
+                  <span className="text-base sm:text-lg font-semibold">{item.name}</span>
+                  <div className="flex items-center gap-3 sm:gap-6">
+                    <div className="flex-1 sm:w-64 bg-muted rounded-full h-2 sm:h-3">
                       <div
-                        className="bg-accent h-3 rounded-full"
+                        className="bg-accent h-2 sm:h-3 rounded-full"
                         style={{
                           width: `${
                             reportData.totalBookings
@@ -262,7 +262,7 @@ export default function ReportsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-base text-muted-foreground w-24 text-right font-medium">
+                    <span className="text-sm sm:text-base text-muted-foreground w-20 sm:w-24 text-right font-medium whitespace-nowrap">
                       {item.count}件 (
                       {reportData.totalBookings
                         ? Math.round((item.count / reportData.totalBookings) * 100)
@@ -279,24 +279,24 @@ export default function ReportsPage() {
 
       {/* Staff Breakdown */}
       <Card className="border-2">
-        <CardHeader>
-          <CardTitle className="text-2xl">スタッフ別</CardTitle>
-          <CardDescription className="text-base">スタッフごとの予約数</CardDescription>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">スタッフ別</CardTitle>
+          <CardDescription className="text-sm sm:text-base">スタッフごとの予約数</CardDescription>
         </CardHeader>
         <CardContent>
           {!reportData?.staffBreakdown || reportData.staffBreakdown.length === 0 ? (
-            <p className="text-center py-12 text-muted-foreground text-lg">
+            <p className="text-center py-8 sm:py-12 text-muted-foreground text-base sm:text-lg">
               データがありません
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {reportData.staffBreakdown.map((item) => (
-                <div key={item.name} className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">{item.name}</span>
-                  <div className="flex items-center gap-6">
-                    <div className="w-64 bg-muted rounded-full h-3">
+                <div key={item.name} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-6">
+                  <span className="text-base sm:text-lg font-semibold">{item.name}</span>
+                  <div className="flex items-center gap-3 sm:gap-6">
+                    <div className="flex-1 sm:w-64 bg-muted rounded-full h-2 sm:h-3">
                       <div
-                        className="bg-success h-3 rounded-full"
+                        className="bg-success h-2 sm:h-3 rounded-full"
                         style={{
                           width: `${
                             reportData.totalBookings
@@ -306,7 +306,7 @@ export default function ReportsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-base text-muted-foreground w-24 text-right font-medium">
+                    <span className="text-sm sm:text-base text-muted-foreground w-20 sm:w-24 text-right font-medium whitespace-nowrap">
                       {item.count}件 (
                       {reportData.totalBookings
                         ? Math.round((item.count / reportData.totalBookings) * 100)
@@ -323,25 +323,25 @@ export default function ReportsPage() {
 
       {/* UTM Source Breakdown */}
       <Card className="border-2">
-        <CardHeader>
-          <CardTitle className="text-2xl">UTMソース別</CardTitle>
-          <CardDescription className="text-base">マーケティング流入元の分析</CardDescription>
+        <CardHeader className="pb-4 sm:pb-6">
+          <CardTitle className="text-xl sm:text-2xl">UTMソース別</CardTitle>
+          <CardDescription className="text-sm sm:text-base">マーケティング流入元の分析</CardDescription>
         </CardHeader>
         <CardContent>
           {!reportData?.utmSourceBreakdown ||
           reportData.utmSourceBreakdown.length === 0 ? (
-            <p className="text-center py-12 text-muted-foreground text-lg">
+            <p className="text-center py-8 sm:py-12 text-muted-foreground text-base sm:text-lg">
               データがありません
             </p>
           ) : (
-            <div className="space-y-4">
+            <div className="space-y-3 sm:space-y-4">
               {reportData.utmSourceBreakdown.map((item) => (
-                <div key={item.source} className="flex items-center justify-between">
-                  <span className="text-lg font-semibold">{item.source || "(なし)"}</span>
-                  <div className="flex items-center gap-6">
-                    <div className="w-64 bg-muted rounded-full h-3">
+                <div key={item.source} className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-6">
+                  <span className="text-base sm:text-lg font-semibold">{item.source || "(なし)"}</span>
+                  <div className="flex items-center gap-3 sm:gap-6">
+                    <div className="flex-1 sm:w-64 bg-muted rounded-full h-2 sm:h-3">
                       <div
-                        className="bg-primary h-3 rounded-full"
+                        className="bg-primary h-2 sm:h-3 rounded-full"
                         style={{
                           width: `${
                             reportData.totalBookings
@@ -351,7 +351,7 @@ export default function ReportsPage() {
                         }}
                       />
                     </div>
-                    <span className="text-base text-muted-foreground w-24 text-right font-medium">
+                    <span className="text-sm sm:text-base text-muted-foreground w-20 sm:w-24 text-right font-medium whitespace-nowrap">
                       {item.count}件 (
                       {reportData.totalBookings
                         ? Math.round((item.count / reportData.totalBookings) * 100)
