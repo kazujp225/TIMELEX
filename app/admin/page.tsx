@@ -266,6 +266,15 @@ export default function AdminDashboard() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <a
+              href="/admin/booking-urls"
+              className="p-6 border-2 border-brand-600 rounded-lg hover:bg-accent transition-colors"
+            >
+              <h3 className="font-semibold text-lg mb-2">📧 予約URL</h3>
+              <p className="text-base text-muted-foreground">
+                お客様に送る予約URLを取得
+              </p>
+            </a>
+            <a
               href="/admin/calendar"
               className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
