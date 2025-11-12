@@ -212,11 +212,11 @@ export function BookingForm({
   }
 
   return (
-    <div className="min-h-screen-safe bg-panel py-8">
+    <div className="min-h-screen-safe bg-panel py-4 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           {/* ステップインジケーター */}
-          <div className="flex items-center justify-center mb-8">
+          <div className="flex items-center justify-center mb-4 sm:mb-8">
             <div className="flex items-center gap-2">
               <div className="flex items-center gap-2">
                 <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
@@ -242,28 +242,28 @@ export function BookingForm({
           </div>
 
           {/* 選択した日時の表示 */}
-          <Card className="mb-6">
-            <CardContent className="space-y-2">
-              <div className="flex items-center gap-2 text-muted text-sm font-medium">
+          <Card className="mb-4 sm:mb-6">
+            <CardContent className="space-y-1 sm:space-y-2">
+              <div className="flex items-center gap-2 text-muted text-xs sm:text-sm font-medium">
                 <Clock className="w-4 h-4" aria-hidden="true" />
                 <span>予約日時</span>
               </div>
-              <p className="text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <p className="text-lg sm:text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（
                 {getWeekday(selectedSlot.start_time)}）
               </p>
-              <p className="text-lg font-bold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <p className="text-base sm:text-lg font-bold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
                 {formatDate(selectedSlot.start_time, "HH:mm")}〜
                 {formatDate(selectedSlot.end_time, "HH:mm")}
               </p>
-              <p className="text-sm text-muted">
+              <p className="text-xs sm:text-sm text-muted">
                 担当：{selectedSlot.staff_name}
               </p>
             </CardContent>
           </Card>
 
           {/* フォーム */}
-          <form onSubmit={handleSubmit} className="space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
             {/* お名前 */}
             <Field
               label="お名前"

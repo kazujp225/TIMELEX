@@ -90,19 +90,19 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
   const cancelUrl = `/book/cancel?id=${bookingId}&token=${booking.cancel_token}`
 
   return (
-    <div className="min-h-screen-safe bg-panel py-8">
+    <div className="min-h-screen-safe bg-panel py-4 sm:py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto">
           <div className="text-center">
             {/* チェックマークアニメーション */}
-            <div className="mb-8 flex items-center justify-center">
+            <div className="mb-4 sm:mb-8 flex items-center justify-center">
               <div
-                className={`w-20 h-20 rounded-xl bg-success flex items-center justify-center transition-all duration-800 shadow-sm ${
+                className={`w-16 sm:w-20 h-16 sm:h-20 rounded-xl bg-success flex items-center justify-center transition-all duration-800 shadow-sm ${
                   showCheckmark ? "scale-100 opacity-100" : "scale-50 opacity-0"
                 }`}
               >
                 <svg
-                  className="w-10 h-10 text-white"
+                  className="w-8 sm:w-10 h-8 sm:h-10 text-white"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -120,23 +120,23 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
             </div>
 
             {/* 確定メッセージ */}
-            <h1 className="text-3xl font-extrabold text-text mb-3" style={{ fontVariantNumeric: "tabular-nums" }}>
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-text mb-2 sm:mb-3" style={{ fontVariantNumeric: "tabular-nums" }}>
               予約が確定しました
             </h1>
-            <p className="text-base text-muted mb-8">
+            <p className="text-sm sm:text-base text-muted mb-4 sm:mb-8">
               ご登録のメールアドレスに確認メールを送信しました
             </p>
 
             {/* 予約詳細 */}
-            <Card className="mb-8 text-left">
-              <CardContent className="space-y-4">
+            <Card className="mb-4 sm:mb-8 text-left">
+              <CardContent className="space-y-3 sm:space-y-4">
                 <div>
-                  <p className="text-xs text-muted font-medium mb-2">日時</p>
-                  <p className="text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
+                  <p className="text-xs text-muted font-medium mb-1 sm:mb-2">日時</p>
+                  <p className="text-lg sm:text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {formatDate(booking.start_time, "YYYY/MM/DD")}（
                     {getWeekday(booking.start_time)}）
                   </p>
-                  <p className="text-lg font-bold text-text mt-1" style={{ fontVariantNumeric: "tabular-nums" }}>
+                  <p className="text-base sm:text-lg font-bold text-text mt-1" style={{ fontVariantNumeric: "tabular-nums" }}>
                     {formatDate(booking.start_time, "HH:mm")}〜
                     {formatDate(booking.end_time, "HH:mm")}
                   </p>
@@ -144,17 +144,17 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
 
                 <div className="h-px bg-border" />
 
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-3 sm:gap-4">
                   <div>
-                    <p className="text-xs text-muted font-medium mb-2">担当</p>
-                    <p className="text-base font-bold text-text">
+                    <p className="text-xs text-muted font-medium mb-1 sm:mb-2">担当</p>
+                    <p className="text-sm sm:text-base font-bold text-text">
                       {booking.staff.name}
                     </p>
                   </div>
 
                   <div>
-                    <p className="text-xs text-muted font-medium mb-2">相談種別</p>
-                    <p className="text-base font-bold text-text">
+                    <p className="text-xs text-muted font-medium mb-1 sm:mb-2">相談種別</p>
+                    <p className="text-sm sm:text-base font-bold text-text">
                       {booking.consultation_type.name}
                     </p>
                   </div>
