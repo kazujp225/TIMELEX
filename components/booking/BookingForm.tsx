@@ -199,52 +199,52 @@ export function BookingForm({
 
   return (
     <div className="h-screen flex flex-col bg-panel overflow-hidden">
-      <div className="flex-1 overflow-y-auto py-3 px-4">
+      <div className="flex-1 overflow-y-auto py-4 px-4">
         <div className="w-full sm:max-w-3xl mx-auto">
           {/* ステップインジケーター */}
-          <div className="flex items-center justify-center mb-3">
-            <div className="flex items-center gap-1">
-              <div className="flex items-center gap-1">
-                <div className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">
-                  <Check className="w-3 h-3" aria-hidden="true" />
+          <div className="flex items-center justify-center mb-5">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
+                  <Check className="w-4 h-4" aria-hidden="true" />
                 </div>
-                <span className="text-xs text-muted hidden sm:inline">日時選択</span>
+                <span className="text-sm text-muted hidden sm:inline">日時選択</span>
               </div>
-              <div className="w-6 h-0.5 bg-brand-600" />
-              <div className="flex items-center gap-1">
-                <div className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">
+              <div className="w-8 h-0.5 bg-brand-600" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
                   2
                 </div>
-                <span className="text-xs font-bold text-text hidden sm:inline">情報入力</span>
+                <span className="text-sm font-bold text-text hidden sm:inline">情報入力</span>
               </div>
-              <div className="w-6 h-0.5 bg-border" />
-              <div className="flex items-center gap-1">
-                <div className="w-6 h-6 rounded-full bg-border text-muted flex items-center justify-center text-xs font-medium">
+              <div className="w-8 h-0.5 bg-border" />
+              <div className="flex items-center gap-2">
+                <div className="w-8 h-8 rounded-full bg-border text-muted flex items-center justify-center text-sm font-medium">
                   3
                 </div>
-                <span className="text-xs text-muted hidden sm:inline">確認</span>
+                <span className="text-sm text-muted hidden sm:inline">確認</span>
               </div>
             </div>
           </div>
 
           {/* 選択した日時の表示 */}
-          <Card className="mb-3">
-            <CardContent className="space-y-0.5 py-2">
-              <div className="flex items-center gap-1 text-muted text-xs font-medium">
-                <Clock className="w-3 h-3" aria-hidden="true" />
+          <Card className="mb-4">
+            <CardContent className="space-y-1 py-3">
+              <div className="flex items-center gap-2 text-muted text-sm font-medium">
+                <Clock className="w-4 h-4" aria-hidden="true" />
                 <span>予約日時</span>
               </div>
-              <p className="text-sm font-bold text-text">
+              <p className="text-base font-bold text-text">
                 {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（{getWeekday(selectedSlot.start_time)}） {formatDate(selectedSlot.start_time, "HH:mm")}〜{formatDate(selectedSlot.end_time, "HH:mm")}
               </p>
-              <p className="text-xs text-muted">
+              <p className="text-sm text-muted">
                 担当：{selectedSlot.staff_name}
               </p>
             </CardContent>
           </Card>
 
           {/* フォーム */}
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {/* お名前 */}
             <Field
               label="お名前"
@@ -406,13 +406,14 @@ export function BookingForm({
             />
 
             {/* ボタン */}
-            <div className="flex flex-col gap-3 mt-6">
+            <div className="flex flex-col gap-3 mt-8 pb-4">
               <Button
                 type="submit"
                 variant="primary"
                 size="lg"
                 fullWidth
                 loading={isSubmitting}
+                className="!py-4 !text-lg"
               >
                 {isSubmitting ? "予約を確定しています..." : "この内容で予約を確定する"}
               </Button>
@@ -423,6 +424,7 @@ export function BookingForm({
                 fullWidth
                 onClick={onBack}
                 disabled={isSubmitting}
+                className="!py-4 !text-lg"
               >
                 戻る
               </Button>

@@ -144,13 +144,13 @@ export default function SelectSlotPage() {
     <div className="h-screen flex flex-col bg-panel overflow-hidden">
       {/* ヘッダー */}
       <div className="bg-panel border-b-2 border-border">
-        <div className="w-full px-4 py-4">
+        <div className="w-full px-4 py-5">
           <div className="w-full sm:max-w-4xl mx-auto text-center">
-            <h1 className="text-xl sm:text-2xl font-bold text-brand-600 mb-2">TIMREXPLUS</h1>
-            <h2 className="text-lg sm:text-xl font-bold text-text mb-1">
+            <h1 className="text-2xl sm:text-3xl font-bold text-brand-600 mb-3">TIMREXPLUS</h1>
+            <h2 className="text-xl sm:text-2xl font-bold text-text mb-2">
               時間を選択してください
             </h2>
-            <p className="text-sm text-muted">
+            <p className="text-base text-muted">
               {selectedDate && format(selectedDate, "M月d日(E)", { locale: ja })} | {consultationType.name}（{consultationType.duration_minutes}分）
             </p>
           </div>
@@ -164,41 +164,41 @@ export default function SelectSlotPage() {
             {/* 時間選択 */}
             {selectedDate && availableSlots.length > 0 && (
               <div>
-                <p className="text-sm text-muted mb-3">
-                  空いているスタッフをクリックすると予約情報入力へ進みます
+                <p className="text-base text-muted mb-4">
+                  空いているスタッフをタップすると予約情報入力へ進みます
                 </p>
 
                 {/* スタッフ凡例 */}
-                <div className="flex items-center gap-4 mb-3">
+                <div className="flex items-center gap-5 mb-4">
                   {MOCK_STAFF.map((staff) => (
                     <div key={staff.id} className="flex items-center gap-2">
                       <div
-                        className="w-4 h-4 rounded-full"
+                        className="w-5 h-5 rounded-full"
                         style={{ backgroundColor: staff.color }}
                       />
-                      <span className="text-sm font-medium text-text">{staff.name}</span>
+                      <span className="text-base font-semibold text-text">{staff.name}</span>
                     </div>
                   ))}
                 </div>
 
                 {/* 時間帯別空き状況表 */}
-                <div className="border-2 border-border rounded-md overflow-hidden">
-                  <div className="bg-panel-muted py-2 px-4 border-b-2 border-border">
+                <div className="border-2 border-border rounded-lg overflow-hidden">
+                  <div className="bg-panel-muted py-3 px-4 border-b-2 border-border">
                     <div className="grid grid-cols-3 gap-2">
-                      <div className="text-sm font-medium text-text">時間</div>
-                      <div className="text-sm font-medium text-text text-center">スタッフA</div>
-                      <div className="text-sm font-medium text-text text-center">スタッフB</div>
+                      <div className="text-base font-semibold text-text">時間</div>
+                      <div className="text-base font-semibold text-text text-center">スタッフA</div>
+                      <div className="text-base font-semibold text-text text-center">スタッフB</div>
                     </div>
                   </div>
                   <div>
                     {availableSlots.map((slot) => (
                       <div
                         key={slot.time.toISOString()}
-                        className="py-2 px-4 border-b border-border last:border-b-0 hover:bg-panel-muted transition-colors"
+                        className="py-3 px-4 border-b border-border last:border-b-0 hover:bg-panel-muted transition-colors"
                       >
                         <div className="grid grid-cols-3 gap-2 items-center">
                           {/* 時間 */}
-                          <div className="text-sm font-medium text-text">
+                          <div className="text-base font-semibold text-text">
                             {formatDate(slot.time, "HH:mm")}
                           </div>
 
@@ -210,13 +210,13 @@ export default function SelectSlotPage() {
                                 {isAvailable ? (
                                   <button
                                     onClick={() => handleSlotSelect(slot, staff)}
-                                    className="w-full py-2 px-3 rounded text-sm font-medium text-white transition-all hover:opacity-90"
+                                    className="w-full py-3 px-3 rounded-md text-base font-bold text-white transition-all hover:opacity-90 active:scale-95"
                                     style={{ backgroundColor: staff.color }}
                                   >
                                     ◯
                                   </button>
                                 ) : (
-                                  <div className="w-full py-2 px-3 rounded text-sm font-medium text-muted bg-panel-muted">
+                                  <div className="w-full py-3 px-3 rounded-md text-base font-semibold text-muted bg-panel-muted">
                                     ×
                                   </div>
                                 )}
@@ -234,11 +234,11 @@ export default function SelectSlotPage() {
       </div>
 
       {/* フッター（戻るボタン） */}
-      <div className="border-t-2 border-border bg-panel px-4 py-3">
+      <div className="border-t-2 border-border bg-panel px-4 py-4">
         <div className="w-full sm:max-w-4xl mx-auto">
           <button
             onClick={handleBack}
-            className="w-full py-3 px-4 rounded-md border-2 border-border text-text hover:bg-panel-muted transition-all text-base"
+            className="w-full py-4 px-5 rounded-lg border-2 border-border text-text hover:bg-panel-muted transition-all text-lg font-medium active:scale-98"
           >
             ← 日付選択に戻る
           </button>
