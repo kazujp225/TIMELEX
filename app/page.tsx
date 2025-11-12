@@ -72,6 +72,14 @@ export default function HomePage() {
       {/* Decorative Background Elements */}
       <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-brand-600/5 rounded-full blur-3xl pointer-events-none"></div>
       <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-brand-400/5 rounded-full blur-3xl pointer-events-none"></div>
+
+      {/* Admin Link - 右下に小さく配置 */}
+      <Link
+        href="/admin"
+        className="fixed bottom-4 right-4 text-xs text-muted hover:text-brand-600 transition-colors opacity-20 hover:opacity-100"
+      >
+        管理
+      </Link>
     </div>
   )
 }
