@@ -29,8 +29,6 @@ interface AdminStats {
   }
   allTime: {
     totalBookings: number
-    totalStaff: number
-    activeStaff: number
     consultationTypes: number
     inquirySources: number
   }
@@ -83,8 +81,6 @@ export default function AdminDashboard() {
         },
         allTime: {
           totalBookings: 342,
-          totalStaff: 5,
-          activeStaff: 4,
           consultationTypes: 8,
           inquirySources: 6,
         },
@@ -114,7 +110,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* System Overview */}
-      <div className="grid gap-6 md:grid-cols-5">
+      <div className="grid gap-6 md:grid-cols-4">
         <Card className="border-2">
           <CardHeader className="pb-4">
             <CardDescription className="text-base">総予約数</CardDescription>
