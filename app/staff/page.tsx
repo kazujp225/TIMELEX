@@ -156,16 +156,16 @@ export default function StaffDashboard() {
   }
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-8 max-w-7xl">
       {/* Welcome Header */}
-      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-8 border border-primary/10">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="text-4xl">👋</div>
+      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-10 border-2 border-primary/10">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="text-5xl">👋</div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">
               {getTimeOfDay()}
             </h1>
-            <p className="text-muted-foreground mt-1">
+            <p className="text-muted-foreground mt-2 text-lg">
               {session?.user?.name || session?.user?.email || "ゲスト"}
             </p>
           </div>
@@ -174,38 +174,38 @@ export default function StaffDashboard() {
 
       {/* Stats Grid */}
       <div className="grid gap-6 md:grid-cols-3">
-        <Card className="border-l-4 border-l-primary bg-gradient-to-br from-primary/5 to-transparent hover:shadow-lg transition-all">
+        <Card className="border-2 border-l-4 border-l-primary bg-gradient-to-br from-primary/5 to-transparent hover:shadow-lg transition-all">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-sm font-medium">今日の予約</CardDescription>
-              <div className="h-10 w-10 rounded-full bg-primary/10 flex items-center justify-center">
-                <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <CardDescription className="text-base font-semibold">今日の予約</CardDescription>
+              <div className="h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
+                <svg className="h-6 w-6 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
-            <CardTitle className="text-5xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+            <CardTitle className="text-6xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               {todayBookings.length}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               {formatDate(new Date(), "YYYY/MM/DD")}（{getWeekday(new Date())}）
             </p>
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-500/5 to-transparent hover:shadow-lg transition-all">
+        <Card className="border-2 border-l-4 border-l-blue-500 bg-gradient-to-br from-blue-500/5 to-transparent hover:shadow-lg transition-all">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-sm font-medium">今週の予約</CardDescription>
-              <div className="h-10 w-10 rounded-full bg-blue-500/10 flex items-center justify-center">
-                <svg className="h-5 w-5 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <CardDescription className="text-base font-semibold">今週の予約</CardDescription>
+              <div className="h-12 w-12 rounded-full bg-blue-500/10 flex items-center justify-center">
+                <svg className="h-6 w-6 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
                 </svg>
               </div>
             </div>
-            <CardTitle className="text-5xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
+            <CardTitle className="text-6xl font-bold bg-gradient-to-r from-blue-600 to-blue-400 bg-clip-text text-transparent">
               {upcomingBookings.filter((b) => {
                 const weekFromNow = new Date()
                 weekFromNow.setDate(weekFromNow.getDate() + 7)
@@ -214,7 +214,7 @@ export default function StaffDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               {formatDate(new Date(), "MM/DD")} 〜{" "}
               {formatDate(
                 new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
@@ -224,17 +224,17 @@ export default function StaffDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-500/5 to-transparent hover:shadow-lg transition-all">
+        <Card className="border-2 border-l-4 border-l-purple-500 bg-gradient-to-br from-purple-500/5 to-transparent hover:shadow-lg transition-all">
           <CardHeader className="pb-3">
             <div className="flex items-center justify-between">
-              <CardDescription className="text-sm font-medium">今月の予約</CardDescription>
-              <div className="h-10 w-10 rounded-full bg-purple-500/10 flex items-center justify-center">
-                <svg className="h-5 w-5 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <CardDescription className="text-base font-semibold">今月の予約</CardDescription>
+              <div className="h-12 w-12 rounded-full bg-purple-500/10 flex items-center justify-center">
+                <svg className="h-6 w-6 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
                 </svg>
               </div>
             </div>
-            <CardTitle className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
+            <CardTitle className="text-6xl font-bold bg-gradient-to-r from-purple-600 to-purple-400 bg-clip-text text-transparent">
               {upcomingBookings.filter((b) => {
                 const bookingDate = new Date(b.start_time)
                 const now = new Date()
@@ -246,7 +246,7 @@ export default function StaffDashboard() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs text-muted-foreground">
+            <p className="text-sm text-muted-foreground font-medium">
               {formatDate(new Date(), "YYYY年MM月")}
             </p>
           </CardContent>
@@ -255,29 +255,29 @@ export default function StaffDashboard() {
 
       {/* Today's Schedule */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-2xl">📅</span>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold flex items-center gap-3">
+            <span className="text-3xl">📅</span>
             本日の予定
           </h2>
           <Link
             href="/staff/calendar"
-            className="text-sm text-primary hover:underline flex items-center gap-1"
+            className="text-base text-primary hover:underline flex items-center gap-2 font-medium"
           >
             カレンダーで見る
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
         </div>
 
         {todayBookings.length === 0 ? (
-          <Card className="bg-gradient-to-br from-gray-50 to-transparent">
+          <Card className="bg-gradient-to-br from-gray-50 to-transparent border-2">
             <CardContent className="pt-6">
-              <div className="text-center py-16 text-muted-foreground">
-                <div className="mx-auto h-20 w-20 rounded-full bg-gray-100 flex items-center justify-center mb-4">
+              <div className="text-center py-20 text-muted-foreground">
+                <div className="mx-auto h-24 w-24 rounded-full bg-gray-100 flex items-center justify-center mb-6">
                   <svg
-                    className="h-10 w-10 text-gray-400"
+                    className="h-12 w-12 text-gray-400"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
@@ -290,19 +290,19 @@ export default function StaffDashboard() {
                     />
                   </svg>
                 </div>
-                <p className="text-lg font-medium text-foreground mb-1">予定なし</p>
-                <p className="text-sm">今日の予約はありません。ゆっくりお過ごしください。</p>
+                <p className="text-xl font-semibold text-foreground mb-2">予定なし</p>
+                <p className="text-base">今日の予約はありません。ゆっくりお過ごしください。</p>
               </div>
             </CardContent>
           </Card>
         ) : (
-          <div className="space-y-3">
+          <div className="space-y-4">
             {todayBookings.map((booking) => (
               <Card
                 key={booking.id}
-                className="border-l-4 border-l-primary hover:shadow-md transition-all"
+                className="border-2 border-l-4 border-l-primary hover:shadow-lg transition-all"
               >
-                <CardContent className="p-6">
+                <CardContent className="p-8">
                   <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
                     <div className="flex-1">
                       <div className="flex items-center gap-3 mb-3">
@@ -375,17 +375,17 @@ export default function StaffDashboard() {
 
       {/* Upcoming Bookings */}
       <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <span className="text-2xl">📆</span>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-2xl font-bold flex items-center gap-3">
+            <span className="text-3xl">📆</span>
             今後の予約
           </h2>
           <Link
             href="/staff/bookings"
-            className="text-sm text-primary hover:underline flex items-center gap-1"
+            className="text-base text-primary hover:underline flex items-center gap-2 font-medium"
           >
             すべて見る
-            <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </Link>
@@ -398,15 +398,15 @@ export default function StaffDashboard() {
           tomorrow.setHours(0, 0, 0, 0)
           return bookingDate >= tomorrow
         }).length === 0 ? (
-          <Card className="bg-gradient-to-br from-gray-50 to-transparent">
+          <Card className="bg-gradient-to-br from-gray-50 to-transparent border-2">
             <CardContent className="pt-6">
-              <div className="text-center py-12 text-muted-foreground">
-                <p>今後の予約はありません</p>
+              <div className="text-center py-16 text-muted-foreground">
+                <p className="text-lg">今後の予約はありません</p>
               </div>
             </CardContent>
           </Card>
         ) : (
-          <div className="grid gap-3 md:grid-cols-2">
+          <div className="grid gap-4 md:grid-cols-2">
             {upcomingBookings
               .filter((b) => {
                 const bookingDate = new Date(b.start_time)
@@ -419,9 +419,9 @@ export default function StaffDashboard() {
               .map((booking) => (
                 <Card
                   key={booking.id}
-                  className="hover:shadow-md transition-all border-l-2 border-l-primary/30"
+                  className="hover:shadow-lg transition-all border-2 border-l-4 border-l-primary/30"
                 >
-                  <CardContent className="p-5">
+                  <CardContent className="p-6">
                     <div className="flex items-start gap-3">
                       <div className="h-10 w-10 rounded-lg bg-primary/5 flex items-center justify-center flex-shrink-0">
                         <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">

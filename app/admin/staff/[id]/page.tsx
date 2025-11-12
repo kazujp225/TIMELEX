@@ -142,22 +142,22 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
   }
 
   return (
-    <div className="space-y-6 max-w-2xl">
+    <div className="space-y-8 max-w-6xl">
       <div>
-        <h1 className="text-3xl font-bold">スタッフを編集</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className="text-4xl font-bold">スタッフを編集</h1>
+        <p className="text-muted-foreground mt-3 text-lg">
           {staff.name} の情報を編集します
         </p>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>基本情報</CardTitle>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">基本情報</CardTitle>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <Label htmlFor="name">
+          <form onSubmit={handleSubmit} className="space-y-8">
+            <div className="space-y-2">
+              <Label htmlFor="name" className="text-base font-semibold">
                 名前 <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -167,15 +167,15 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
                   setFormData({ ...formData, name: e.target.value })
                 }
                 placeholder="山田 太郎"
-                className={errors.name ? "border-destructive" : ""}
+                className={`h-14 text-base ${errors.name ? "border-destructive" : ""}`}
               />
               {errors.name && (
                 <p className="text-sm text-destructive mt-1">{errors.name}</p>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="email">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-base font-semibold">
                 メールアドレス <span className="text-destructive">*</span>
               </Label>
               <Input
@@ -186,22 +186,22 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
                   setFormData({ ...formData, email: e.target.value })
                 }
                 placeholder="yamada@example.com"
-                className={errors.email ? "border-destructive" : ""}
+                className={`h-14 text-base ${errors.email ? "border-destructive" : ""}`}
               />
               {errors.email && (
-                <p className="text-sm text-destructive mt-1">{errors.email}</p>
+                <p className="text-sm text-destructive mt-2">{errors.email}</p>
               )}
             </div>
 
-            <div>
-              <Label htmlFor="timezone">タイムゾーン</Label>
+            <div className="space-y-2">
+              <Label htmlFor="timezone" className="text-base font-semibold">タイムゾーン</Label>
               <Select
                 value={formData.timezone}
                 onValueChange={(value) =>
                   setFormData({ ...formData, timezone: value })
                 }
               >
-                <SelectTrigger>
+                <SelectTrigger className="h-14 text-base">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -214,7 +214,7 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
               </Select>
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-3">
               <input
                 type="checkbox"
                 id="is_active"
@@ -222,9 +222,9 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
                 onChange={(e) =>
                   setFormData({ ...formData, is_active: e.target.checked })
                 }
-                className="h-4 w-4 rounded border-gray-300"
+                className="h-5 w-5 rounded border-gray-300"
               />
-              <Label htmlFor="is_active" className="cursor-pointer">
+              <Label htmlFor="is_active" className="cursor-pointer text-base">
                 アクティブ（予約受付を有効にする）
               </Label>
             </div>
@@ -235,8 +235,8 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
               </div>
             )}
 
-            <div className="flex gap-3">
-              <Button type="submit" disabled={saving}>
+            <div className="flex gap-4 pt-4">
+              <Button type="submit" disabled={saving} className="h-14 px-8 text-base font-semibold">
                 {saving ? "保存中..." : "変更を保存"}
               </Button>
               <Button
@@ -244,6 +244,7 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
                 variant="outline"
                 onClick={() => router.back()}
                 disabled={saving}
+                className="h-14 px-8 text-base font-semibold"
               >
                 キャンセル
               </Button>
@@ -253,18 +254,19 @@ export default function EditStaffPage({ params }: { params: { id: string } }) {
       </Card>
 
       {/* Danger Zone */}
-      <Card className="border-destructive">
-        <CardHeader>
-          <CardTitle className="text-destructive">危険な操作</CardTitle>
+      <Card className="border-2 border-destructive">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl text-destructive">危険な操作</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-base text-muted-foreground">
             スタッフを削除すると、関連する予約履歴は保持されますが、新規予約は受け付けられなくなります。
           </p>
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={saving}
+            className="h-14 px-8 text-base font-semibold"
           >
             スタッフを削除
           </Button>

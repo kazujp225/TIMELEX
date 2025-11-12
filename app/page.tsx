@@ -97,8 +97,43 @@ export default function HomePage() {
           </Link>
         </div>
 
+        {/* 開発者用UI確認 */}
+        <div className="mt-12 pt-12 border-t-2 border-dashed border-gray-300">
+          <h3 className="text-xl font-bold text-gray-700 mb-6">🔧 開発者用UI確認</h3>
+          <div className="grid md:grid-cols-2 gap-4">
+            <Link
+              href="/admin"
+              className="block p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-300 text-purple-700 rounded-lg hover:shadow-lg transition-all"
+            >
+              <div className="text-center">
+                <div className="text-3xl mb-2">⚙️</div>
+                <h3 className="text-lg font-bold mb-1">管理者画面を確認</h3>
+                <p className="text-sm text-purple-600">
+                  /admin ダッシュボード
+                </p>
+              </div>
+            </Link>
+
+            <Link
+              href="/staff"
+              className="block p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 text-blue-700 rounded-lg hover:shadow-lg transition-all"
+            >
+              <div className="text-center">
+                <div className="text-3xl mb-2">👤</div>
+                <h3 className="text-lg font-bold mb-1">スタッフ画面を確認</h3>
+                <p className="text-sm text-blue-600">
+                  /staff ダッシュボード
+                </p>
+              </div>
+            </Link>
+          </div>
+          <p className="text-xs text-gray-500 mt-4">
+            ※ 開発モードでは認証をスキップしてUI確認が可能です
+          </p>
+        </div>
+
         {/* フッター */}
-        <div className="mt-16 text-sm text-[#999999]">
+        <div className="mt-12 text-sm text-[#999999]">
           <p>TimeRex/Calendly風のシームレスな予約体験</p>
           <p className="mt-2">開発中 - モックデータで動作確認可能</p>
         </div>

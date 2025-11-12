@@ -1,3 +1,7 @@
+/* General UI v1 - Design System */
+@import "../src/styles/tokens.css";
+@import "../src/styles/primitives.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -158,8 +162,8 @@
   }
 
   body {
-    @apply bg-background text-foreground;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    @apply bg-panel text-text;
+    font-feature-settings: "rlig" 1, "calt" 1, "tnum" 1;
   }
 
   /* カスタムスクロールバー（Webkit） */
@@ -226,9 +230,9 @@
 
   /* 入力フィールドスタイル */
   .input {
-    @apply flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base;
-    @apply placeholder:text-muted-foreground;
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply flex h-12 w-full rounded-md border border-border bg-panel px-4 py-2 text-base;
+    @apply placeholder:text-muted;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
     @apply disabled:cursor-not-allowed disabled:opacity-50;
   }
 

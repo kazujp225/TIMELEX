@@ -1,10 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/src/components/ui/Button"
+import { Card, CardContent } from "@/src/components/ui/Card"
 import { formatDate, getWeekday } from "@/lib/utils"
 import { BookingStatus, ConsultationMode, RecentModeOverride } from "@/types"
 import type { BookingWithRelations } from "@/types"
+import { Calendar, Video } from "lucide-react"
 
 interface BookingConfirmationProps {
   bookingId: string
@@ -80,7 +82,7 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
   if (!booking) {
     return (
       <div className="min-h-screen-safe flex items-center justify-center">
-        <div className="animate-spin w-8 h-8 border-4 border-[#6EC5FF] border-t-transparent rounded-full" />
+        <div className="animate-spin w-8 h-8 border-4 border-brand-600 border-t-transparent rounded-full" />
       </div>
     )
   }
@@ -88,149 +90,143 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
   const cancelUrl = `/book/cancel?id=${bookingId}&token=${booking.cancel_token}`
 
   return (
-    <div className="min-h-screen-safe flex items-center justify-center bg-white">
-      <div className="container-custom text-center py-8">
-        {/* チェックマークアニメーション */}
-        <div className="mb-8 flex items-center justify-center">
-          <div
-            className={`w-24 h-24 rounded-full bg-[#4CAF50] flex items-center justify-center transition-all duration-800 ${
-              showCheckmark ? "scale-100 opacity-100" : "scale-50 opacity-0"
-            }`}
-          >
-            <svg
-              className="w-12 h-12 text-white"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={3}
-                d="M5 13l4 4L19 7"
-                className={showCheckmark ? "animate-check-draw" : ""}
-              />
-            </svg>
-          </div>
-        </div>
-
-        {/* 確定メッセージ */}
-        <h1 className="text-2xl font-bold text-[#2D2D2D] mb-2">
-          予約が確定しました
-        </h1>
-        <p className="text-base text-[#666666] mb-8">
-          ご登録のメールアドレスに確認メールを送信しました
-        </p>
-
-        {/* 予約詳細 */}
-        <div className="bg-[#6EC5FF]/10 rounded-lg p-6 mb-8 text-left">
-          <div className="space-y-3">
-            <div>
-              <p className="text-sm text-[#666666] mb-1">日時</p>
-              <p className="text-xl font-bold text-[#2D2D2D]">
-                {formatDate(booking.start_time, "YYYY/MM/DD")}（
-                {getWeekday(booking.start_time)}）
-              </p>
-              <p className="text-lg font-medium text-[#2D2D2D]">
-                {formatDate(booking.start_time, "HH:mm")}〜
-                {formatDate(booking.end_time, "HH:mm")}
-              </p>
+    <div className="min-h-screen-safe bg-panel py-8">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-3xl mx-auto">
+          <div className="text-center">
+            {/* チェックマークアニメーション */}
+            <div className="mb-8 flex items-center justify-center">
+              <div
+                className={`w-20 h-20 rounded-xl bg-success flex items-center justify-center transition-all duration-800 shadow-sm ${
+                  showCheckmark ? "scale-100 opacity-100" : "scale-50 opacity-0"
+                }`}
+              >
+                <svg
+                  className="w-10 h-10 text-white"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  strokeWidth="2"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                    className={showCheckmark ? "animate-check-draw" : ""}
+                  />
+                </svg>
+              </div>
             </div>
 
-            <div>
-              <p className="text-sm text-[#666666] mb-1">担当</p>
-              <p className="text-base font-medium text-[#2D2D2D]">
-                {booking.staff.name}
-              </p>
-            </div>
+            {/* 確定メッセージ */}
+            <h1 className="text-3xl font-extrabold text-text mb-3" style={{ fontVariantNumeric: "tabular-nums" }}>
+              予約が確定しました
+            </h1>
+            <p className="text-base text-muted mb-8">
+              ご登録のメールアドレスに確認メールを送信しました
+            </p>
 
-            <div>
-              <p className="text-sm text-[#666666] mb-1">相談種別</p>
-              <p className="text-base font-medium text-[#2D2D2D]">
-                {booking.consultation_type.name}
-              </p>
-            </div>
-          </div>
-        </div>
+            {/* 予約詳細 */}
+            <Card className="mb-8 text-left">
+              <CardContent className="space-y-4">
+                <div>
+                  <p className="text-xs text-muted font-medium mb-2">日時</p>
+                  <p className="text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {formatDate(booking.start_time, "YYYY/MM/DD")}（
+                    {getWeekday(booking.start_time)}）
+                  </p>
+                  <p className="text-lg font-bold text-text mt-1" style={{ fontVariantNumeric: "tabular-nums" }}>
+                    {formatDate(booking.start_time, "HH:mm")}〜
+                    {formatDate(booking.end_time, "HH:mm")}
+                  </p>
+                </div>
 
-        {/* アクションボタン */}
-        <div className="space-y-3">
-          <Button
-            onClick={() =>
-              window.open(booking.google_meet_link, "_blank", "noopener,noreferrer")
-            }
-            className="w-full h-14 text-lg"
-            variant="default"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path d="M3.5 7.5L10 12l-6.5 4.5V7.5zm0-3v15l13-7.5-13-7.5z" />
-            </svg>
-            Google Meetに参加
-          </Button>
+                <div className="h-px bg-border" />
 
-          <Button
-            onClick={() => {
-              // .icsファイルをダウンロード
-              const icsContent = `BEGIN:VCALENDAR
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted font-medium mb-2">担当</p>
+                    <p className="text-base font-bold text-text">
+                      {booking.staff.name}
+                    </p>
+                  </div>
+
+                  <div>
+                    <p className="text-xs text-muted font-medium mb-2">相談種別</p>
+                    <p className="text-base font-bold text-text">
+                      {booking.consultation_type.name}
+                    </p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* アクションボタン */}
+            <div className="space-y-3">
+              <Button
+                onClick={() =>
+                  window.open(booking.google_meet_link, "_blank", "noopener,noreferrer")
+                }
+                variant="primary"
+                size="lg"
+                fullWidth
+                icon={<Video className="w-5 h-5" aria-hidden="true" />}
+              >
+                Google Meetに参加
+              </Button>
+
+              <Button
+                onClick={() => {
+                  const icsStart = booking.start_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
+                  const icsEnd = booking.end_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
+                  const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 BEGIN:VEVENT
-DTSTART:${booking.start_time.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
-DTEND:${booking.end_time.toISOString().replace(/[-:]/g, "").split(".")[0]}Z
+DTSTART:${icsStart}
+DTEND:${icsEnd}
 SUMMARY:${booking.consultation_type.name}
 DESCRIPTION:Google Meet: ${booking.google_meet_link}
 LOCATION:${booking.google_meet_link}
 END:VEVENT
 END:VCALENDAR`
 
-              const blob = new Blob([icsContent], { type: "text/calendar" })
-              const url = URL.createObjectURL(blob)
-              const a = document.createElement("a")
-              a.href = url
-              a.download = "booking.ics"
-              a.click()
-              URL.revokeObjectURL(url)
-            }}
-            variant="outline"
-            className="w-full h-12"
-          >
-            <svg
-              className="w-5 h-5 mr-2"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
-              />
-            </svg>
-            カレンダーに追加
-          </Button>
+                  const blob = new Blob([icsContent], { type: "text/calendar" })
+                  const url = URL.createObjectURL(blob)
+                  const a = document.createElement("a")
+                  a.href = url
+                  a.download = "booking.ics"
+                  a.click()
+                  URL.revokeObjectURL(url)
+                }}
+                variant="secondary"
+                size="md"
+                fullWidth
+                icon={<Calendar className="w-5 h-5" aria-hidden="true" />}
+              >
+                カレンダーに追加
+              </Button>
 
-          <Button
-            onClick={() => (window.location.href = cancelUrl)}
-            variant="ghost"
-            className="w-full h-12 text-[#666666]"
-          >
-            予約を変更・キャンセル
-          </Button>
-        </div>
+              <Button
+                onClick={() => (window.location.href = cancelUrl)}
+                variant="ghost"
+                size="md"
+                fullWidth
+              >
+                予約を変更・キャンセル
+              </Button>
+            </div>
 
-        {/* トップに戻る */}
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <Button
-            onClick={() => (window.location.href = "/")}
-            variant="link"
-            className="text-[#6EC5FF]"
-          >
-            トップページに戻る
-          </Button>
+            {/* トップに戻る */}
+            <div className="mt-12 pt-8 border-t border-border">
+              <button
+                onClick={() => (window.location.href = "/")}
+                className="text-brand-600 hover:text-brand-500 text-sm font-medium transition-colors"
+              >
+                トップページに戻る
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -1,0 +1,134 @@
+/* General UI v1 - Primitive Components */
+
+/* Button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-weight: 700;
+  border: 1px solid transparent;
+  box-shadow: var(--shadow-sm);
+  transition: transform 0.02s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:active {
+  transform: translateY(1px);
+}
+
+.btn-primary {
+  background: var(--brand-600);
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background: var(--brand-500);
+}
+
+.btn-secondary {
+  background: #fff;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-secondary:hover {
+  background: var(--panel-muted);
+}
+
+/* Card */
+.card {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 16px;
+}
+
+.cards {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-items: start;
+}
+
+/* Stat Card */
+.stat {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  column-gap: 12px;
+  row-gap: 4px;
+  align-items: center;
+}
+
+.stat .value {
+  grid-column: 1 / -1;
+  font-size: 34px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.stat .label {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Accent Bar */
+.accent {
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--brand-500), var(--brand-400));
+}
+
+/* List */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: #fff;
+}
+
+/* Field */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.input {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 16px;
+}
+
+.help {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Navigation Active State */
+.nav-active {
+  position: relative;
+}
+
+.nav-active::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 8px;
+  bottom: 8px;
+  width: 3px;
+  background: var(--brand-600);
+  border-radius: 3px;
+}

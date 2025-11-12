@@ -245,13 +245,13 @@ export default function BookingsListPage() {
   }
 
   return (
-    <div className="space-y-8">
-      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-8 border border-primary/10">
-        <div className="flex items-center gap-3 mb-2">
-          <div className="text-4xl">📋</div>
+    <div className="space-y-8 max-w-7xl">
+      <div className="bg-gradient-to-br from-primary/10 via-primary/5 to-transparent rounded-3xl p-10 border-2 border-primary/10">
+        <div className="flex items-center gap-4 mb-2">
+          <div className="text-5xl">📋</div>
           <div>
-            <h1 className="text-2xl md:text-3xl font-bold text-foreground">予約一覧</h1>
-            <p className="text-muted-foreground mt-1">
+            <h1 className="text-3xl md:text-4xl font-bold text-foreground">予約一覧</h1>
+            <p className="text-muted-foreground mt-2 text-lg">
               全ての予約を確認・管理できます
             </p>
           </div>
@@ -259,7 +259,7 @@ export default function BookingsListPage() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-2xl p-6 border border-border/50 shadow-sm">
+      <div className="bg-white rounded-2xl p-8 border-2 border-border/50 shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <svg className="h-5 w-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />

@@ -1,0 +1,50 @@
+/* General UI v1 - Design Tokens */
+:root {
+  /* Brand */
+  --brand-600: #2563eb;
+  --brand-500: #3b82f6;
+  --brand-400: #60a5fa;
+
+  /* Neutral */
+  --text: #0f172a;
+  --muted: #64748b;
+  --bg: #ffffff;
+  --panel: #ffffff;
+  --panel-muted: #f8fafc;
+  --border: #e5e7eb;
+
+  /* Status */
+  --success: #22c55e;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --info: #06b6d4;
+
+  /* Radii/Shadow */
+  --radius: 16px;
+  --radius-sm: 12px;
+  --shadow: 0 8px 24px rgba(2, 6, 23, 0.06), 0 1px 2px rgba(2, 6, 23, 0.06);
+  --shadow-sm: 0 1px 2px rgba(2, 6, 23, 0.06);
+
+  /* Spacing */
+  --gap-1: 8px;
+  --gap-2: 12px;
+  --gap-3: 16px;
+  --gap-4: 24px;
+  --gap-5: 32px;
+
+  /* Layout */
+  --container: 1120px;
+}
+
+html {
+  font-family: Inter, "Noto Sans JP", system-ui, -apple-system, "Segoe UI", Roboto, "Hiragino Sans", "Yu Gothic UI", Meiryo, sans-serif;
+  font-feature-settings: "tnum" on;
+  color: var(--text);
+  background: var(--bg);
+}
+
+.container {
+  max-width: var(--container);
+  margin-inline: auto;
+  padding-inline: 24px;
+}

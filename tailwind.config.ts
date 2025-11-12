@@ -17,11 +17,22 @@ const config: Config = {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        // General UI v1 Tokens
+        brand: {
+          600: "#2563eb",
+          500: "#3b82f6",
+          400: "#60a5fa",
+        },
+        text: "#0f172a",
+        muted: "#64748b",
+        panel: "#ffffff",
+        "panel-muted": "#f8fafc",
+        border: "#e5e7eb",
+        success: "#22c55e",
+        warning: "#f59e0b",
+        danger: "#ef4444",
+        info: "#06b6d4",
+        // Legacy colors (for gradual migration)
         primary: {
           DEFAULT: "#6EC5FF",
           foreground: "#FFFFFF",
@@ -34,14 +45,6 @@ const config: Config = {
           DEFAULT: "#FF7676",
           foreground: "#FFFFFF",
         },
-        success: {
-          DEFAULT: "#4CAF50",
-          foreground: "#FFFFFF",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "#666666",
-        },
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
@@ -52,12 +55,15 @@ const config: Config = {
         inter: ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       borderRadius: {
-        lg: "16px",
+        xl: "16px", // --radius
+        lg: "12px", // --radius-sm
         md: "12px",
         sm: "8px",
       },
       boxShadow: {
-        custom: "0 4px 8px rgba(0, 0, 0, 0.06)",
+        elev: "0 8px 24px rgba(2, 6, 23, 0.06), 0 1px 2px rgba(2, 6, 23, 0.06)", // --shadow
+        sm: "0 1px 2px rgba(2, 6, 23, 0.06)", // --shadow-sm
+        custom: "0 4px 8px rgba(0, 0, 0, 0.06)", // legacy
       },
       keyframes: {
         "fade-in": {

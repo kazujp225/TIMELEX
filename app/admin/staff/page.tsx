@@ -80,57 +80,58 @@ export default function StaffManagementPage() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-7xl">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-3xl font-bold">スタッフ管理</h1>
-          <p className="text-muted-foreground mt-2">
+          <h1 className="text-4xl font-bold">スタッフ管理</h1>
+          <p className="text-muted-foreground mt-3 text-lg">
             スタッフの追加・編集・削除を行います
           </p>
         </div>
 
-        <Button asChild>
+        <Button asChild className="h-14 px-8 text-base font-semibold">
           <Link href="/admin/staff/new">+ スタッフを追加</Link>
         </Button>
       </div>
 
       {/* Filters */}
-      <Card>
-        <CardHeader>
-          <CardTitle>絞り込み</CardTitle>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">絞り込み</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-2">
-            <div>
-              <label className="text-sm font-medium mb-2 block">検索</label>
+          <div className="grid gap-6 md:grid-cols-2">
+            <div className="space-y-2">
+              <label className="text-base font-semibold block">検索</label>
               <Input
                 placeholder="名前またはメールアドレス"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
+                className="h-14 text-base"
               />
             </div>
 
-            <div>
-              <label className="text-sm font-medium mb-2 block">ステータス</label>
-              <div className="flex gap-2">
+            <div className="space-y-2">
+              <label className="text-base font-semibold block">ステータス</label>
+              <div className="flex gap-3">
                 <Button
                   variant={statusFilter === "all" ? "default" : "outline"}
                   onClick={() => setStatusFilter("all")}
-                  size="sm"
+                  className="h-12 px-6 text-base"
                 >
                   全て
                 </Button>
                 <Button
                   variant={statusFilter === "active" ? "default" : "outline"}
                   onClick={() => setStatusFilter("active")}
-                  size="sm"
+                  className="h-12 px-6 text-base"
                 >
                   アクティブ
                 </Button>
                 <Button
                   variant={statusFilter === "inactive" ? "default" : "outline"}
                   onClick={() => setStatusFilter("inactive")}
-                  size="sm"
+                  className="h-12 px-6 text-base"
                 >
                   無効
                 </Button>
@@ -141,15 +142,15 @@ export default function StaffManagementPage() {
       </Card>
 
       {/* Staff List */}
-      <Card>
-        <CardHeader>
-          <CardTitle>スタッフ一覧（{filteredStaff.length}人）</CardTitle>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">スタッフ一覧（{filteredStaff.length}人）</CardTitle>
         </CardHeader>
         <CardContent>
           {filteredStaff.length === 0 ? (
-            <div className="text-center py-12 text-muted-foreground">
+            <div className="text-center py-16 text-muted-foreground">
               <svg
-                className="mx-auto h-12 w-12 mb-4"
+                className="mx-auto h-16 w-16 mb-4"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -161,36 +162,36 @@ export default function StaffManagementPage() {
                   d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
                 />
               </svg>
-              <p>スタッフが見つかりません</p>
+              <p className="text-lg">スタッフが見つかりません</p>
             </div>
           ) : (
-            <div className="space-y-3">
+            <div className="space-y-4">
               {filteredStaff.map((s) => (
                 <div
                   key={s.id}
-                  className="p-4 border rounded-lg hover:bg-accent/50 transition-colors"
+                  className="p-6 border-2 rounded-lg hover:bg-accent/50 transition-colors"
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-4 flex-1">
+                  <div className="flex items-center justify-between gap-6">
+                    <div className="flex items-center gap-6 flex-1">
                       {s.photo_url ? (
                         <img
                           src={s.photo_url}
                           alt={s.name}
-                          className="w-12 h-12 rounded-full"
+                          className="w-16 h-16 rounded-full"
                         />
                       ) : (
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <span className="text-primary font-medium">
+                        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
+                          <span className="text-primary font-semibold text-xl">
                             {s.name.charAt(0)}
                           </span>
                         </div>
                       )}
 
                       <div className="flex-1">
-                        <div className="flex items-center gap-2">
-                          <h3 className="font-medium">{s.name}</h3>
+                        <div className="flex items-center gap-3">
+                          <h3 className="font-semibold text-lg">{s.name}</h3>
                           <span
-                            className={`text-xs px-2 py-1 rounded ${
+                            className={`text-sm px-3 py-1 rounded font-medium ${
                               s.is_active
                                 ? "bg-success/10 text-success"
                                 : "bg-muted text-muted-foreground"
@@ -199,25 +200,25 @@ export default function StaffManagementPage() {
                             {s.is_active ? "アクティブ" : "無効"}
                           </span>
                         </div>
-                        <p className="text-sm text-muted-foreground">{s.email}</p>
-                        <p className="text-xs text-muted-foreground mt-1">
+                        <p className="text-base text-muted-foreground mt-1">{s.email}</p>
+                        <p className="text-sm text-muted-foreground mt-1">
                           タイムゾーン: {s.timezone}
                         </p>
                       </div>
                     </div>
 
-                    <div className="flex gap-2">
+                    <div className="flex gap-3">
                       <Button
                         variant="outline"
-                        size="sm"
                         asChild
+                        className="h-12 px-6 text-base"
                       >
                         <Link href={`/admin/staff/${s.id}`}>編集</Link>
                       </Button>
                       <Button
                         variant={s.is_active ? "outline" : "default"}
-                        size="sm"
                         onClick={() => toggleStaffStatus(s.id, s.is_active)}
+                        className="h-12 px-6 text-base"
                       >
                         {s.is_active ? "無効化" : "有効化"}
                       </Button>

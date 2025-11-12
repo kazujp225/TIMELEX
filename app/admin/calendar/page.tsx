@@ -1,110 +1,136 @@
 "use client"
 
-import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { formatDate } from "@/lib/utils"
-import type { BookingWithRelations } from "@/types"
+import type { BookingWithRelations, Staff } from "@/types"
 
-export default function StaffCalendarPage() {
-  const { data: session } = useSession()
+export default function AdminCalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
+  const [staff, setStaff] = useState<Staff[]>([])
   const [bookings, setBookings] = useState<BookingWithRelations[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    loadMockBookings()
+    loadData()
   }, [currentDate])
 
-  const loadMockBookings = () => {
+  const loadData = async () => {
     setLoading(true)
 
-    // モックデータ
-    const mockData: BookingWithRelations[] = []
+    // モックデータ: スタッフ
+    const mockStaff: Staff[] = [
+      {
+        id: "staff-1",
+        name: "山田太郎",
+        email: "yamada@example.com",
+        is_active: true,
+        timezone: "Asia/Tokyo",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: "staff-2",
+        name: "佐藤花子",
+        email: "sato@example.com",
+        is_active: true,
+        timezone: "Asia/Tokyo",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      {
+        id: "staff-3",
+        name: "鈴木一郎",
+        email: "suzuki@example.com",
+        is_active: true,
+        timezone: "Asia/Tokyo",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+    ]
+
+    // モックデータ: 予約
+    const mockBookings: BookingWithRelations[] = []
     const weekStart = new Date(currentDate)
     weekStart.setDate(weekStart.getDate() - weekStart.getDay())
 
-    // 今週の予約をランダムに生成
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(weekStart)
-      day.setDate(day.getDate() + i)
+    // Googleカレンダー風のカラーパレット
+    const colors = [
+      "#4285f4", // 青
+      "#ea4335", // 赤
+      "#fbbc04", // 黄色
+      "#34a853", // 緑
+      "#ff6d01", // オレンジ
+      "#46bdc6", // シアン
+      "#7986cb", // 藤色
+      "#f439a0", // ピンク
+      "#e67c73", // サーモン
+      "#33b679", // ミント
+      "#8e24aa", // 紫
+      "#039be5", // 水色
+    ]
 
-      // 平日は予約を追加
-      if (i >= 1 && i <= 5) {
-        const morningBooking: BookingWithRelations = {
-          id: `booking-${i}-1`,
-          status: "confirmed" as any,
-          start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 10, 0),
-          end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 10, 30),
-          duration_minutes: 30,
-          staff_id: "staff-1",
-          consultation_type_id: "type-1",
-          inquiry_source_id: "source-1",
-          client_name: `山田${i}太郎`,
-          client_email: `client${i}@example.com`,
-          client_company: `株式会社${i}`,
-          client_memo: null,
-          is_recent: i % 2 === 0,
-          google_event_id: `event-${i}`,
-          google_meet_link: "https://meet.google.com/xxx-yyyy-zzz",
-          cancel_token: `token-${i}`,
-          created_at: new Date(),
-          updated_at: new Date(),
-          staff: {
-            id: "staff-1",
-            name: "スタッフA",
-            email: "staff@example.com",
-            is_active: true,
-            timezone: "Asia/Tokyo",
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-          consultation_type: {
-            id: "type-1",
-            name: "初回相談",
-            duration_minutes: 30,
-            buffer_before_minutes: 5,
-            buffer_after_minutes: 5,
-            mode: "immediate" as any,
-            recent_mode_override: "keep" as any,
-            display_order: 0,
-            is_active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-          inquiry_source: {
-            id: "source-1",
-            name: "自社サイト",
-            display_order: 0,
-            is_active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-        }
-        mockData.push(morningBooking)
+    mockStaff.forEach((staffMember, staffIndex) => {
+      for (let i = 0; i < 7; i++) {
+        const day = new Date(weekStart)
+        day.setDate(day.getDate() + i)
 
-        if (i === 2 || i === 4) {
-          const afternoonBooking: BookingWithRelations = {
-            ...morningBooking,
-            id: `booking-${i}-2`,
-            start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 14, 0),
-            end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 15, 0),
-            duration_minutes: 60,
-            client_name: `佐藤${i}花子`,
-            consultation_type: {
-              ...morningBooking.consultation_type,
-              id: "type-2",
-              name: "フォローアップ",
+        if (i >= 1 && i <= 5) {
+          const hours = staffIndex === 0 ? [10, 14] : staffIndex === 1 ? [11, 15] : [13, 16]
+
+          hours.forEach((hour, hourIndex) => {
+            const booking: BookingWithRelations = {
+              id: `booking-${staffIndex}-${i}-${hourIndex}`,
+              status: "confirmed" as any,
+              start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, 0),
+              end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour + 1, 0),
               duration_minutes: 60,
-            },
-          }
-          mockData.push(afternoonBooking)
+              staff_id: staffMember.id,
+              consultation_type_id: "type-1",
+              inquiry_source_id: "source-1",
+              client_name: `クライアント${staffIndex}-${i}-${hourIndex}`,
+              client_email: `client${staffIndex}-${i}@example.com`,
+              client_company: `株式会社サンプル${staffIndex}`,
+              client_memo: null,
+              is_recent: Math.random() > 0.5,
+              google_event_id: `event-${staffIndex}-${i}`,
+              google_meet_link: "https://meet.google.com/xxx-yyyy-zzz",
+              cancel_token: `token-${staffIndex}-${i}`,
+              created_at: new Date(),
+              updated_at: new Date(),
+              staff: staffMember,
+              consultation_type: {
+                id: "type-1",
+                name: "初回相談",
+                duration_minutes: 60,
+                buffer_before_minutes: 5,
+                buffer_after_minutes: 5,
+                mode: "immediate" as any,
+                recent_mode_override: "keep" as any,
+                display_order: 0,
+                is_active: true,
+                created_at: new Date(),
+                updated_at: new Date(),
+              },
+              inquiry_source: {
+                id: "source-1",
+                name: "自社サイト",
+                display_order: 0,
+                is_active: true,
+                created_at: new Date(),
+                updated_at: new Date(),
+              },
+              color: colors[staffIndex],
+            } as any
+            mockBookings.push(booking)
+          })
         }
       }
-    }
+    })
 
-    setBookings(mockData)
+    setStaff(mockStaff)
+    setBookings(mockBookings)
     setLoading(false)
   }
 
@@ -158,6 +184,12 @@ export default function StaffCalendarPage() {
     )
   }
 
+  const getTimePosition = (time: Date) => {
+    const hours = time.getHours()
+    const minutes = time.getMinutes()
+    return ((hours - 8) * 60 + minutes) / 60 // 8時を0として計算
+  }
+
   const weekDays = getWeekDays()
   const hours = Array.from({ length: 13 }, (_, i) => i + 8) // 8:00 - 20:00
 
@@ -174,7 +206,7 @@ export default function StaffCalendarPage() {
       {/* ヘッダー */}
       <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
-          <h1 className="text-4xl font-bold">マイカレンダー</h1>
+          <h1 className="text-4xl font-bold">カレンダー</h1>
           <p className="text-muted-foreground mt-2 text-lg">
             {formatDate(weekDays[0], "YYYY年MM月DD日")} 〜 {formatDate(weekDays[6], "MM月DD日")}
           </p>
@@ -262,6 +294,7 @@ export default function StaffCalendarPage() {
                             return bookingHour === hour
                           })
                           .map((booking) => {
+                            const startHour = new Date(booking.start_time).getHours()
                             const startMinute = new Date(booking.start_time).getMinutes()
                             const duration = booking.duration_minutes
                             const top = (startMinute / 60) * 60
@@ -270,17 +303,19 @@ export default function StaffCalendarPage() {
                             return (
                               <div
                                 key={booking.id}
-                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-blue-500 text-white"
+                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
                                 style={{
                                   top: `${top}px`,
                                   height: `${height}px`,
+                                  backgroundColor: (booking as any).color || "#4285f4",
+                                  color: "white",
                                 }}
                               >
                                 <div className="font-semibold truncate">
                                   {formatDate(booking.start_time, "HH:mm")} {booking.client_name}
                                 </div>
                                 <div className="text-[10px] opacity-90 truncate mt-0.5">
-                                  {booking.consultation_type.name}
+                                  {booking.staff.name} - {booking.consultation_type.name}
                                 </div>
                               </div>
                             )
@@ -295,35 +330,24 @@ export default function StaffCalendarPage() {
         </CardContent>
       </Card>
 
-      {/* 統計情報 */}
-      <div className="grid gap-6 md:grid-cols-3">
-        <Card className="border-2">
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground mb-2">今週の予約</div>
-            <div className="text-4xl font-bold text-primary">{bookings.length}</div>
-            <div className="text-sm text-muted-foreground mt-1">件</div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2">
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground mb-2">確定済み</div>
-            <div className="text-4xl font-bold text-green-500">
-              {bookings.filter((b) => b.status === "confirmed").length}
+      {/* 凡例 */}
+      <div className="flex items-center gap-6 flex-wrap">
+        <div className="text-sm font-semibold">スタッフ:</div>
+        {staff.map((staffMember, index) => {
+          const colors = [
+            "#4285f4", "#ea4335", "#fbbc04", "#34a853", "#ff6d01", "#46bdc6",
+            "#7986cb", "#f439a0", "#e67c73", "#33b679", "#8e24aa", "#039be5"
+          ]
+          return (
+            <div key={staffMember.id} className="flex items-center gap-2">
+              <div
+                className="w-4 h-4 rounded"
+                style={{ backgroundColor: colors[index % colors.length] }}
+              ></div>
+              <span className="text-sm">{staffMember.name}</span>
             </div>
-            <div className="text-sm text-muted-foreground mt-1">件</div>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2">
-          <CardContent className="p-6">
-            <div className="text-sm text-muted-foreground mb-2">継続顧客</div>
-            <div className="text-4xl font-bold text-blue-500">
-              {bookings.filter((b) => b.is_recent).length}
-            </div>
-            <div className="text-sm text-muted-foreground mt-1">件</div>
-          </CardContent>
-        </Card>
+          )
+        })}
       </div>
     </div>
   )

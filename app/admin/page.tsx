@@ -96,20 +96,20 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-8 max-w-7xl">
       <div>
-        <h1 className="text-3xl font-bold">管理者ダッシュボード</h1>
-        <p className="text-muted-foreground mt-2">
+        <h1 className="text-4xl font-bold">管理者ダッシュボード</h1>
+        <p className="text-muted-foreground mt-3 text-lg">
           システム全体の状況を確認できます
         </p>
       </div>
 
       {/* System Overview */}
-      <div className="grid gap-4 md:grid-cols-5">
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>総予約数</CardDescription>
-            <CardTitle className="text-3xl">
+      <div className="grid gap-6 md:grid-cols-5">
+        <Card className="border-2">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">総予約数</CardDescription>
+            <CardTitle className="text-4xl">
               {stats?.allTime.totalBookings || 0}
             </CardTitle>
           </CardHeader>
@@ -118,10 +118,10 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>スタッフ数</CardDescription>
-            <CardTitle className="text-3xl">
+        <Card className="border-2">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">スタッフ数</CardDescription>
+            <CardTitle className="text-4xl">
               {stats?.allTime.activeStaff || 0}
             </CardTitle>
           </CardHeader>
@@ -132,10 +132,10 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>相談種別</CardDescription>
-            <CardTitle className="text-3xl">
+        <Card className="border-2">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">相談種別</CardDescription>
+            <CardTitle className="text-4xl">
               {stats?.allTime.consultationTypes || 0}
             </CardTitle>
           </CardHeader>
@@ -144,10 +144,10 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card>
-          <CardHeader className="pb-3">
-            <CardDescription>お問い合わせ元</CardDescription>
-            <CardTitle className="text-3xl">
+        <Card className="border-2">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">お問い合わせ元</CardDescription>
+            <CardTitle className="text-4xl">
               {stats?.allTime.inquirySources || 0}
             </CardTitle>
           </CardHeader>
@@ -156,10 +156,10 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-primary">
-          <CardHeader className="pb-3">
-            <CardDescription>継続率</CardDescription>
-            <CardTitle className="text-3xl text-primary">
+        <Card className="border-2 border-primary">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">継続率</CardDescription>
+            <CardTitle className="text-4xl text-primary">
               {stats?.month.total
                 ? Math.round(
                     (stats.month.recent / stats.month.total) * 100
@@ -175,143 +175,143 @@ export default function AdminDashboard() {
       </div>
 
       {/* Today's Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle>今日の予約</CardTitle>
-          <CardDescription>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">今日の予約</CardTitle>
+          <CardDescription className="text-base">
             {formatDate(new Date(), "YYYY/MM/DD")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-4">
             <div>
-              <div className="text-2xl font-bold">{stats?.today.total || 0}</div>
-              <div className="text-sm text-muted-foreground">総予約数</div>
+              <div className="text-3xl font-bold">{stats?.today.total || 0}</div>
+              <div className="text-base text-muted-foreground mt-2">総予約数</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-success">
+              <div className="text-3xl font-bold text-success">
                 {stats?.today.confirmed || 0}
               </div>
-              <div className="text-sm text-muted-foreground">確定</div>
+              <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-3xl font-bold text-primary">
                 {stats?.today.new || 0}
               </div>
-              <div className="text-sm text-muted-foreground">新規</div>
+              <div className="text-base text-muted-foreground mt-2">新規</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent">
+              <div className="text-3xl font-bold text-accent">
                 {stats?.today.recent || 0}
               </div>
-              <div className="text-sm text-muted-foreground">継続</div>
+              <div className="text-base text-muted-foreground mt-2">継続</div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Weekly Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle>今週の予約</CardTitle>
-          <CardDescription>過去7日間の統計</CardDescription>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">今週の予約</CardTitle>
+          <CardDescription className="text-base">過去7日間の統計</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-4">
             <div>
-              <div className="text-2xl font-bold">{stats?.week.total || 0}</div>
-              <div className="text-sm text-muted-foreground">総予約数</div>
+              <div className="text-3xl font-bold">{stats?.week.total || 0}</div>
+              <div className="text-base text-muted-foreground mt-2">総予約数</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-success">
+              <div className="text-3xl font-bold text-success">
                 {stats?.week.confirmed || 0}
               </div>
-              <div className="text-sm text-muted-foreground">確定</div>
+              <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-3xl font-bold text-primary">
                 {stats?.week.new || 0}
               </div>
-              <div className="text-sm text-muted-foreground">新規</div>
+              <div className="text-base text-muted-foreground mt-2">新規</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent">
+              <div className="text-3xl font-bold text-accent">
                 {stats?.week.recent || 0}
               </div>
-              <div className="text-sm text-muted-foreground">継続</div>
+              <div className="text-base text-muted-foreground mt-2">継続</div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Monthly Stats */}
-      <Card>
-        <CardHeader>
-          <CardTitle>今月の予約</CardTitle>
-          <CardDescription>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">今月の予約</CardTitle>
+          <CardDescription className="text-base">
             {formatDate(new Date(), "YYYY年MM月")}
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-4">
             <div>
-              <div className="text-2xl font-bold">{stats?.month.total || 0}</div>
-              <div className="text-sm text-muted-foreground">総予約数</div>
+              <div className="text-3xl font-bold">{stats?.month.total || 0}</div>
+              <div className="text-base text-muted-foreground mt-2">総予約数</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-success">
+              <div className="text-3xl font-bold text-success">
                 {stats?.month.confirmed || 0}
               </div>
-              <div className="text-sm text-muted-foreground">確定</div>
+              <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-primary">
+              <div className="text-3xl font-bold text-primary">
                 {stats?.month.new || 0}
               </div>
-              <div className="text-sm text-muted-foreground">新規</div>
+              <div className="text-base text-muted-foreground mt-2">新規</div>
             </div>
             <div>
-              <div className="text-2xl font-bold text-accent">
+              <div className="text-3xl font-bold text-accent">
                 {stats?.month.recent || 0}
               </div>
-              <div className="text-sm text-muted-foreground">継続</div>
+              <div className="text-base text-muted-foreground mt-2">継続</div>
             </div>
           </div>
         </CardContent>
       </Card>
 
       {/* Quick Actions */}
-      <Card>
-        <CardHeader>
-          <CardTitle>クイックアクション</CardTitle>
-          <CardDescription>よく使う管理機能へのショートカット</CardDescription>
+      <Card className="border-2">
+        <CardHeader className="pb-6">
+          <CardTitle className="text-2xl">クイックアクション</CardTitle>
+          <CardDescription className="text-base">よく使う管理機能へのショートカット</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-3 md:grid-cols-3">
+          <div className="grid gap-4 md:grid-cols-3">
             <a
               href="/admin/staff"
-              className="p-4 border rounded-lg hover:bg-accent transition-colors"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-medium mb-1">スタッフ管理</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-lg mb-2">スタッフ管理</h3>
+              <p className="text-base text-muted-foreground">
                 スタッフの追加・編集・削除
               </p>
             </a>
             <a
               href="/admin/consultation-types"
-              className="p-4 border rounded-lg hover:bg-accent transition-colors"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-medium mb-1">相談種別管理</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-lg mb-2">相談種別管理</h3>
+              <p className="text-base text-muted-foreground">
                 相談種別の設定・編集
               </p>
             </a>
             <a
               href="/admin/settings"
-              className="p-4 border rounded-lg hover:bg-accent transition-colors"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-medium mb-1">システム設定</h3>
-              <p className="text-sm text-muted-foreground">
+              <h3 className="font-semibold text-lg mb-2">システム設定</h3>
+              <p className="text-base text-muted-foreground">
                 グローバル設定の変更
               </p>
             </a>
