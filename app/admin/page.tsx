@@ -40,9 +40,18 @@ export default function AdminDashboard() {
   const { data: session } = useSession()
   const [stats, setStats] = useState<AdminStats | null>(null)
   const [loading, setLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
 
   useEffect(() => {
-    fetchStats()
+    // 認証チェック
+    const authenticated = sessionStorage.getItem("admin_authenticated")
+    if (authenticated === "true") {
+      setIsAuthenticated(true)
+      fetchStats()
+    } else {
+      // 未認証の場合はログインページにリダイレクト
+      window.location.href = "/admin/login"
+    }
   }, [])
 
   const fetchStats = async () => {
@@ -87,7 +96,7 @@ export default function AdminDashboard() {
     }
   }
 
-  if (loading) {
+  if (!isAuthenticated || loading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-spin h-12 w-12 border-4 border-primary border-t-transparent rounded-full" />
@@ -275,28 +284,46 @@ export default function AdminDashboard() {
         <CardContent>
           <div className="grid gap-4 md:grid-cols-3">
             <a
-              href="/admin/staff"
+              href="/admin/calendar"
               className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-semibold text-lg mb-2">スタッフ管理</h3>
+              <h3 className="font-semibold text-lg mb-2">📅 予約カレンダー</h3>
               <p className="text-base text-muted-foreground">
-                スタッフの追加・編集・削除
+                全予約を一覧で確認
+              </p>
+            </a>
+            <a
+              href="/admin/reports"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
+            >
+              <h3 className="font-semibold text-lg mb-2">📊 レポート</h3>
+              <p className="text-base text-muted-foreground">
+                予約分析・統計データ
               </p>
             </a>
             <a
               href="/admin/consultation-types"
               className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-semibold text-lg mb-2">相談種別管理</h3>
+              <h3 className="font-semibold text-lg mb-2">💬 相談種別管理</h3>
               <p className="text-base text-muted-foreground">
                 相談種別の設定・編集
+              </p>
+            </a>
+            <a
+              href="/admin/inquiry-sources"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
+            >
+              <h3 className="font-semibold text-lg mb-2">📧 お問い合わせ元管理</h3>
+              <p className="text-base text-muted-foreground">
+                流入元の追加・編集
               </p>
             </a>
             <a
               href="/admin/settings"
               className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
             >
-              <h3 className="font-semibold text-lg mb-2">システム設定</h3>
+              <h3 className="font-semibold text-lg mb-2">⚙️ システム設定</h3>
               <p className="text-base text-muted-foreground">
                 グローバル設定の変更
               </p>

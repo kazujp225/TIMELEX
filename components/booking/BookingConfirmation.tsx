@@ -239,14 +239,17 @@ END:VCALENDAR`
               </Button>
             </div>
 
-            {/* トップに戻る */}
-            <div className="mt-12 pt-8 border-t border-border">
-              <button
-                onClick={() => (window.location.href = "/")}
-                className="text-brand-600 hover:text-brand-500 text-sm font-medium transition-colors"
-              >
-                トップページに戻る
-              </button>
+            {/* サンキューメッセージ */}
+            <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
+              <div className="bg-brand-50 rounded-xl p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-bold text-text mb-2">
+                  ご予約ありがとうございます
+                </h2>
+                <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                  当日はこのページからGoogle Meetに参加できます。<br />
+                  このページをブックマークしておくと便利です。
+                </p>
+              </div>
             </div>
           </div>
         </div>

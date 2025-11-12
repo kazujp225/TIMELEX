@@ -23,21 +23,10 @@ export default function HomePage() {
             空き枠を選んで、その場で予約完了。Google Meet リンクが即座に発行されます。
           </p>
 
-          {/* Primary CTA */}
+          {/* Primary CTA - メールからの直接リンクを想定しているため、ここでは表示しない */}
           <div className="mb-6 sm:mb-10">
-            <Link href="/book">
-              <Button
-                variant="primary"
-                size="lg"
-                icon={<Calendar className="w-5 h-5" aria-hidden="true" />}
-                className="text-lg sm:text-xl px-6 sm:px-8 py-4 sm:py-5 min-h-[52px] sm:min-h-[56px] shadow-lg hover:shadow-xl transition-all"
-              >
-                面談を予約する
-              </Button>
-            </Link>
-            <p className="mt-3 sm:mt-4 text-xs sm:text-sm text-muted flex items-center justify-center gap-2">
-              <CheckCircle className="w-4 h-4 text-success" aria-hidden="true" />
-              無料でご利用いただけます
+            <p className="text-base sm:text-lg text-muted max-w-2xl mx-auto">
+              ご予約は、お送りしたメールのリンクからお願いいたします
             </p>
           </div>
 
@@ -77,16 +66,6 @@ export default function HomePage() {
             </div>
           </div>
 
-          {/* Footer Links */}
-          <div className="flex flex-row justify-center items-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-border">
-            <Link href="/staff" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium py-3 px-4 tap-target">
-              スタッフログイン
-            </Link>
-            <span className="text-border">|</span>
-            <Link href="/admin" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium py-3 px-4 tap-target">
-              管理者ログイン
-            </Link>
-          </div>
         </div>
       </div>
 
