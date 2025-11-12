@@ -112,8 +112,8 @@ export default function BookingPage() {
 
   return (
     <div className="min-h-screen-safe bg-white">
-      {/* デバッグ用トラッキング情報表示（開発時のみ） */}
-      {process.env.NODE_ENV === "development" && trackingData && (
+      {/* デバッグ用トラッキング情報表示（開発時のみ） - 非表示 */}
+      {false && process.env.NODE_ENV === "development" && trackingData && (
         <div className="fixed top-2 right-2 z-50 max-w-xs bg-black/90 text-white text-xs p-3 rounded-lg shadow-xl">
           <div className="font-bold mb-2 flex items-center gap-2">
             <span>📊</span>
