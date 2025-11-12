@@ -39,9 +39,7 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
   const adminNavItems: NavItem[] = [
     { label: "ダッシュボード", href: "/admin", icon: LayoutDashboard },
     { label: "カレンダー", href: "/admin/calendar", icon: Calendar },
-    { label: "スタッフ管理", href: "/admin/staff", icon: Users },
     { label: "相談種別", href: "/admin/consultation-types", icon: MessageSquare },
-    { label: "お問い合わせ元", href: "/admin/inquiry-sources", icon: FileText },
     { label: "アンケート", href: "/admin/questionnaires", icon: ClipboardList },
     { label: "レポート", href: "/admin/reports", icon: BarChart3 },
     { label: "設定", href: "/admin/settings", icon: Settings },

@@ -30,7 +30,6 @@ interface AdminStats {
   allTime: {
     totalBookings: number
     consultationTypes: number
-    inquirySources: number
   }
 }
 
@@ -82,7 +81,6 @@ export default function AdminDashboard() {
         allTime: {
           totalBookings: 342,
           consultationTypes: 8,
-          inquirySources: 6,
         },
       })
     } catch (error) {
@@ -110,7 +108,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* System Overview */}
-      <div className="grid gap-6 md:grid-cols-4">
+      <div className="grid gap-6 md:grid-cols-3">
         <Card className="border-2">
           <CardHeader className="pb-4">
             <CardDescription className="text-base">総予約数</CardDescription>
@@ -128,18 +126,6 @@ export default function AdminDashboard() {
             <CardDescription className="text-base">相談種別</CardDescription>
             <CardTitle className="text-4xl">
               {stats?.allTime.consultationTypes || 0}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">種類</p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2">
-          <CardHeader className="pb-4">
-            <CardDescription className="text-base">お問い合わせ元</CardDescription>
-            <CardTitle className="text-4xl">
-              {stats?.allTime.inquirySources || 0}
             </CardTitle>
           </CardHeader>
           <CardContent>
@@ -304,15 +290,6 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-lg mb-2">💬 相談種別管理</h3>
               <p className="text-base text-muted-foreground">
                 相談種別の設定・編集
-              </p>
-            </a>
-            <a
-              href="/admin/inquiry-sources"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">📧 お問い合わせ元管理</h3>
-              <p className="text-base text-muted-foreground">
-                流入元の追加・編集
               </p>
             </a>
             <a

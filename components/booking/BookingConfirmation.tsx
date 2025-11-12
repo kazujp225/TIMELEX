@@ -46,7 +46,7 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
       updated_at: new Date(),
       staff: {
         id: "staff-1",
-        name: "スタッフA",
+        name: "担当者A",
         email: "staff-a@example.com",
         is_active: true,
         timezone: "Asia/Tokyo",
@@ -199,7 +199,7 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
                   const icsStart = booking.start_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
                   const icsEnd = booking.end_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
                   const meetUrl = booking.consultation_type.google_meet_url || booking.google_meet_link
-                  const description = `オンライン面談\\n\\n担当: ${booking.staff?.name || 'スタッフ'}\\n相談種別: ${booking.consultation_type.name}\\n\\nGoogle Meetリンク:\\n${meetUrl}\\n\\n※予約時間になりましたら、上記リンクからご参加ください。`
+                  const description = `オンライン面談\\n\\n担当: ${booking.staff?.name || '担当者'}\\n相談種別: ${booking.consultation_type.name}\\n\\nGoogle Meetリンク:\\n${meetUrl}\\n\\n※予約時間になりましたら、上記リンクからご参加ください。`
                   const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
 PRODID:-//TIMREXPLUS//Booking//JP
