@@ -132,7 +132,7 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
 
       {/* Mobile Bottom Navigation */}
       <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-[#1a1d23] border-t border-gray-700/50">
-        <div className="flex justify-around items-center h-16 px-2">
+        <div className="flex justify-around items-center h-14 px-1">
           {navItems.slice(0, 4).map((item) => {
             const Icon = item.icon
             const active = isActive(item.href)
@@ -141,16 +141,16 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-lg transition-colors min-w-[64px] ${
+                className={`flex flex-col items-center justify-center gap-0.5 px-2 py-1.5 rounded-lg transition-colors flex-1 max-w-[80px] ${
                   active
                     ? "text-[#6EC5FF]"
                     : "text-gray-400 hover:text-white"
                 }`}
               >
                 <Icon className="w-5 h-5" />
-                <span className="text-[10px] font-medium">{item.label.split(" ")[0]}</span>
+                <span className="text-[9px] font-medium leading-tight truncate w-full text-center">{item.label.split(" ")[0]}</span>
                 {active && (
-                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-8 h-1 bg-[#6EC5FF] rounded-t-full" />
+                  <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[#6EC5FF] rounded-t-full" />
                 )}
               </Link>
             )
