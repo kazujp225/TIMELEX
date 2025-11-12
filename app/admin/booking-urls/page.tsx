@@ -126,36 +126,6 @@ export default function BookingUrlsPage() {
         })}
       </div>
 
-      {/* メールテンプレート例 */}
-      <Card className="border-2">
-        <CardHeader>
-          <CardTitle className="text-xl">💡 メールテンプレート例</CardTitle>
-          <CardDescription className="text-base">
-            お客様へのメールに使えるテンプレートです
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="bg-gray-50 rounded-lg p-6 border border-gray-300 space-y-4">
-            <p className="text-sm text-gray-800 leading-relaxed">
-              お世話になっております。<br />
-              <br />
-              この度は〇〇にご興味をお持ちいただき、ありがとうございます。<br />
-              <br />
-              以下のリンクから、ご都合の良い日時をお選びいただき、オンライン面談のご予約をお願いいたします。<br />
-              <br />
-              <strong>▼ 予約はこちら</strong><br />
-              <span className="text-brand-600">[ここに上記のURLを貼り付け]</span><br />
-              <br />
-              ご予約完了後、自動でGoogle Meetのリンクが発行されます。<br />
-              当日はそちらのリンクからご参加ください。<br />
-              <br />
-              ご不明点がございましたら、お気軽にお問い合わせください。<br />
-              <br />
-              何卒よろしくお願いいたします。
-            </p>
-          </div>
-        </CardContent>
-      </Card>
     </div>
   )
 }
