@@ -329,7 +329,7 @@ export default function Dashboard() {
       {/* サイドバー */}
       <aside className="shift-sidebar w-64">
         <div className="p-6">
-          <h1 className="text-xl font-bold mb-8">TUMELEXPLUS</h1>
+          <h1 className="text-xl font-bold mb-8">TIMREXPLUS</h1>
           <nav className="space-y-2">
             <a href="#" className="shift-sidebar-item active">
               ダッシュボード

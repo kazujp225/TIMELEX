@@ -515,7 +515,7 @@ vercel
 ## 📞 サポート
 
 質問・バグ報告は以下で受け付けています：
-- **GitHub Issues**: https://github.com/ZETTAI-INC/TUMELEXPLUS/issues
+- **GitHub Issues**: https://github.com/ZETTAI-INC/TImelex/issues
 - **Email**: support@zettai-inc.com
 
 ---

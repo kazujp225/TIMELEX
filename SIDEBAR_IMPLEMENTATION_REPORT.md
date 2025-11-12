@@ -2,11 +2,11 @@
 
 ## 実装概要
 
-TUMELEXPLUSプロジェクトにSHIFTアプリ風のダークサイドバーコンポーネントを実装しました。
+TIMREXPLUSプロジェクトにSHIFTアプリ風のダークサイドバーコンポーネントを実装しました。
 
 **実装日**: 2025-11-12
 **担当**: Claude AI
-**プロジェクト**: TUMELEXPLUS v1.0
+**プロジェクト**: TIMREXPLUS v1.0
 
 ---
 
@@ -436,7 +436,7 @@ import { DashboardLayout } from "components/layout/DashboardLayout"
 
 ## まとめ
 
-TUMELEXPLUSプロジェクトに、SHIFT風のモダンなダークサイドバーを実装しました。
+TIMREXPLUSプロジェクトに、SHIFT風のモダンなダークサイドバーを実装しました。
 
 ### 主な成果
 

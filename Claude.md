@@ -330,7 +330,7 @@ TIMREXPLUS/
 
 - プロダクトオーナー: [担当者名]
 - 技術リード: [担当者名]
-- プロジェクトリポジトリ: https://github.com/ZETTAI-INC/TUMELEXPLUS
+- プロジェクトリポジトリ: https://github.com/ZETTAI-INC/TImelex
 
 ### ドキュメントの改善提案
 

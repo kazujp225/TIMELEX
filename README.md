@@ -246,8 +246,8 @@ TimeRex/Calendlyのような直感的な予約体験を、社内運用に最適�
 ### 1. リポジトリのクローン
 
 ```bash
-git clone https://github.com/ZETTAI-INC/TUMELEXPLUS.git
-cd TUMELEXPLUS
+git clone https://github.com/ZETTAI-INC/TImelex.git
+cd TIMREXPLUS
 ```
 
 ### 2. 依存関係のインストール
@@ -359,7 +359,7 @@ TIMREXPLUS/
 
 ## 📞 お問い合わせ
 
-- **プロジェクトリポジトリ**: https://github.com/ZETTAI-INC/TUMELEXPLUS
+- **プロジェクトリポジトリ**: https://github.com/ZETTAI-INC/TImelex
 - **Issue**: 質問・バグ報告は Issue で受け付けています
 - **Pull Request**: ドキュメントの改善提案を歓迎します
 

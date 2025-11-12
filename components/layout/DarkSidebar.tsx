@@ -64,7 +64,7 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
         <div className="flex items-center h-16 px-6 border-b border-gray-700/50">
           <Link href={`/${role}`} className="flex items-center gap-2">
             <h1 className="text-xl font-bold bg-gradient-to-r from-[#6EC5FF] to-[#FFC870] bg-clip-text text-transparent">
-              TUMELEX
+              TIMREXPLUS
             </h1>
           </Link>
         </div>

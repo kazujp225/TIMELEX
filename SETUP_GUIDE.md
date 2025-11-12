@@ -316,7 +316,7 @@ Vercelにデプロイする手順：
 ## サポート
 
 問題が発生した場合は、GitHubリポジトリのIssueで報告してください：
-https://github.com/ZETTAI-INC/TUMELEXPLUS/issues
+https://github.com/ZETTAI-INC/TImelex/issues
 
 ---
 

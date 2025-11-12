@@ -1,14 +1,14 @@
-# SHIFT vs TUMELEXPLUS デザイン比較
+# SHIFT vs TIMREXPLUS デザイン比較
 
 **作成日**: 2025-11-12
 
-このドキュメントは、SHIFTアプリのデザイン特徴と、TUMELEXPLUSへの適用状況を比較したものです。
+このドキュメントは、SHIFTアプリのデザイン特徴と、TIMREXPLUSへの適用状況を比較したものです。
 
 ---
 
 ## デザインの主要特徴比較
 
-| 特徴 | SHIFTアプリ | TUMELEXPLUS | 適用状況 |
+| 特徴 | SHIFTアプリ | TIMREXPLUS | 適用状況 |
 |------|------------|-------------|---------|
 | **サイドバー背景** | 濃いグレー (#1a1d23程度) | `--sidebar-bg: #1a1d23` | ✅ 完全一致 |
 | **メインエリア背景** | 薄いグレー (#f8f9fa程度) | `--main-bg: #f8f9fa` | ✅ 完全一致 |
@@ -25,7 +25,7 @@
 ## カラーパレット比較
 
 ### サイドバー
-| 用途 | SHIFTアプリ | TUMELEXPLUS | 備考 |
+| 用途 | SHIFTアプリ | TIMREXPLUS | 備考 |
 |------|------------|-------------|------|
 | 背景 | `#1a1d23` | `--sidebar-bg: #1a1d23` | 完全一致 |
 | テキスト | 白 | `--sidebar-text: #ffffff` | 完全一致 |
@@ -34,7 +34,7 @@
 | アクティブ | さらに明るいグレー | `--sidebar-active: #2d3340` | 適切に調整 |
 
 ### メインエリア
-| 用途 | SHIFTアプリ | TUMELEXPLUS | 備考 |
+| 用途 | SHIFTアプリ | TIMREXPLUS | 備考 |
 |------|------------|-------------|------|
 | 背景 | `#f8f9fa` | `--main-bg: #f8f9fa` | 完全一致 |
 | カード背景 | 白 | `--content-bg: #ffffff` | 完全一致 |
@@ -45,7 +45,7 @@
 ## コンポーネント比較
 
 ### ボタン
-| 特徴 | SHIFTアプリ | TUMELEXPLUS | 適用クラス |
+| 特徴 | SHIFTアプリ | TIMREXPLUS | 適用クラス |
 |------|------------|-------------|-----------|
 | 角丸 | 8px程度 | `--radius-sm: 8px` | `.shift-btn` |
 | フォントウェイト | 太め | `600 (semibold)` | `.shift-btn` |
@@ -54,7 +54,7 @@
 | 最小高さ | 44px程度 | `44px` | `.shift-btn` |
 
 ### カード
-| 特徴 | SHIFTアプリ | TUMELEXPLUS | 適用クラス |
+| 特徴 | SHIFTアプリ | TIMREXPLUS | 適用クラス |
 |------|------------|-------------|-----------|
 | 背景 | 白 | `--content-bg` | `.shift-card` |
 | ボーダー | 薄いグレー、1px | `1px solid #e5e7eb` | `.shift-card` |
@@ -64,7 +64,7 @@
 | パディング | 24px程度 | `--spacing-lg: 24px` | `.shift-card` |
 
 ### 入力フィールド
-| 特徴 | SHIFTアプリ | TUMELEXPLUS | 適用クラス |
+| 特徴 | SHIFTアプリ | TIMREXPLUS | 適用クラス |
 |------|------------|-------------|-----------|
 | ボーダー | 薄いグレー | `1px solid #e5e7eb` | `.shift-input` |
 | 角丸 | 8px程度 | `--radius-sm: 8px` | `.shift-input` |
@@ -88,7 +88,7 @@ SHIFT:
 │                   角丸、控えめな影   │
 └─────────────────────────────────────┘
 
-TUMELEXPLUS（適用後）:
+TIMREXPLUS（適用後）:
 ┌─────────────────────────────────────┐
 │ [.shift-sidebar]  [.shift-main]    │
 │ --sidebar-bg      --main-bg        │
@@ -110,7 +110,7 @@ TUMELEXPLUS（適用後）:
 4. **フィードバック**: ホバー・アクティブ状態の明確化
 5. **控えめな影**: 強すぎない奥行き表現
 
-### TUMELEXPLUSでの適用
+### TIMREXPLUSでの適用
 1. **クリーンさ**: ✅ シンプルなコンポーネント設計
 2. **統一性**: ✅ CSS変数による一貫性確保
 3. **読みやすさ**: ✅ semiboldフォント、適切なコントラスト
@@ -119,9 +119,9 @@ TUMELEXPLUS（適用後）:
 
 ---
 
-## TUMELEXPLUS独自の拡張
+## TIMREXPLUS独自の拡張
 
-SHIFTにはない、TUMELEXPLUSで追加した機能：
+SHIFTにはない、TIMREXPLUSで追加した機能：
 
 ### 1. セマンティックカラー
 ```css
