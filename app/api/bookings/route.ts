@@ -2,10 +2,7 @@ import { NextRequest, NextResponse } from "next/server"
 import { bookingFormSchema } from "@/lib/validations"
 import { bookingDb, settingsDb } from "@/lib/supabase/database"
 import { createCalendarEvent } from "@/lib/google/calendar"
-import {
-  sendClientConfirmationEmail,
-  sendStaffNotificationEmail,
-} from "@/lib/email/resend"
+import { sendBookingNotificationToAdmin } from "@/lib/email"
 import { bookingAudit } from "@/lib/audit-log"
 import { BookingStatus } from "@/types"
 import crypto from "crypto"
@@ -94,15 +91,17 @@ export async function POST(request: NextRequest) {
       user_agent: request.headers.get("user-agent") || undefined,
     })
 
-    // メール送信（非同期、エラーでも予約は確定済み）
+    // 管理者にメール通知（非同期、エラーでも予約は確定済み）
     try {
-      const bookingWithRelations = await bookingDb.getById(booking.id)
-      if (bookingWithRelations) {
-        // クライアント向け確定メール
-        await sendClientConfirmationEmail(bookingWithRelations)
-        // スタッフ向け通知メール
-        await sendStaffNotificationEmail(bookingWithRelations)
-      }
+      await sendBookingNotificationToAdmin({
+        clientName: validated.client_name,
+        clientEmail: validated.client_email,
+        clientCompany: validated.client_company,
+        consultationType: body.consultation_type_name || "",
+        startTime: new Date(validated.start_time),
+        endTime: new Date(body.end_time),
+        staffName: body.staff_name || "担当者",
+      })
     } catch (emailError) {
       console.error("Email sending failed:", emailError)
       // メール送信失敗でもエラーは返さない
