@@ -1,10 +1,9 @@
 "use client"
 
 import { useEffect } from "react"
-import { useRouter, useSearchParams } from "next/navigation"
+import { useSearchParams } from "next/navigation"
 
 export default function Product2Page() {
-  const router = useRouter()
   const searchParams = useSearchParams()
 
   useEffect(() => {
@@ -13,21 +12,20 @@ export default function Product2Page() {
     params.set("type", "2")
 
     // トラッキングデータをセッションストレージに保存
-    if (typeof window !== "undefined") {
-      const tracking = {
-        utm_source: params.get("utm_source"),
-        utm_medium: params.get("utm_medium"),
-        utm_campaign: params.get("utm_campaign"),
-        utm_term: params.get("utm_term"),
-        utm_content: params.get("utm_content"),
-        referrer: document.referrer || null,
-        landing_page: window.location.href,
-      }
-      sessionStorage.setItem("booking_tracking", JSON.stringify(tracking))
+    const tracking = {
+      utm_source: params.get("utm_source"),
+      utm_medium: params.get("utm_medium"),
+      utm_campaign: params.get("utm_campaign"),
+      utm_term: params.get("utm_term"),
+      utm_content: params.get("utm_content"),
+      referrer: document.referrer || null,
+      landing_page: window.location.href,
     }
+    sessionStorage.setItem("booking_tracking", JSON.stringify(tracking))
 
-    router.replace(`/book/select-date?${params.toString()}`)
-  }, [router, searchParams])
+    // 即座にリダイレクト
+    window.location.href = `/book/select-date?${params.toString()}`
+  }, [searchParams])
 
   return (
     <div className="h-screen flex items-center justify-center bg-panel">
