@@ -1,143 +1,98 @@
 import Link from "next/link"
+import { Calendar, Clock, Zap, CheckCircle } from "lucide-react"
+import { Button } from "@/src/components/ui/Button"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen-safe flex items-center justify-center bg-white">
-      <div className="container-custom text-center py-12">
-        <h1 className="text-5xl font-bold text-[#2D2D2D] mb-4">
-          TIMREXPLUS
-        </h1>
-        <p className="text-xl text-[#666666] mb-12">
-          オンライン面談予約システム
-        </p>
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 via-panel to-panel flex items-center justify-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div className="text-center max-w-5xl mx-auto">
+          {/* Logo/Brand */}
+          <div className="mb-8">
+            <h1 className="text-5xl sm:text-6xl font-extrabold text-text mb-3 tracking-tight">
+              TIMREXPLUS
+            </h1>
+            <div className="w-20 h-1 bg-brand-600 mx-auto rounded-full"></div>
+          </div>
 
-        <div className="max-w-2xl mx-auto space-y-6">
-          {/* 予約ページ（クライアント向け） */}
-          <Link
-            href="/book"
-            className="block p-8 bg-gradient-to-r from-[#6EC5FF] to-[#5AB3E8] text-white rounded-lg shadow-custom hover:opacity-90 transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="text-left">
-                <h2 className="text-2xl font-bold mb-2">📅 面談を予約する</h2>
-                <p className="text-white/90">
-                  空き枠を確認して、その場で予約確定
-                </p>
-              </div>
-              <svg
-                className="w-8 h-8"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
+          {/* Hero Copy */}
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-text mb-4 leading-tight">
+            オンライン面談予約を、もっと<span className="text-brand-600">スムーズ</span>に
+          </h2>
+          <p className="text-lg text-muted mb-8 max-w-2xl mx-auto">
+            空き枠を選んで、その場で予約完了。Google Meet リンクが即座に発行されます。
+          </p>
+
+          {/* Primary CTA */}
+          <div className="mb-10">
+            <Link href="/book">
+              <Button
+                variant="primary"
+                size="lg"
+                icon={<Calendar className="w-5 h-5" aria-hidden="true" />}
+                className="text-xl px-8 py-5 min-h-[56px] shadow-lg hover:shadow-xl transition-all"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </Link>
-
-          {/* スタッフログイン */}
-          <Link
-            href="/staff/login"
-            className="block p-6 bg-white border-2 border-[#6EC5FF] text-[#6EC5FF] rounded-lg hover:bg-[#6EC5FF]/5 transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="text-left">
-                <h3 className="text-lg font-bold mb-1">👤 スタッフログイン</h3>
-                <p className="text-sm text-[#666666]">
-                  予約管理・カレンダー確認
-                </p>
-              </div>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </Link>
-
-          {/* 管理者ログイン */}
-          <Link
-            href="/admin/login"
-            className="block p-6 bg-white border-2 border-[#666666] text-[#666666] rounded-lg hover:bg-gray-50 transition-all"
-          >
-            <div className="flex items-center justify-between">
-              <div className="text-left">
-                <h3 className="text-lg font-bold mb-1">⚙️ 管理者ログイン</h3>
-                <p className="text-sm text-[#999999]">
-                  システム設定・スタッフ管理
-                </p>
-              </div>
-              <svg
-                className="w-6 h-6"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M9 5l7 7-7 7"
-                />
-              </svg>
-            </div>
-          </Link>
-        </div>
-
-        {/* 開発者用UI確認 */}
-        <div className="mt-12 pt-12 border-t-2 border-dashed border-gray-300">
-          <h3 className="text-xl font-bold text-gray-700 mb-6">🔧 開発者用UI確認</h3>
-          <div className="grid md:grid-cols-2 gap-4">
-            <Link
-              href="/admin"
-              className="block p-6 bg-gradient-to-br from-purple-50 to-purple-100 border-2 border-purple-300 text-purple-700 rounded-lg hover:shadow-lg transition-all"
-            >
-              <div className="text-center">
-                <div className="text-3xl mb-2">⚙️</div>
-                <h3 className="text-lg font-bold mb-1">管理者画面を確認</h3>
-                <p className="text-sm text-purple-600">
-                  /admin ダッシュボード
-                </p>
-              </div>
+                面談を予約する
+              </Button>
             </Link>
+            <p className="mt-4 text-sm text-muted flex items-center justify-center gap-2">
+              <CheckCircle className="w-4 h-4 text-success" aria-hidden="true" />
+              無料でご利用いただけます
+            </p>
+          </div>
 
-            <Link
-              href="/staff"
-              className="block p-6 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-300 text-blue-700 rounded-lg hover:shadow-lg transition-all"
-            >
-              <div className="text-center">
-                <div className="text-3xl mb-2">👤</div>
-                <h3 className="text-lg font-bold mb-1">スタッフ画面を確認</h3>
-                <p className="text-sm text-blue-600">
-                  /staff ダッシュボード
-                </p>
+          {/* Features - Inline */}
+          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto mb-10">
+            {/* Feature 1 */}
+            <div className="bg-panel border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-brand-600 text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Zap className="w-6 h-6" aria-hidden="true" />
               </div>
+              <h3 className="text-base font-bold text-text mb-2">即時確定</h3>
+              <p className="text-sm text-muted">
+                空き枠を選ぶだけで予約完了
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="bg-panel border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-success text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Calendar className="w-6 h-6" aria-hidden="true" />
+              </div>
+              <h3 className="text-base font-bold text-text mb-2">自動発行</h3>
+              <p className="text-sm text-muted">
+                Meet リンク自動生成
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="bg-panel border border-border rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
+              <div className="w-12 h-12 bg-brand-400 text-white rounded-lg flex items-center justify-center mx-auto mb-3">
+                <Clock className="w-6 h-6" aria-hidden="true" />
+              </div>
+              <h3 className="text-base font-bold text-text mb-2">3ステップ</h3>
+              <p className="text-sm text-muted">
+                シンプルで迷わない操作
+              </p>
+            </div>
+          </div>
+
+          {/* Footer Links */}
+          <div className="flex flex-row justify-center items-center gap-6 pt-8 border-t border-border">
+            <Link href="/staff" className="text-sm text-muted hover:text-brand-600 transition-colors font-medium">
+              スタッフログイン
+            </Link>
+            <span className="text-border">|</span>
+            <Link href="/admin" className="text-sm text-muted hover:text-brand-600 transition-colors font-medium">
+              管理者ログイン
             </Link>
           </div>
-          <p className="text-xs text-gray-500 mt-4">
-            ※ 開発モードでは認証をスキップしてUI確認が可能です
-          </p>
-        </div>
-
-        {/* フッター */}
-        <div className="mt-12 text-sm text-[#999999]">
-          <p>TimeRex/Calendly風のシームレスな予約体験</p>
-          <p className="mt-2">開発中 - モックデータで動作確認可能</p>
         </div>
       </div>
+
+      {/* Decorative Background Elements */}
+      <div className="absolute top-0 right-0 -mt-20 -mr-20 w-80 h-80 bg-brand-600/5 rounded-full blur-3xl pointer-events-none"></div>
+      <div className="absolute bottom-0 left-0 -mb-20 -ml-20 w-80 h-80 bg-brand-400/5 rounded-full blur-3xl pointer-events-none"></div>
     </div>
   )
 }

@@ -22,6 +22,7 @@ const config: Config = {
           600: "#2563eb",
           500: "#3b82f6",
           400: "#60a5fa",
+          50: "#eff6ff",
         },
         text: "#0f172a",
         muted: "#64748b",
