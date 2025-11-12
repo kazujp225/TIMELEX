@@ -329,7 +329,7 @@ export function BookingForm({
                 <SelectTrigger className={errors.inquiry_source_id ? "border-danger" : ""}>
                   <SelectValue placeholder="選択してください" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="max-h-[200px] overflow-y-auto">
                   {inquirySources.map((source) => (
                     <SelectItem key={source.id} value={source.id}>
                       {source.name}
