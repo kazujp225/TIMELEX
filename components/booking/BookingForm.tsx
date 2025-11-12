@@ -179,16 +179,34 @@ export function BookingForm({
     setIsSubmitting(true)
 
     try {
-      // TODO: APIリクエスト
-      console.log("予約データ（モック）:", {
-        ...formData,
-        questionnaire_answers: questionnaireAnswers,
+      // 簡易API（Supabase不要）を呼び出し
+      const response = await fetch("/api/bookings/simple", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          client_name: formData.client_name,
+          client_email: formData.client_email,
+          client_company: formData.client_company,
+          client_memo: formData.client_memo,
+          start_time: selectedSlot.start_time.toISOString(),
+          end_time: selectedSlot.end_time.toISOString(),
+          duration_minutes: consultationTypes[0]?.duration_minutes || 30,
+          staff_id: selectedSlot.staff_id,
+          staff_name: selectedSlot.staff_name,
+          consultation_type_id: "type-1",
+          consultation_type_name: consultationTypes[0]?.name || "相談",
+        }),
       })
 
-      // 仮の成功レスポンス
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-      const bookingId = "booking-" + Math.random().toString(36).substr(2, 9)
-      onSubmit(bookingId)
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || "予約に失敗しました")
+      }
+
+      onSubmit(data.booking_id)
     } catch (error) {
       console.error("予約エラー:", error)
       alert("予約に失敗しました。もう一度お試しください。")
