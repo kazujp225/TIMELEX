@@ -12,6 +12,14 @@ const createConsultationTypeSchema = z.object({
   buffer_before_minutes: z.number().int().min(0).max(60).default(5),
   buffer_after_minutes: z.number().int().min(0).max(60).default(5),
   display_order: z.number().int().min(0).default(0),
+  google_meet_url: z
+    .string()
+    .url()
+    .regex(/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/, {
+      message: "Invalid Google Meet URL format. Expected: https://meet.google.com/xxx-xxxx-xxx",
+    })
+    .optional()
+    .nullable(),
 })
 
 /**

@@ -120,20 +120,6 @@ export default function AdminDashboard() {
 
         <Card className="border-2">
           <CardHeader className="pb-4">
-            <CardDescription className="text-base">スタッフ数</CardDescription>
-            <CardTitle className="text-4xl">
-              {stats?.allTime.activeStaff || 0}
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">
-              アクティブ / {stats?.allTime.totalStaff || 0}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-2">
-          <CardHeader className="pb-4">
             <CardDescription className="text-base">相談種別</CardDescription>
             <CardTitle className="text-4xl">
               {stats?.allTime.consultationTypes || 0}

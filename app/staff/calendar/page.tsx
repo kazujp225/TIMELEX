@@ -12,6 +12,7 @@ export default function StaffCalendarPage() {
   const [currentDate, setCurrentDate] = useState(new Date())
   const [bookings, setBookings] = useState<BookingWithRelations[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedBooking, setSelectedBooking] = useState<BookingWithRelations | null>(null)
 
   useEffect(() => {
     loadMockBookings()
@@ -20,89 +21,97 @@ export default function StaffCalendarPage() {
   const loadMockBookings = () => {
     setLoading(true)
 
-    // モックデータ
+    // モックデータ - シンプルに固定の予約を生成
     const mockData: BookingWithRelations[] = []
-    const weekStart = new Date(currentDate)
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay())
+    const today = new Date()
 
-    // 今週の予約をランダムに生成
-    for (let i = 0; i < 7; i++) {
-      const day = new Date(weekStart)
-      day.setDate(day.getDate() + i)
-
-      // 平日は予約を追加
-      if (i >= 1 && i <= 5) {
-        const morningBooking: BookingWithRelations = {
-          id: `booking-${i}-1`,
-          status: "confirmed" as any,
-          start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 10, 0),
-          end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 10, 30),
-          duration_minutes: 30,
-          staff_id: "staff-1",
-          consultation_type_id: "type-1",
-          inquiry_source_id: "source-1",
-          client_name: `山田${i}太郎`,
-          client_email: `client${i}@example.com`,
-          client_company: `株式会社${i}`,
-          client_memo: null,
-          is_recent: i % 2 === 0,
-          google_event_id: `event-${i}`,
-          google_meet_link: "https://meet.google.com/xxx-yyyy-zzz",
-          cancel_token: `token-${i}`,
-          created_at: new Date(),
-          updated_at: new Date(),
-          staff: {
-            id: "staff-1",
-            name: "スタッフA",
-            email: "staff@example.com",
-            is_active: true,
-            timezone: "Asia/Tokyo",
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-          consultation_type: {
-            id: "type-1",
-            name: "初回相談",
-            duration_minutes: 30,
-            buffer_before_minutes: 5,
-            buffer_after_minutes: 5,
-            mode: "immediate" as any,
-            recent_mode_override: "keep" as any,
-            display_order: 0,
-            is_active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-          inquiry_source: {
-            id: "source-1",
-            name: "自社サイト",
-            display_order: 0,
-            is_active: true,
-            created_at: new Date(),
-            updated_at: new Date(),
-          },
-        }
-        mockData.push(morningBooking)
-
-        if (i === 2 || i === 4) {
-          const afternoonBooking: BookingWithRelations = {
-            ...morningBooking,
-            id: `booking-${i}-2`,
-            start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 14, 0),
-            end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), 15, 0),
-            duration_minutes: 60,
-            client_name: `佐藤${i}花子`,
-            consultation_type: {
-              ...morningBooking.consultation_type,
-              id: "type-2",
-              name: "フォローアップ",
-              duration_minutes: 60,
-            },
-          }
-          mockData.push(afternoonBooking)
-        }
-      }
+    // 月曜日 10:00 - 初回相談
+    const booking1: BookingWithRelations = {
+      id: `booking-1`,
+      status: "confirmed" as any,
+      start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1, 10, 0),
+      end_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 1, 10, 30),
+      duration_minutes: 30,
+      staff_id: "staff-1",
+      consultation_type_id: "type-1",
+      inquiry_source_id: "source-1",
+      client_name: "山田太郎",
+      client_email: "yamada@example.com",
+      client_company: "株式会社サンプル",
+      client_memo: null,
+      is_recent: false,
+      google_event_id: "event-1",
+      google_meet_link: "https://meet.google.com/xxx-yyyy-zzz",
+      cancel_token: "token-1",
+      created_at: new Date(),
+      updated_at: new Date(),
+      staff: {
+        id: "staff-1",
+        name: "スタッフA",
+        email: "staff@example.com",
+        is_active: true,
+        timezone: "Asia/Tokyo",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      consultation_type: {
+        id: "type-1",
+        name: "初回相談",
+        duration_minutes: 30,
+        buffer_before_minutes: 5,
+        buffer_after_minutes: 5,
+        mode: "immediate" as any,
+        recent_mode_override: "keep" as any,
+        display_order: 0,
+        is_active: true,
+        google_meet_url: "https://meet.google.com/abc-defg-hij",
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
+      inquiry_source: {
+        id: "source-1",
+        name: "自社サイト",
+        display_order: 0,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
+      },
     }
+    mockData.push(booking1)
+
+    // 火曜日 14:00 - フォローアップ
+    const booking2: BookingWithRelations = {
+      ...booking1,
+      id: "booking-2",
+      start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 2, 14, 0),
+      end_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 2, 15, 0),
+      duration_minutes: 60,
+      client_name: "佐藤花子",
+      client_email: "sato@example.com",
+      client_company: "株式会社テスト",
+      google_meet_link: "https://meet.google.com/aaa-bbbb-ccc",
+      consultation_type: {
+        ...booking1.consultation_type,
+        id: "type-2",
+        name: "フォローアップ",
+        duration_minutes: 60,
+        google_meet_url: "https://meet.google.com/xyz-uvwx-yzw",
+      },
+    }
+    mockData.push(booking2)
+
+    // 水曜日 11:00 - 初回相談
+    const booking3: BookingWithRelations = {
+      ...booking1,
+      id: "booking-3",
+      start_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 3, 11, 0),
+      end_time: new Date(today.getFullYear(), today.getMonth(), today.getDate() - today.getDay() + 3, 11, 30),
+      client_name: "鈴木一郎",
+      client_email: "suzuki@example.com",
+      client_company: "鈴木商事",
+      google_meet_link: "https://meet.google.com/ddd-eeee-fff",
+    }
+    mockData.push(booking3)
 
     setBookings(mockData)
     setLoading(false)
@@ -270,18 +279,40 @@ export default function StaffCalendarPage() {
                             return (
                               <div
                                 key={booking.id}
-                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer bg-blue-500 text-white"
+                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-xl hover:scale-105 hover:z-10 transition-all duration-200 ease-in-out bg-blue-500 text-white"
                                 style={{
                                   top: `${top}px`,
                                   height: `${height}px`,
                                 }}
                               >
-                                <div className="font-semibold truncate">
+                                <div
+                                  className="font-semibold truncate cursor-pointer"
+                                  onClick={() => setSelectedBooking(booking)}
+                                >
                                   {formatDate(booking.start_time, "HH:mm")} {booking.client_name}
                                 </div>
-                                <div className="text-[10px] opacity-90 truncate mt-0.5">
+                                <div
+                                  className="text-[10px] opacity-90 truncate mt-0.5 cursor-pointer"
+                                  onClick={() => setSelectedBooking(booking)}
+                                >
                                   {booking.consultation_type.name}
                                 </div>
+                                {(booking.consultation_type.google_meet_url || booking.google_meet_link) && (
+                                  <div
+                                    className="mt-1 pt-1 border-t border-white/20"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <a
+                                      href={booking.consultation_type.google_meet_url || booking.google_meet_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-[10px] underline hover:text-yellow-200 hover:scale-105 hover:font-semibold block truncate transition-all duration-200 ease-in-out hover:bg-white/10 hover:px-1 rounded"
+                                      title={booking.consultation_type.google_meet_url || booking.google_meet_link}
+                                    >
+                                      🎥 Meet: {(booking.consultation_type.google_meet_url || booking.google_meet_link).replace('https://meet.google.com/', '')}
+                                    </a>
+                                  </div>
+                                )}
                               </div>
                             )
                           })}
@@ -325,6 +356,108 @@ export default function StaffCalendarPage() {
           </CardContent>
         </Card>
       </div>
+
+      {/* 予約詳細モーダル */}
+      {selectedBooking && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedBooking(null)}
+        >
+          <Card
+            className="w-full max-w-md bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CardContent className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-bold">予約詳細</h2>
+                <button
+                  onClick={() => setSelectedBooking(null)}
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* 日時 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">日時</div>
+                  <div className="text-lg font-semibold">
+                    {formatDate(selectedBooking.start_time, "YYYY年MM月DD日(ddd)")}
+                  </div>
+                  <div className="text-lg font-semibold">
+                    {formatDate(selectedBooking.start_time, "HH:mm")} 〜{" "}
+                    {formatDate(selectedBooking.end_time, "HH:mm")}
+                  </div>
+                </div>
+
+                {/* クライアント情報 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">クライアント</div>
+                  <div className="text-lg font-semibold">{selectedBooking.client_name}</div>
+                  {selectedBooking.client_company && (
+                    <div className="text-sm text-gray-600">{selectedBooking.client_company}</div>
+                  )}
+                </div>
+
+                {/* 相談種別 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">相談種別</div>
+                  <div className="text-lg">{selectedBooking.consultation_type.name}</div>
+                </div>
+
+                {/* Google Meet URL */}
+                {(selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link) && (
+                  <div>
+                    <div className="text-sm text-gray-500 mb-2">Google Meet</div>
+                    <Button
+                      onClick={() => {
+                        const meetUrl = selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link
+                        window.open(meetUrl, "_blank", "noopener,noreferrer")
+                      }}
+                      className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700"
+                    >
+                      🎥 Google Meetに参加
+                    </Button>
+                    <div className="mt-2 p-2 bg-gray-50 rounded text-xs break-all text-gray-600">
+                      {selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link}
+                    </div>
+                  </div>
+                )}
+
+                {/* メモ */}
+                {selectedBooking.client_memo && (
+                  <div>
+                    <div className="text-sm text-gray-500 mb-1">メモ</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {selectedBooking.client_memo}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <Button
+                  onClick={() => {
+                    window.location.href = `/staff/bookings/${selectedBooking.id}`
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  詳細を見る
+                </Button>
+                <Button
+                  onClick={() => setSelectedBooking(null)}
+                  variant="default"
+                  className="flex-1"
+                >
+                  閉じる
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }

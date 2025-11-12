@@ -61,6 +61,7 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
         buffer_after_minutes: 5,
         mode: ConsultationMode.IMMEDIATE,
         recent_mode_override: RecentModeOverride.KEEP,
+        google_meet_url: "https://meet.google.com/abc-defg-hij",
         display_order: 1,
         is_active: true,
         created_at: new Date(),
@@ -162,32 +163,53 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
               </CardContent>
             </Card>
 
+            {/* Google Meet URL */}
+            {booking.consultation_type.google_meet_url && (
+              <Card className="mb-4 sm:mb-6 text-left">
+                <CardContent className="space-y-2">
+                  <div className="flex items-center gap-2 text-brand-600">
+                    <Video className="w-5 h-5" aria-hidden="true" />
+                    <p className="text-sm font-bold">オンライン会議</p>
+                  </div>
+                  <p className="text-xs text-muted">
+                    以下のGoogle Meetリンクから会議に参加できます
+                  </p>
+                </CardContent>
+              </Card>
+            )}
+
             {/* アクションボタン */}
             <div className="space-y-3">
-              <Button
-                onClick={() =>
-                  window.open(booking.google_meet_link, "_blank", "noopener,noreferrer")
-                }
-                variant="primary"
-                size="lg"
-                fullWidth
-                icon={<Video className="w-5 h-5" aria-hidden="true" />}
-              >
-                Google Meetに参加
-              </Button>
+              {booking.consultation_type.google_meet_url && (
+                <Button
+                  onClick={() =>
+                    window.open(booking.consultation_type.google_meet_url, "_blank", "noopener,noreferrer")
+                  }
+                  variant="primary"
+                  size="lg"
+                  fullWidth
+                  icon={<Video className="w-5 h-5" aria-hidden="true" />}
+                >
+                  Google Meetに参加
+                </Button>
+              )}
 
               <Button
                 onClick={() => {
                   const icsStart = booking.start_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
                   const icsEnd = booking.end_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
+                  const meetUrl = booking.consultation_type.google_meet_url || booking.google_meet_link
+                  const description = `オンライン面談\\n\\n担当: ${booking.staff?.name || 'スタッフ'}\\n相談種別: ${booking.consultation_type.name}\\n\\nGoogle Meetリンク:\\n${meetUrl}\\n\\n※予約時間になりましたら、上記リンクからご参加ください。`
                   const icsContent = `BEGIN:VCALENDAR
 VERSION:2.0
+PRODID:-//TIMREXPLUS//Booking//JP
 BEGIN:VEVENT
 DTSTART:${icsStart}
 DTEND:${icsEnd}
-SUMMARY:${booking.consultation_type.name}
-DESCRIPTION:Google Meet: ${booking.google_meet_link}
-LOCATION:${booking.google_meet_link}
+SUMMARY:【TIMREXPLUS】${booking.consultation_type.name}
+DESCRIPTION:${description}
+LOCATION:${meetUrl}
+URL:${meetUrl}
 END:VEVENT
 END:VCALENDAR`
 

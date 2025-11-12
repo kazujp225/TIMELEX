@@ -24,6 +24,7 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
     recent_mode_override: RecentModeOverride.KEEP,
     display_order: 0,
     is_active: true,
+    google_meet_url: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
 
@@ -48,6 +49,7 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
           recent_mode_override: data.consultationType.recent_mode_override,
           display_order: data.consultationType.display_order,
           is_active: data.consultationType.is_active,
+          google_meet_url: data.consultationType.google_meet_url || "",
         })
       } else {
         console.error("Failed to fetch consultation type")
@@ -86,6 +88,14 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
       newErrors.buffer_after_minutes = "後バッファは0分以上で入力してください"
     } else if (formData.buffer_after_minutes > 60) {
       newErrors.buffer_after_minutes = "後バッファは60分以内で入力してください"
+    }
+
+    // Google Meet URLのバリデーション
+    if (formData.google_meet_url && formData.google_meet_url.trim()) {
+      const meetUrlPattern = /^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/
+      if (!meetUrlPattern.test(formData.google_meet_url.trim())) {
+        newErrors.google_meet_url = "正しいGoogle Meet URLを入力してください（例: https://meet.google.com/abc-defg-hij）"
+      }
     }
 
     setErrors(newErrors)
@@ -305,6 +315,31 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
               </Select>
               <p className="text-sm text-muted-foreground mt-2">
                 30日以内に予約した継続顧客の扱いを設定
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="google_meet_url" className="text-base font-semibold">
+                Google Meet URL（固定）
+              </Label>
+              <Input
+                id="google_meet_url"
+                type="url"
+                value={formData.google_meet_url}
+                onChange={(e) =>
+                  setFormData({ ...formData, google_meet_url: e.target.value })
+                }
+                placeholder="https://meet.google.com/abc-defg-hij"
+                className={`h-14 text-base ${errors.google_meet_url ? "border-destructive" : ""}`}
+              />
+              {errors.google_meet_url && (
+                <p className="text-sm text-destructive mt-2">{errors.google_meet_url}</p>
+              )}
+              <p className="text-sm text-muted-foreground mt-2">
+                この商材専用の固定Google Meet URLを設定します（任意）
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                💡 Google Meetで会議室を作成し、固定URLをコピーしてください
               </p>
             </div>
 

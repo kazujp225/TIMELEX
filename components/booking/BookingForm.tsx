@@ -5,17 +5,10 @@ import { Button } from "@/src/components/ui/Button"
 import { Field, Input, Textarea } from "@/src/components/ui/Field"
 import { Card, CardContent } from "@/src/components/ui/Card"
 import { Checkbox } from "@/components/ui/checkbox"
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select"
 import { validateEmail, formatDate, getWeekday } from "@/lib/utils"
 import { QuestionnaireForm } from "@/components/booking/QuestionnaireForm"
 import { QuestionType } from "@/types"
-import type { ConsultationType, InquirySource, Question } from "@/types"
+import type { ConsultationType, Question } from "@/types"
 import { Check, Clock, Mail } from "lucide-react"
 
 interface BookingFormProps {
@@ -26,7 +19,6 @@ interface BookingFormProps {
     staff_name: string
   }
   consultationTypes: ConsultationType[]
-  inquirySources: InquirySource[]
   onSubmit: (bookingId: string) => void
   onBack: () => void
 }
@@ -77,14 +69,12 @@ const MOCK_QUESTIONS: Question[] = [
 export function BookingForm({
   selectedSlot,
   consultationTypes,
-  inquirySources,
   onSubmit,
   onBack,
 }: BookingFormProps) {
   const [formData, setFormData] = useState({
     client_name: "",
     client_email: "",
-    inquiry_source_id: "",
     client_company: "",
     client_memo: "",
     reminder_24h_enabled: true,
@@ -155,10 +145,6 @@ export function BookingForm({
       newErrors.client_email = "メールアドレスは100文字以内で入力してください"
     }
 
-    if (!formData.inquiry_source_id) {
-      newErrors.inquiry_source_id = "お問い合わせ元を選択してください"
-    }
-
     if (formData.client_company.length > 100) {
       newErrors.client_company = "会社名は100文字以内で入力してください"
     }
@@ -212,58 +198,53 @@ export function BookingForm({
   }
 
   return (
-    <div className="min-h-screen-safe bg-panel py-4 sm:py-8">
-      <div className="w-full sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div className="h-screen flex flex-col bg-panel overflow-hidden">
+      <div className="flex-1 overflow-y-auto py-3 px-4">
         <div className="w-full sm:max-w-3xl mx-auto">
           {/* ステップインジケーター */}
-          <div className="flex items-center justify-center mb-4 sm:mb-8">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
-                  <Check className="w-4 h-4" aria-hidden="true" />
+          <div className="flex items-center justify-center mb-3">
+            <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1">
+                <div className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">
+                  <Check className="w-3 h-3" aria-hidden="true" />
                 </div>
-                <span className="text-sm text-muted">日時選択</span>
+                <span className="text-xs text-muted hidden sm:inline">日時選択</span>
               </div>
-              <div className="w-8 h-0.5 bg-brand-600" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <div className="w-6 h-0.5 bg-brand-600" />
+              <div className="flex items-center gap-1">
+                <div className="w-6 h-6 rounded-full bg-brand-600 text-white flex items-center justify-center text-xs font-bold">
                   2
                 </div>
-                <span className="text-sm font-bold text-text">情報入力</span>
+                <span className="text-xs font-bold text-text hidden sm:inline">情報入力</span>
               </div>
-              <div className="w-8 h-0.5 bg-border" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-border text-muted flex items-center justify-center text-sm font-medium" style={{ fontVariantNumeric: "tabular-nums" }}>
+              <div className="w-6 h-0.5 bg-border" />
+              <div className="flex items-center gap-1">
+                <div className="w-6 h-6 rounded-full bg-border text-muted flex items-center justify-center text-xs font-medium">
                   3
                 </div>
-                <span className="text-sm text-muted">確認</span>
+                <span className="text-xs text-muted hidden sm:inline">確認</span>
               </div>
             </div>
           </div>
 
           {/* 選択した日時の表示 */}
-          <Card className="mb-4 sm:mb-6">
-            <CardContent className="space-y-1 sm:space-y-2">
-              <div className="flex items-center gap-2 text-muted text-xs sm:text-sm font-medium">
-                <Clock className="w-4 h-4" aria-hidden="true" />
+          <Card className="mb-3">
+            <CardContent className="space-y-0.5 py-2">
+              <div className="flex items-center gap-1 text-muted text-xs font-medium">
+                <Clock className="w-3 h-3" aria-hidden="true" />
                 <span>予約日時</span>
               </div>
-              <p className="text-lg sm:text-xl font-extrabold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
-                {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（
-                {getWeekday(selectedSlot.start_time)}）
+              <p className="text-sm font-bold text-text">
+                {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（{getWeekday(selectedSlot.start_time)}） {formatDate(selectedSlot.start_time, "HH:mm")}〜{formatDate(selectedSlot.end_time, "HH:mm")}
               </p>
-              <p className="text-base sm:text-lg font-bold text-text" style={{ fontVariantNumeric: "tabular-nums" }}>
-                {formatDate(selectedSlot.start_time, "HH:mm")}〜
-                {formatDate(selectedSlot.end_time, "HH:mm")}
-              </p>
-              <p className="text-xs sm:text-sm text-muted">
+              <p className="text-xs text-muted">
                 担当：{selectedSlot.staff_name}
               </p>
             </CardContent>
           </Card>
 
           {/* フォーム */}
-          <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6">
+          <form onSubmit={handleSubmit} className="space-y-3">
             {/* お名前 */}
             <Field
               label="お名前"
@@ -314,29 +295,6 @@ export function BookingForm({
                   </div>
                 </div>
               )}
-            </Field>
-
-            {/* お問い合わせ元 */}
-            <Field
-              label="お問い合わせ元"
-              required
-              error={errors.inquiry_source_id}
-            >
-              <Select
-                value={formData.inquiry_source_id}
-                onValueChange={(value) => handleChange("inquiry_source_id", value)}
-              >
-                <SelectTrigger className={errors.inquiry_source_id ? "border-danger" : ""}>
-                  <SelectValue placeholder="選択してください" />
-                </SelectTrigger>
-                <SelectContent className="max-h-[200px] overflow-y-auto">
-                  {inquirySources.map((source) => (
-                    <SelectItem key={source.id} value={source.id}>
-                      {source.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
             </Field>
 
             {/* 会社名（任意） */}

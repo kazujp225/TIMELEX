@@ -83,6 +83,7 @@ export interface ConsultationType {
   recent_mode_override: RecentModeOverride
   display_order: number
   is_active: boolean
+  google_meet_url?: string | null // 固定Google Meet URL（商材ごと）
   created_at: Date
   updated_at: Date
 }
@@ -95,6 +96,7 @@ export interface ConsultationTypeCreateInput {
   mode?: ConsultationMode
   recent_mode_override?: RecentModeOverride
   display_order?: number
+  google_meet_url?: string // 固定Google Meet URL（商材ごと）
 }
 
 // ==========================================

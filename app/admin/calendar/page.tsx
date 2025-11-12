@@ -11,6 +11,7 @@ export default function AdminCalendarPage() {
   const [staff, setStaff] = useState<Staff[]>([])
   const [bookings, setBookings] = useState<BookingWithRelations[]>([])
   const [loading, setLoading] = useState(true)
+  const [selectedBooking, setSelectedBooking] = useState<BookingWithRelations | null>(null)
 
   useEffect(() => {
     loadData()
@@ -110,6 +111,7 @@ export default function AdminCalendarPage() {
                 recent_mode_override: "keep" as any,
                 display_order: 0,
                 is_active: true,
+                google_meet_url: `https://meet.google.com/${['abc-defg-hij', 'xyz-uvwx-yzw', 'mno-pqrs-tuv'][staffIndex]}`,
                 created_at: new Date(),
                 updated_at: new Date(),
               },
@@ -303,7 +305,7 @@ export default function AdminCalendarPage() {
                             return (
                               <div
                                 key={booking.id}
-                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-md transition-shadow cursor-pointer"
+                                className="absolute left-1 right-1 rounded-md p-2 text-xs overflow-hidden shadow-sm hover:shadow-xl hover:scale-105 hover:z-10 transition-all duration-200 ease-in-out"
                                 style={{
                                   top: `${top}px`,
                                   height: `${height}px`,
@@ -311,12 +313,34 @@ export default function AdminCalendarPage() {
                                   color: "white",
                                 }}
                               >
-                                <div className="font-semibold truncate">
+                                <div
+                                  className="font-semibold truncate cursor-pointer"
+                                  onClick={() => setSelectedBooking(booking)}
+                                >
                                   {formatDate(booking.start_time, "HH:mm")} {booking.client_name}
                                 </div>
-                                <div className="text-[10px] opacity-90 truncate mt-0.5">
+                                <div
+                                  className="text-[10px] opacity-90 truncate mt-0.5 cursor-pointer"
+                                  onClick={() => setSelectedBooking(booking)}
+                                >
                                   {booking.staff.name} - {booking.consultation_type.name}
                                 </div>
+                                {(booking.consultation_type.google_meet_url || booking.google_meet_link) && (
+                                  <div
+                                    className="mt-1 pt-1 border-t border-white/20"
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    <a
+                                      href={booking.consultation_type.google_meet_url || booking.google_meet_link}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="text-[10px] underline hover:text-yellow-200 hover:scale-105 hover:font-semibold block truncate transition-all duration-200 ease-in-out hover:bg-white/10 hover:px-1 rounded"
+                                      title={booking.consultation_type.google_meet_url || booking.google_meet_link}
+                                    >
+                                      🎥 Meet: {(booking.consultation_type.google_meet_url || booking.google_meet_link).replace('https://meet.google.com/', '')}
+                                    </a>
+                                  </div>
+                                )}
                               </div>
                             )
                           })}
@@ -349,6 +373,114 @@ export default function AdminCalendarPage() {
           )
         })}
       </div>
+
+      {/* 予約詳細モーダル */}
+      {selectedBooking && (
+        <div
+          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+          onClick={() => setSelectedBooking(null)}
+        >
+          <Card
+            className="w-full max-w-md bg-white"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CardContent className="p-6">
+              <div className="flex justify-between items-start mb-4">
+                <h2 className="text-2xl font-bold">予約詳細</h2>
+                <button
+                  onClick={() => setSelectedBooking(null)}
+                  className="text-gray-400 hover:text-gray-600 text-2xl"
+                >
+                  ×
+                </button>
+              </div>
+
+              <div className="space-y-4">
+                {/* 日時 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">日時</div>
+                  <div className="text-lg font-semibold">
+                    {formatDate(selectedBooking.start_time, "YYYY年MM月DD日(ddd)")}
+                  </div>
+                  <div className="text-lg font-semibold">
+                    {formatDate(selectedBooking.start_time, "HH:mm")} 〜{" "}
+                    {formatDate(selectedBooking.end_time, "HH:mm")}
+                  </div>
+                </div>
+
+                {/* スタッフ */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">担当スタッフ</div>
+                  <div className="text-lg font-semibold">{selectedBooking.staff.name}</div>
+                </div>
+
+                {/* クライアント情報 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">クライアント</div>
+                  <div className="text-lg font-semibold">{selectedBooking.client_name}</div>
+                  {selectedBooking.client_company && (
+                    <div className="text-sm text-gray-600">{selectedBooking.client_company}</div>
+                  )}
+                </div>
+
+                {/* 相談種別 */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">相談種別</div>
+                  <div className="text-lg">{selectedBooking.consultation_type.name}</div>
+                </div>
+
+                {/* Google Meet URL */}
+                {(selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link) && (
+                  <div>
+                    <div className="text-sm text-gray-500 mb-2">Google Meet</div>
+                    <Button
+                      onClick={() => {
+                        const meetUrl = selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link
+                        window.open(meetUrl, "_blank", "noopener,noreferrer")
+                      }}
+                      className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700"
+                    >
+                      🎥 Google Meetに参加
+                    </Button>
+                    <div className="mt-2 p-2 bg-gray-50 rounded text-xs break-all text-gray-600">
+                      {selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link}
+                    </div>
+                  </div>
+                )}
+
+                {/* メモ */}
+                {selectedBooking.client_memo && (
+                  <div>
+                    <div className="text-sm text-gray-500 mb-1">メモ</div>
+                    <div className="text-sm text-gray-700 whitespace-pre-wrap">
+                      {selectedBooking.client_memo}
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 flex gap-3">
+                <Button
+                  onClick={() => {
+                    window.location.href = `/admin/bookings/${selectedBooking.id}`
+                  }}
+                  variant="outline"
+                  className="flex-1"
+                >
+                  詳細を見る
+                </Button>
+                <Button
+                  onClick={() => setSelectedBooking(null)}
+                  variant="default"
+                  className="flex-1"
+                >
+                  閉じる
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      )}
     </div>
   )
 }
