@@ -1,0 +1,12 @@
+{
+  "crons": [
+    {
+      "path": "/api/cron/reminders?type=24h",
+      "schedule": "0 * * * *"
+    },
+    {
+      "path": "/api/cron/reminders?type=30m",
+      "schedule": "*/5 * * * *"
+    }
+  ]
+}

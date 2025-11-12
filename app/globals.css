@@ -1,0 +1,560 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* 既存のHSL形式カラー（Tailwindと互換性維持） */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 18%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 18%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 18%;
+
+    --primary: 199 100% 71%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 18%;
+
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 40%;
+
+    --accent: 38 100% 72%;
+    --accent-foreground: 0 0% 18%;
+
+    --destructive: 0 90% 73%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 89%;
+    --input: 0 0% 89%;
+    --ring: 199 100% 71%;
+
+    --radius: 0.5rem;
+
+    /* ========================================
+       SHIFT風デザインシステム - カラーパレット
+       ======================================== */
+
+    /* サイドバー */
+    --sidebar-bg: #1a1d23;
+    --sidebar-text: #ffffff;
+    --sidebar-text-muted: #9ca3af;
+    --sidebar-hover: #252932;
+    --sidebar-active: #2d3340;
+
+    /* メインエリア */
+    --main-bg: #f8f9fa;
+    --content-bg: #ffffff;
+
+    /* ブルー系統（プライマリー） */
+    --blue-50: #eff6ff;
+    --blue-100: #dbeafe;
+    --blue-200: #bfdbfe;
+    --blue-300: #93c5fd;
+    --blue-400: #60a5fa;
+    --blue-500: #3b82f6;
+    --blue-600: #2563eb;
+    --blue-700: #1d4ed8;
+    --blue-800: #1e40af;
+    --blue-900: #1e3a8a;
+
+    /* グレースケール */
+    --gray-50: #f9fafb;
+    --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb;
+    --gray-300: #d1d5db;
+    --gray-400: #9ca3af;
+    --gray-500: #6b7280;
+    --gray-600: #4b5563;
+    --gray-700: #374151;
+    --gray-800: #1f2937;
+    --gray-900: #111827;
+
+    /* セマンティックカラー */
+    --success: #10b981;
+    --warning: #f59e0b;
+    --error: #ef4444;
+    --info: #3b82f6;
+
+    /* ========================================
+       SHIFT風デザインシステム - スペーシング
+       ======================================== */
+    --spacing-xs: 8px;
+    --spacing-sm: 12px;
+    --spacing-md: 16px;
+    --spacing-lg: 24px;
+    --spacing-xl: 32px;
+    --spacing-2xl: 48px;
+    --spacing-3xl: 64px;
+
+    /* ========================================
+       SHIFT風デザインシステム - ボーダー
+       ======================================== */
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 20px;
+    --radius-full: 9999px;
+
+    --border-width: 1px;
+    --border-color: var(--gray-200);
+    --border-color-dark: var(--gray-300);
+
+    /* ========================================
+       SHIFT風デザインシステム - シャドウ（控えめ）
+       ======================================== */
+    --shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+
+    /* ========================================
+       SHIFT風デザインシステム - タイポグラフィ
+       ======================================== */
+    --font-size-xs: 12px;
+    --font-size-sm: 14px;
+    --font-size-base: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 30px;
+    --font-size-4xl: 36px;
+
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+
+    /* ========================================
+       SHIFT風デザインシステム - トランジション
+       ======================================== */
+    --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-base: 200ms cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-slow: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* ========================================
+       SHIFT風デザインシステム - Z-Index
+       ======================================== */
+    --z-dropdown: 1000;
+    --z-sticky: 1020;
+    --z-fixed: 1030;
+    --z-modal-backdrop: 1040;
+    --z-modal: 1050;
+    --z-popover: 1060;
+    --z-tooltip: 1070;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* カスタムスクロールバー（Webkit） */
+  ::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    @apply bg-gray-100;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    @apply bg-gray-400;
+  }
+
+  /* スムーズスクロール（iOS対応） */
+  * {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* タップハイライトの削除 */
+  * {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* フォーカス可視化 */
+  *:focus-visible {
+    @apply outline-none ring-2 ring-primary ring-offset-2;
+  }
+
+  /* ビューポート高さのカスタムプロパティ */
+  :root {
+    --vh: 1vh;
+  }
+}
+
+@layer components {
+  /* ========================================
+     既存のボタンスタイル（互換性維持）
+     ======================================== */
+  .btn {
+    @apply inline-flex items-center justify-center rounded-md text-base font-medium transition-all duration-200;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply disabled:pointer-events-none disabled:opacity-50;
+    @apply min-h-[44px] px-6;
+  }
+
+  .btn-primary {
+    @apply bg-primary text-primary-foreground hover:opacity-90 active:scale-95;
+  }
+
+  .btn-accent {
+    @apply bg-accent text-accent-foreground hover:opacity-90 active:scale-95;
+  }
+
+  .btn-outline {
+    @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground;
+  }
+
+  /* 入力フィールドスタイル */
+  .input {
+    @apply flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base;
+    @apply placeholder:text-muted-foreground;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
+    @apply disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  /* カードスタイル */
+  .card {
+    @apply rounded-lg border bg-card text-card-foreground shadow-custom;
+  }
+
+  /* コンテナ */
+  .container-custom {
+    @apply mx-auto max-w-[680px] px-4 sm:px-6;
+  }
+
+  /* セクション間マージン */
+  .section-margin {
+    @apply my-12 md:my-16;
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - サイドバー
+     ======================================== */
+  .shift-sidebar {
+    background-color: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .shift-sidebar-item {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-sm);
+    color: var(--sidebar-text-muted);
+    font-weight: var(--font-weight-medium);
+    transition: all var(--transition-base);
+    cursor: pointer;
+  }
+
+  .shift-sidebar-item:hover {
+    background-color: var(--sidebar-hover);
+    color: var(--sidebar-text);
+  }
+
+  .shift-sidebar-item.active {
+    background-color: var(--sidebar-active);
+    color: var(--sidebar-text);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - メインレイアウト
+     ======================================== */
+  .shift-main {
+    background-color: var(--main-bg);
+    min-height: 100vh;
+  }
+
+  .shift-content {
+    background-color: var(--content-bg);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - カード
+     ======================================== */
+  .shift-card {
+    background-color: var(--content-bg);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-md);
+    padding: var(--spacing-lg);
+    box-shadow: var(--shadow-xs);
+    transition: all var(--transition-base);
+  }
+
+  .shift-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-2px);
+  }
+
+  .shift-card-title {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .shift-card-description {
+    font-size: var(--font-size-sm);
+    color: var(--gray-500);
+    line-height: var(--line-height-normal);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - ボタン
+     ======================================== */
+  .shift-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--spacing-sm) var(--spacing-lg);
+    border-radius: var(--radius-sm);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-semibold);
+    line-height: var(--line-height-tight);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    border: none;
+    min-height: 44px;
+  }
+
+  .shift-btn:focus-visible {
+    outline: 2px solid var(--blue-500);
+    outline-offset: 2px;
+  }
+
+  .shift-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  .shift-btn-primary {
+    background-color: var(--blue-500);
+    color: white;
+  }
+
+  .shift-btn-primary:hover:not(:disabled) {
+    background-color: var(--blue-600);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+  }
+
+  .shift-btn-primary:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  .shift-btn-secondary {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+  }
+
+  .shift-btn-secondary:hover:not(:disabled) {
+    background-color: var(--gray-200);
+  }
+
+  .shift-btn-outline {
+    background-color: transparent;
+    border: var(--border-width) solid var(--border-color-dark);
+    color: var(--gray-700);
+  }
+
+  .shift-btn-outline:hover:not(:disabled) {
+    background-color: var(--gray-50);
+    border-color: var(--gray-400);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - 入力フィールド
+     ======================================== */
+  .shift-input {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    font-size: var(--font-size-base);
+    color: var(--gray-900);
+    background-color: var(--content-bg);
+    border: var(--border-width) solid var(--border-color);
+    border-radius: var(--radius-sm);
+    transition: all var(--transition-base);
+    min-height: 44px;
+  }
+
+  .shift-input::placeholder {
+    color: var(--gray-400);
+  }
+
+  .shift-input:focus {
+    outline: none;
+    border-color: var(--blue-500);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  }
+
+  .shift-input:disabled {
+    background-color: var(--gray-50);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  .shift-input.error {
+    border-color: var(--error);
+  }
+
+  .shift-input.error:focus {
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - ラベル
+     ======================================== */
+  .shift-label {
+    display: block;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--gray-700);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .shift-label.required::after {
+    content: " *";
+    color: var(--error);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - バッジ
+     ======================================== */
+  .shift-badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 4px var(--spacing-sm);
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    border-radius: var(--radius-full);
+    line-height: var(--line-height-tight);
+  }
+
+  .shift-badge-primary {
+    background-color: var(--blue-100);
+    color: var(--blue-700);
+  }
+
+  .shift-badge-success {
+    background-color: #d1fae5;
+    color: #065f46;
+  }
+
+  .shift-badge-warning {
+    background-color: #fef3c7;
+    color: #92400e;
+  }
+
+  .shift-badge-error {
+    background-color: #fee2e2;
+    color: #991b1b;
+  }
+
+  .shift-badge-gray {
+    background-color: var(--gray-100);
+    color: var(--gray-700);
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - ディバイダー
+     ======================================== */
+  .shift-divider {
+    height: var(--border-width);
+    background-color: var(--border-color);
+    border: none;
+    margin: var(--spacing-lg) 0;
+  }
+
+  /* ========================================
+     SHIFT風コンポーネント - セクションヘッダー
+     ======================================== */
+  .shift-section-header {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .shift-section-title {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--gray-900);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .shift-section-subtitle {
+    font-size: var(--font-size-sm);
+    color: var(--gray-500);
+    line-height: var(--line-height-normal);
+  }
+}
+
+@layer utilities {
+  /* モバイルファーストの高さ制約 */
+  .h-screen-safe {
+    height: 100vh;
+    height: 100dvh;
+  }
+
+  .max-h-screen-safe {
+    max-height: 100vh;
+    max-height: 100dvh;
+  }
+
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100svh;
+  }
+
+  /* タップ領域確保 */
+  .tap-target {
+    @apply min-h-[44px] min-w-[44px];
+  }
+
+  /* スクロールスナップ */
+  .scroll-snap-y {
+    scroll-snap-type: y proximity;
+  }
+
+  .scroll-snap-item {
+    scroll-snap-align: start;
+  }
+
+  /* アニメーション */
+  .animate-in {
+    animation: fade-in 0.3s ease-in-out;
+  }
+
+  .animate-scale {
+    animation: scale-in 0.2s ease-out;
+  }
+
+  /* テキストスタイル */
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* グリッドレスポンシブ */
+  .grid-responsive {
+    @apply grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3;
+  }
+}
