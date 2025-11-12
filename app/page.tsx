@@ -4,9 +4,9 @@ import { Button } from "@/src/components/ui/Button"
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-brand-50 via-panel to-panel flex items-center justify-center">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
-        <div className="text-center max-w-5xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-b from-brand-50 via-panel to-panel flex items-center justify-center overflow-hidden relative">
+      <div className="w-full sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-12">
+        <div className="text-center w-full sm:max-w-5xl mx-auto">
           {/* Logo/Brand */}
           <div className="mb-4 sm:mb-8">
             <h1 className="text-3xl sm:text-5xl md:text-6xl font-extrabold text-text mb-2 sm:mb-3 tracking-tight">
@@ -79,11 +79,11 @@ export default function HomePage() {
 
           {/* Footer Links */}
           <div className="flex flex-row justify-center items-center gap-4 sm:gap-6 pt-6 sm:pt-8 border-t border-border">
-            <Link href="/staff" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium">
+            <Link href="/staff" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium py-3 px-4 tap-target">
               スタッフログイン
             </Link>
             <span className="text-border">|</span>
-            <Link href="/admin" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium">
+            <Link href="/admin" className="text-xs sm:text-sm text-muted hover:text-brand-600 transition-colors font-medium py-3 px-4 tap-target">
               管理者ログイン
             </Link>
           </div>

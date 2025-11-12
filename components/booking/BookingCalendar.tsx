@@ -126,8 +126,8 @@ export function BookingCalendar({
 
   return (
     <div className="w-full px-4 sm:px-6 lg:px-8 py-4 sm:py-8 bg-panel">
-      <div className="max-w-7xl mx-auto">
-        <div className="max-w-4xl mx-auto">
+      <div className="w-full sm:max-w-7xl mx-auto">
+        <div className="w-full sm:max-w-4xl mx-auto">
           {/* ヘッダー */}
           <header className="text-center mb-6 sm:mb-10">
             <div className="w-full max-w-[200px] sm:max-w-[240px] h-[48px] sm:h-[60px] mx-auto mb-4 sm:mb-6 flex items-center justify-center">
@@ -150,7 +150,7 @@ export function BookingCalendar({
               <SelectTrigger className="h-12 sm:h-14 text-sm sm:text-base">
                 <SelectValue placeholder="選択してください" />
               </SelectTrigger>
-              <SelectContent className="w-full min-w-[300px]">
+              <SelectContent className="w-full max-w-[calc(100vw-2rem)]">
                 {consultationTypes.map((type) => (
                   <SelectItem key={type.id} value={type.id}>
                     {type.name}（{type.duration_minutes}分）
@@ -281,8 +281,8 @@ export function BookingCalendar({
 
           {/* 選択情報と次へボタン */}
           {selectedSlot && (
-            <div className="sticky bottom-0 left-0 right-0 bg-panel border-t-2 border-border p-4 sm:p-6 -mx-4">
-              <div className="max-w-7xl mx-auto px-4">
+            <div className="fixed bottom-0 left-0 right-0 bg-panel border-t-2 border-border p-4 sm:p-6 w-full z-50">
+              <div className="w-full sm:max-w-4xl mx-auto px-2 sm:px-4">
                 <div className="mb-4 sm:mb-6 p-4 sm:p-6 bg-brand-600/10 rounded-lg">
                   <p className="text-sm sm:text-base text-muted mb-1 sm:mb-2">選択した日時</p>
                   <p className="text-lg sm:text-xl font-medium text-text">

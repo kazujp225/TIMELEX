@@ -91,8 +91,8 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
 
   return (
     <div className="min-h-screen-safe bg-panel py-4 sm:py-8">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-3xl mx-auto">
+      <div className="w-full sm:max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="w-full sm:max-w-3xl mx-auto">
           <div className="text-center">
             {/* チェックマークアニメーション */}
             <div className="mb-4 sm:mb-8 flex items-center justify-center">
