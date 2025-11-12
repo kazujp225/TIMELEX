@@ -200,7 +200,7 @@ END:VCALENDAR`
                   URL.revokeObjectURL(url)
                 }}
                 variant="secondary"
-                size="md"
+                size="lg"
                 fullWidth
                 icon={<Calendar className="w-5 h-5" aria-hidden="true" />}
               >
@@ -210,7 +210,7 @@ END:VCALENDAR`
               <Button
                 onClick={() => (window.location.href = cancelUrl)}
                 variant="ghost"
-                size="md"
+                size="lg"
                 fullWidth
               >
                 予約を変更・キャンセル
