@@ -147,172 +147,18 @@ export default function SettingsPage() {
         </p>
       </div>
 
-      {/* Booking Settings */}
+      {/* 予約設定・顧客設定・データ管理 - 一旦非表示（将来復活予定） */}
+      {/*
       <Card className="border-2">
         <CardHeader className="pb-6">
           <CardTitle className="text-2xl">予約設定</CardTitle>
           <CardDescription>予約に関する基本設定</CardDescription>
         </CardHeader>
         <CardContent className="space-y-8">
-          <div className="space-y-2">
-            <Label htmlFor="minimum_booking_hours" className="text-base font-semibold">
-              最短予約猶予（時間）
-            </Label>
-            <Input
-              id="minimum_booking_hours"
-              type="number"
-              value={settings.minimum_booking_hours}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  minimum_booking_hours: parseInt(e.target.value) || 0,
-                })
-              }
-              min="0"
-              max="48"
-              className={`h-14 text-base ${errors.minimum_booking_hours ? "border-destructive" : ""}`}
-            />
-            {errors.minimum_booking_hours && (
-              <p className="text-sm text-destructive mt-1">
-                {errors.minimum_booking_hours}
-              </p>
-            )}
-            <p className="text-sm text-muted-foreground mt-1">
-              予約開始時刻の何時間前まで予約可能か（デフォルト: 2時間）
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="maximum_booking_days" className="text-base font-semibold">
-              最長予約期間（日）
-            </Label>
-            <Input
-              id="maximum_booking_days"
-              type="number"
-              value={settings.maximum_booking_days}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  maximum_booking_days: parseInt(e.target.value) || 0,
-                })
-              }
-              min="7"
-              max="365"
-              className={`h-14 text-base ${errors.maximum_booking_days ? "border-destructive" : ""}`}
-            />
-            {errors.maximum_booking_days && (
-              <p className="text-sm text-destructive mt-1">
-                {errors.maximum_booking_days}
-              </p>
-            )}
-            <p className="text-sm text-muted-foreground mt-1">
-              何日先まで予約を受け付けるか（デフォルト: 60日）
-            </p>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="cancellation_deadline_hours" className="text-base font-semibold">
-              キャンセル期限（時間）
-            </Label>
-            <Input
-              id="cancellation_deadline_hours"
-              type="number"
-              value={settings.cancellation_deadline_hours}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  cancellation_deadline_hours: parseInt(e.target.value) || 0,
-                })
-              }
-              min="0"
-              max="48"
-              className={`h-14 text-base ${errors.cancellation_deadline_hours ? "border-destructive" : ""}`}
-            />
-            {errors.cancellation_deadline_hours && (
-              <p className="text-sm text-destructive mt-1">
-                {errors.cancellation_deadline_hours}
-              </p>
-            )}
-            <p className="text-sm text-muted-foreground mt-1">
-              予約開始時刻の何時間前までキャンセル可能か（デフォルト: 2時間）
-            </p>
-          </div>
+          ...
         </CardContent>
       </Card>
-
-      {/* Customer Settings */}
-      <Card className="border-2">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">顧客設定</CardTitle>
-          <CardDescription>顧客分類に関する設定</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          <div className="space-y-2">
-            <Label htmlFor="recent_customer_days" className="text-base font-semibold">
-              継続顧客判定期間（日）
-            </Label>
-            <Input
-              id="recent_customer_days"
-              type="number"
-              value={settings.recent_customer_days}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  recent_customer_days: parseInt(e.target.value) || 0,
-                })
-              }
-              min="7"
-              max="90"
-              className={`h-14 text-base ${errors.recent_customer_days ? "border-destructive" : ""}`}
-            />
-            {errors.recent_customer_days && (
-              <p className="text-sm text-destructive mt-1">
-                {errors.recent_customer_days}
-              </p>
-            )}
-            <p className="text-sm text-muted-foreground mt-1">
-              この期間内に予約があれば継続顧客とみなす（デフォルト: 30日）
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Data Settings */}
-      <Card className="border-2">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">データ管理</CardTitle>
-          <CardDescription>データ保持に関する設定</CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-8">
-          <div className="space-y-2">
-            <Label htmlFor="data_retention_days" className="text-base font-semibold">
-              データ保持期間（日）
-            </Label>
-            <Input
-              id="data_retention_days"
-              type="number"
-              value={settings.data_retention_days}
-              onChange={(e) =>
-                setSettings({
-                  ...settings,
-                  data_retention_days: parseInt(e.target.value) || 0,
-                })
-              }
-              min="30"
-              max="365"
-              className={`h-14 text-base ${errors.data_retention_days ? "border-destructive" : ""}`}
-            />
-            {errors.data_retention_days && (
-              <p className="text-sm text-destructive mt-1">
-                {errors.data_retention_days}
-              </p>
-            )}
-            <p className="text-sm text-muted-foreground mt-1">
-              予約データを保持する期間（デフォルト: 180日）
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+      */}
 
       {/* Google Calendar Integration */}
       <Card className="border-2 border-brand-600">
@@ -379,6 +225,8 @@ export default function SettingsPage() {
         </CardContent>
       </Card>
 
+      {/* 保存ボタン - 一旦非表示（設定項目復活時に使用） */}
+      {/*
       {errors.submit && (
         <div className="p-3 bg-destructive/10 border border-destructive rounded">
           <p className="text-sm text-destructive">{errors.submit}</p>
@@ -398,6 +246,7 @@ export default function SettingsPage() {
           リセット
         </Button>
       </div>
+      */}
     </div>
   )
 }

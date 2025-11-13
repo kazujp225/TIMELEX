@@ -199,23 +199,6 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-primary">
-          <CardHeader className="pb-4">
-            <CardDescription className="text-base">継続率</CardDescription>
-            <CardTitle className="text-4xl text-primary">
-              {stats?.month.total
-                ? Math.round(
-                    (stats.month.recent / stats.month.total) * 100
-                  )
-                : 0}
-              %
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground">今月</p>
-          </CardContent>
-        </Card>
-
         <Card className="border-2 border-[#6EC5FF]">
           <CardHeader className="pb-4">
             <CardDescription className="text-base">メール送信</CardDescription>
@@ -241,7 +224,7 @@ export default function AdminDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-3">
             <div>
               <div className="text-3xl font-bold">{stats?.today.total || 0}</div>
               <div className="text-base text-muted-foreground mt-2">総予約数</div>
@@ -253,16 +236,10 @@ export default function AdminDashboard() {
               <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary">
-                {stats?.today.new || 0}
+              <div className="text-3xl font-bold text-destructive">
+                {stats?.today.cancelled || 0}
               </div>
-              <div className="text-base text-muted-foreground mt-2">新規</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">
-                {stats?.today.recent || 0}
-              </div>
-              <div className="text-base text-muted-foreground mt-2">継続</div>
+              <div className="text-base text-muted-foreground mt-2">キャンセル</div>
             </div>
           </div>
         </CardContent>
@@ -275,7 +252,7 @@ export default function AdminDashboard() {
           <CardDescription className="text-base">過去7日間の統計</CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-3">
             <div>
               <div className="text-3xl font-bold">{stats?.week.total || 0}</div>
               <div className="text-base text-muted-foreground mt-2">総予約数</div>
@@ -287,16 +264,10 @@ export default function AdminDashboard() {
               <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary">
-                {stats?.week.new || 0}
+              <div className="text-3xl font-bold text-destructive">
+                {stats?.week.cancelled || 0}
               </div>
-              <div className="text-base text-muted-foreground mt-2">新規</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">
-                {stats?.week.recent || 0}
-              </div>
-              <div className="text-base text-muted-foreground mt-2">継続</div>
+              <div className="text-base text-muted-foreground mt-2">キャンセル</div>
             </div>
           </div>
         </CardContent>
@@ -311,7 +282,7 @@ export default function AdminDashboard() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-6 md:grid-cols-4">
+          <div className="grid gap-6 md:grid-cols-3">
             <div>
               <div className="text-3xl font-bold">{stats?.month.total || 0}</div>
               <div className="text-base text-muted-foreground mt-2">総予約数</div>
@@ -323,16 +294,10 @@ export default function AdminDashboard() {
               <div className="text-base text-muted-foreground mt-2">確定</div>
             </div>
             <div>
-              <div className="text-3xl font-bold text-primary">
-                {stats?.month.new || 0}
+              <div className="text-3xl font-bold text-destructive">
+                {stats?.month.cancelled || 0}
               </div>
-              <div className="text-base text-muted-foreground mt-2">新規</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-accent">
-                {stats?.month.recent || 0}
-              </div>
-              <div className="text-base text-muted-foreground mt-2">継続</div>
+              <div className="text-base text-muted-foreground mt-2">キャンセル</div>
             </div>
           </div>
         </CardContent>

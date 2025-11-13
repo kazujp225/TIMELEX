@@ -32,75 +32,71 @@ async function testEmail() {
     const { data, error } = await resend.emails.send({
       from: "TIMREXPLUS <onboarding@resend.dev>",
       to: ["team@zettai.co.jp"], // Resendテストモードでは自分のメールアドレスのみ
-      subject: "🧪 TIMREXPLUS - メール送信テスト",
+      subject: "TIMREXPLUS - メール送信テスト",
       html: `
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      line-height: 1.6;
-      color: #333;
-      max-width: 600px;
-      margin: 0 auto;
-      padding: 20px;
-    }
-    .header {
-      background: linear-gradient(135deg, #6EC5FF 0%, #FFC870 100%);
-      color: white;
-      padding: 30px;
-      text-align: center;
-      border-radius: 8px;
-      margin-bottom: 20px;
-    }
-    .content {
-      background: #ffffff;
-      padding: 30px;
-      border: 1px solid #e5e7eb;
-      border-radius: 8px;
-    }
-    .success-box {
-      background: #d1fae5;
-      border-left: 4px solid #10b981;
-      padding: 15px;
-      margin: 15px 0;
-      border-radius: 4px;
-    }
-  </style>
 </head>
-<body>
-  <div class="header">
-    <h1 style="margin: 0; font-size: 24px;">✅ メール送信テスト</h1>
-    <p style="margin: 10px 0 0 0; opacity: 0.9;">TIMREXPLUS</p>
-  </div>
+<body style="margin:0; padding:0; background-color:#F3F4F6;">
+  <div style="width:100%; padding:24px 0;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto;">
+      <tr>
+        <td style="padding:0 24px 16px; font-size:12px; color:#9CA3AF; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          TIMREXPLUS
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#FFFFFF; border-radius:12px; padding:24px; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; border:1px solid #E5E7EB;">
 
-  <div class="content">
-    <div class="success-box">
-      <strong>🎉 テスト成功！</strong>
-      <p style="margin: 10px 0 0 0;">
-        Resendからのメール送信が正常に機能しています。
-      </p>
-    </div>
+          <!-- タイトル -->
+          <h1 style="font-size:18px; margin:0 0 12px; color:#111827;">
+            メール送信テスト
+          </h1>
 
-    <h2 style="color: #6EC5FF;">確認項目</h2>
-    <ul>
-      <li>✅ Resend APIキーが正しく設定されています</li>
-      <li>✅ メール送信機能が正常に動作しています</li>
-      <li>✅ HTMLメールのレンダリングが正常です</li>
-    </ul>
+          <!-- 要約 -->
+          <p style="font-size:14px; line-height:1.6; margin:0 0 16px; color:#4B5563;">
+            Resendからのメール送信が正常に機能しています。
+          </p>
 
-    <h2 style="color: #6EC5FF;">次のステップ</h2>
-    <ol>
-      <li>予約システムから実際の予約通知をテスト</li>
-      <li>本番環境でドメイン認証を設定（独自ドメインからの送信用）</li>
-      <li>メール配信率をモニタリング</li>
-    </ol>
+          <!-- 成功メッセージ -->
+          <div style="font-size:12px; line-height:1.6; margin:16px 0; padding:12px; background-color:#D1FAE5; border-left:3px solid #10B981; border-radius:4px; color:#065F46;">
+            <strong>テスト成功</strong><br>
+            メール配信システムが正常に動作しています。
+          </div>
 
-    <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #e5e7eb; color: #666; font-size: 14px;">
-      テスト実行日時: ${new Date().toLocaleString("ja-JP")}
-    </p>
+          <!-- 確認項目 -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; margin:16px 0; color:#374151;">
+            <tr>
+              <td style="padding:8px 0; vertical-align:top;">•</td>
+              <td style="padding:8px 0 8px 8px; vertical-align:top;">Resend APIキーが正しく設定されています</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; vertical-align:top;">•</td>
+              <td style="padding:8px 0 8px 8px; vertical-align:top;">メール送信機能が正常に動作しています</td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; vertical-align:top;">•</td>
+              <td style="padding:8px 0 8px 8px; vertical-align:top;">HTMLメールのレンダリングが正常です</td>
+            </tr>
+          </table>
+
+          <!-- 補足 -->
+          <p style="font-size:11px; line-height:1.6; margin:20px 0 0; padding-top:20px; border-top:1px solid #E5E7EB; color:#9CA3AF;">
+            テスト実行日時: ${new Date().toLocaleString("ja-JP")}
+          </p>
+
+        </td>
+      </tr>
+
+      <!-- フッター -->
+      <tr>
+        <td style="padding:16px 24px 0; font-size:11px; color:#9CA3AF; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          © 2025 ZettAI Inc. All rights reserved.
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>

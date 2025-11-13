@@ -60,76 +60,83 @@ export async function sendBookingNotificationToAdmin(params: BookingNotification
 <html>
 <head>
   <meta charset="utf-8">
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; line-height: 1.6; color: #1f2937; margin: 0; padding: 20px; background: #f9fafb; }
-    .container { max-width: 540px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-    .header { background: linear-gradient(135deg, #6EC5FF 0%, #FFC870 100%); color: white; padding: 20px; text-align: center; }
-    .content { padding: 24px; }
-    .row { display: flex; padding: 12px 0; border-bottom: 1px solid #f3f4f6; }
-    .row:last-child { border-bottom: none; }
-    .label { min-width: 80px; font-weight: 600; color: #6b7280; font-size: 13px; }
-    .value { flex: 1; color: #1f2937; font-size: 15px; }
-    .highlight { background: #fef3c7; border-left: 3px solid #fbbf24; padding: 12px; margin: 16px 0; border-radius: 4px; }
-    .footer { text-align: center; padding: 16px; color: #9ca3af; font-size: 12px; background: #f9fafb; }
-  </style>
 </head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1 style="margin: 0; font-size: 20px; font-weight: 600;">🔔 新規予約通知</h1>
-      <p style="margin: 8px 0 0 0; opacity: 0.9; font-size: 14px;">TIMREXPLUS</p>
-    </div>
+<body style="margin:0; padding:0; background-color:#F3F4F6;">
+  <div style="width:100%; padding:24px 0;">
+    <table align="center" width="100%" cellpadding="0" cellspacing="0" style="max-width:600px; margin:0 auto;">
+      <tr>
+        <td style="padding:0 24px 16px; font-size:12px; color:#9CA3AF; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          TIMREXPLUS
+        </td>
+      </tr>
+      <tr>
+        <td style="background-color:#FFFFFF; border-radius:12px; padding:24px; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; border:1px solid #E5E7EB;">
 
-    <div class="content">
-      <div class="row">
-        <div class="label">お客様</div>
-        <div class="value">
-          <strong>${clientName}</strong>
-          ${clientCompany ? `<div style="color: #6b7280; font-size: 13px; margin-top: 2px;">${clientCompany}</div>` : ""}
-        </div>
-      </div>
+          <!-- タイトル -->
+          <h1 style="font-size:18px; margin:0 0 12px; color:#111827;">
+            ${clientName}様から予約が届きました
+          </h1>
 
-      <div class="row">
-        <div class="label">メール</div>
-        <div class="value"><a href="mailto:${clientEmail}" style="color: #6EC5FF; text-decoration: none;">${clientEmail}</a></div>
-      </div>
+          <!-- 要約 -->
+          <p style="font-size:14px; line-height:1.6; margin:0 0 16px; color:#4B5563;">
+            以下の内容で予約が確定しています。お客様対応の準備をお願いします。
+          </p>
 
-      <div class="row">
-        <div class="label">商材</div>
-        <div class="value"><strong style="color: #F59E0B;">${consultationType}</strong></div>
-      </div>
+          <!-- 情報ブロック -->
+          <table width="100%" cellpadding="0" cellspacing="0" style="font-size:14px; margin:0 0 20px; color:#374151;">
+            <tr>
+              <td style="padding:8px 0; width:100px; color:#6B7280; vertical-align:top;">お客様</td>
+              <td style="padding:8px 0; vertical-align:top;">
+                <strong>${clientName}</strong>
+                ${clientCompany ? `<div style="color:#6B7280; font-size:13px; margin-top:2px;">${clientCompany}</div>` : ""}
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; color:#6B7280; vertical-align:top;">メール</td>
+              <td style="padding:8px 0; vertical-align:top;">
+                <a href="mailto:${clientEmail}" style="color:#2563EB; text-decoration:none;">${clientEmail}</a>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; color:#6B7280; vertical-align:top;">相談種別</td>
+              <td style="padding:8px 0; vertical-align:top;"><strong>${consultationType}</strong></td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; color:#6B7280; vertical-align:top;">日時</td>
+              <td style="padding:8px 0; vertical-align:top;">
+                ${formattedDate}<br>
+                <strong style="color:#2563EB; font-size:15px;">${formattedTime}</strong>
+              </td>
+            </tr>
+            <tr>
+              <td style="padding:8px 0; color:#6B7280; vertical-align:top;">担当者</td>
+              <td style="padding:8px 0; vertical-align:top;"><strong>${staffName}</strong></td>
+            </tr>
+          </table>
 
-      <div class="row">
-        <div class="label">日時</div>
-        <div class="value">
-          ${formattedDate}<br>
-          <strong style="color: #6EC5FF; font-size: 16px;">${formattedTime}</strong>
-        </div>
-      </div>
+          <!-- 補足 -->
+          <p style="font-size:12px; line-height:1.6; margin:16px 0 0; padding:12px; background-color:#FEF3C7; border-left:3px solid #F59E0B; border-radius:4px; color:#92400E;">
+            <strong>対応方法</strong><br>
+            1. Google Meet URLを作成<br>
+            2. <strong>${clientEmail}</strong> 宛にMeet URLを送信
+          </p>
 
-      <div class="row">
-        <div class="label">担当者</div>
-        <div class="value">${staffName}</div>
-      </div>
+        </td>
+      </tr>
 
-      <div class="highlight">
-        <strong style="color: #92400e;">📝 対応方法</strong>
-        <ol style="margin: 8px 0 0 16px; padding: 0; font-size: 14px; color: #6b7280;">
-          <li style="margin: 4px 0;">Meet URLを作成</li>
-          <li style="margin: 4px 0;"><strong>${clientEmail}</strong> に返信</li>
-        </ol>
-      </div>
-    </div>
-
-    <div class="footer">
-      TIMREXPLUS 自動送信
-    </div>
+      <!-- フッター -->
+      <tr>
+        <td style="padding:16px 24px 0; font-size:11px; color:#9CA3AF; font-family:system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+          © 2025 ZettAI Inc. All rights reserved.
+        </td>
+      </tr>
+    </table>
   </div>
 </body>
 </html>
   `
 
-  const emailSubject = `🔔 【${consultationType}】新規予約: ${clientName}様 - ${formattedDate} ${formattedTime}`
+  const emailSubject = `【${consultationType}】新規予約: ${clientName}様 - ${formattedDate} ${formattedTime}`
 
   // Create email log entry BEFORE sending
   const { data: emailLog, error: logError } = await supabase
