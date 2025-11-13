@@ -97,7 +97,7 @@ export default function BookingUrlsPage() {
                   <div className="flex gap-2">
                     <Button
                       onClick={() => copyToClipboard(product.id, url)}
-                      variant={isCopied ? "default" : "secondary"}
+                      variant={isCopied ? "primary" : "secondary"}
                       size="sm"
                       icon={isCopied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
                     >
