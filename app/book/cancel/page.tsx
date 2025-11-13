@@ -29,66 +29,64 @@ export default function CancelBookingPage() {
       return
     }
 
-    // TODO: APIから予約情報を取得してトークンを検証
-    // モックデータ
-    const now = new Date()
-    const futureDate = new Date(now)
-    futureDate.setDate(futureDate.getDate() + 3)
-    futureDate.setHours(15, 0, 0, 0)
+    // APIから予約情報を取得
+    const fetchBooking = async () => {
+      try {
+        const response = await fetch(`/api/bookings/${bookingId}`)
 
-    const mockBooking: BookingWithRelations = {
-      id: bookingId,
-      status: BookingStatus.CONFIRMED,
-      start_time: futureDate,
-      end_time: new Date(futureDate.getTime() + 30 * 60 * 1000),
-      duration_minutes: 30,
-      staff_id: "staff-1",
-      consultation_type_id: "type-1",
-      inquiry_source_id: "source-1",
-      client_name: "山田 太郎",
-      client_email: "yamada@example.com",
-      client_company: "株式会社〇〇",
-      client_memo: null,
-      is_recent: false,
-      google_event_id: "event-123",
-      google_meet_link: "https://meet.google.com/abc-defg-hij",
-      cancel_token: cancelToken,
-      created_at: new Date(),
-      updated_at: new Date(),
-      staff: {
-        id: "staff-1",
-        name: "スタッフA",
-        email: "staff-a@example.com",
-        is_active: true,
-        timezone: "Asia/Tokyo",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      consultation_type: {
-        id: "type-1",
-        name: "初回相談（AI導入）",
-        duration_minutes: 30,
-        buffer_before_minutes: 5,
-        buffer_after_minutes: 5,
-        mode: ConsultationMode.IMMEDIATE,
-        recent_mode_override: RecentModeOverride.KEEP,
-        display_order: 1,
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      inquiry_source: {
-        id: "source-1",
-        name: "自社コーポレートサイト",
-        display_order: 1,
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
+        if (!response.ok) {
+          setError("予約情報が見つかりませんでした")
+          setLoading(false)
+          return
+        }
+
+        const { booking: data } = await response.json()
+
+        // トークンを検証
+        if (data.cancel_token !== cancelToken) {
+          setError("無効なキャンセルトークンです")
+          setLoading(false)
+          return
+        }
+
+        // Date型に変換
+        const bookingData: BookingWithRelations = {
+          ...data,
+          start_time: new Date(data.start_time),
+          end_time: new Date(data.end_time),
+          created_at: new Date(data.created_at),
+          updated_at: new Date(data.updated_at),
+          cancelled_at: data.cancelled_at ? new Date(data.cancelled_at) : null,
+          staff: {
+            ...data.staff,
+            created_at: new Date(data.staff.created_at),
+            updated_at: new Date(data.staff.updated_at),
+            google_token_expires_at: data.staff.google_token_expires_at
+              ? new Date(data.staff.google_token_expires_at)
+              : null,
+          },
+          consultation_type: {
+            ...data.consultation_type,
+            created_at: new Date(data.consultation_type.created_at),
+            updated_at: new Date(data.consultation_type.updated_at),
+          },
+          inquiry_source: data.inquiry_source ? {
+            ...data.inquiry_source,
+            created_at: new Date(data.inquiry_source.created_at),
+            updated_at: new Date(data.inquiry_source.updated_at),
+          } : null,
+        }
+
+        setBooking(bookingData)
+        setLoading(false)
+      } catch (error) {
+        console.error("Error fetching booking:", error)
+        setError("予約情報の取得に失敗しました")
+        setLoading(false)
+      }
     }
 
-    setBooking(mockBooking)
-    setLoading(false)
+    fetchBooking()
   }, [bookingId, cancelToken])
 
   const handleCancel = async () => {
@@ -100,12 +98,27 @@ export default function CancelBookingPage() {
     setError(null)
 
     try {
-      // TODO: APIリクエスト
-      await new Promise((resolve) => setTimeout(resolve, 1500))
+      const response = await fetch(`/api/bookings/${bookingId}/cancel`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cancel_token: cancelToken,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        setError(data.error || "キャンセル処理に失敗しました")
+        return
+      }
 
       setSuccess(true)
       setActionType("cancel")
     } catch (err) {
+      console.error("Error cancelling booking:", err)
       setError("キャンセル処理に失敗しました。もう一度お試しください。")
     } finally {
       setIsProcessing(false)
@@ -245,21 +258,6 @@ export default function CancelBookingPage() {
               <p className="text-xl font-medium mt-2">{booking.client_email}</p>
             </div>
 
-            {booking.google_meet_link && (
-              <div>
-                <p className="text-base text-muted-foreground font-medium mb-3">Google Meet</p>
-                <Button
-                  onClick={() => window.open(booking.google_meet_link, "_blank", "noopener,noreferrer")}
-                  className="w-full h-14 text-lg"
-                  variant="outline"
-                >
-                  <svg className="w-6 h-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M3.5 7.5L10 12l-6.5 4.5V7.5zm0-3v15l13-7.5-13-7.5z" />
-                  </svg>
-                  Meetに参加
-                </Button>
-              </div>
-            )}
 
             {/* ステータス表示 */}
             <div>
@@ -287,7 +285,7 @@ export default function CancelBookingPage() {
             <Button
               onClick={handleReschedule}
               className="w-full h-16 text-xl"
-              variant="outline"
+              variant="secondary"
               disabled={isProcessing}
             >
               <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,0 +1,24 @@
+#!/bin/bash
+
+echo "📧 予約API経由でメール送信テスト"
+echo ""
+
+curl -X POST http://localhost:3000/api/bookings/simple \
+  -H "Content-Type: application/json" \
+  -d '{
+    "client_name": "テスト太郎",
+    "client_email": "test@example.com",
+    "client_company": "テスト株式会社",
+    "start_time": "2025-11-20T14:00:00+09:00",
+    "end_time": "2025-11-20T14:30:00+09:00",
+    "duration_minutes": 30,
+    "staff_id": "staff-1",
+    "staff_name": "スタッフA",
+    "consultation_type_id": "1",
+    "consultation_type_name": "初回相談（AI導入）"
+  }'
+
+echo ""
+echo ""
+echo "✅ APIリクエスト完了"
+echo "📧 team@zettai.co.jp のメールボックスを確認してください"

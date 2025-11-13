@@ -317,8 +317,8 @@ export default function SettingsPage() {
       {/* Google Calendar Integration */}
       <Card className="border-2 border-brand-600">
         <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">Google カレンダー連携</CardTitle>
-          <CardDescription>Google MeetのURL自動発行に必要です</CardDescription>
+          <CardTitle className="text-2xl">Google カレンダー連携（オプション）</CardTitle>
+          <CardDescription>Google Meet URLを手動発行する場合は不要です</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {googleStatus.isConnected ? (
@@ -336,39 +336,43 @@ export default function SettingsPage() {
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-900">
-                  <strong>✅ Google Meet自動発行が有効です</strong><br />
-                  予約が確定されると、自動的にGoogle MeetのURLが生成され、カレンダーに予定が追加されます。
+                  <strong>✅ Google Calendar連携が有効です</strong><br />
+                  将来的にGoogle Meet URLの自動発行やカレンダー同期を有効化できます。
                 </p>
               </div>
             </div>
           ) : (
             <div className="space-y-4">
-              <div className="flex items-center gap-3 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+              <div className="flex items-center gap-3 p-4 bg-gray-50 border border-gray-200 rounded-lg">
                 <div className="flex-shrink-0">
-                  <svg className="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
                 </div>
                 <div>
-                  <p className="text-base font-semibold text-yellow-900">未連携</p>
-                  <p className="text-sm text-yellow-700">Google Meetの自動発行には連携が必要です</p>
+                  <p className="text-base font-semibold text-gray-900">未連携</p>
+                  <p className="text-sm text-gray-600">現在は手動運用中（連携は任意です）</p>
                 </div>
               </div>
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
-                <p className="text-sm text-gray-700 mb-4">
-                  Google Calendarと連携すると、予約時に自動的に：
+                <p className="text-sm text-gray-700 mb-2">
+                  <strong>💡 Google Calendarと連携すると（将来機能）：</strong>
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2 ml-4 list-disc">
-                  <li>Google MeetのURLが生成されます</li>
-                  <li>カレンダーに予定が追加されます</li>
-                  <li>予約者にMeet URLが送信されます</li>
+                  <li>Google Meet URLの自動生成</li>
+                  <li>カレンダーへの予定自動追加</li>
+                  <li>予約者へのMeet URL自動送信</li>
                 </ul>
+                <p className="text-sm text-gray-600 mt-3">
+                  ※ 現在は予約ごとにMeet URLを手動で発行する運用です
+                </p>
               </div>
               <Button
                 onClick={handleGoogleConnect}
+                variant="outline"
                 className="h-14 px-8 text-base font-semibold w-full sm:w-auto"
               >
-                Googleアカウントと連携
+                Googleアカウントと連携（オプション）
               </Button>
             </div>
           )}

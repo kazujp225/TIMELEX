@@ -15,8 +15,8 @@ export default function AdminLoginPage() {
     setError("")
     setLoading(true)
 
-    // 簡易パスワード認証（環境変数から取得、デフォルトは "admin123"）
-    const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "admin123"
+    // 簡易パスワード認証（環境変数から取得、デフォルトは "0000"）
+    const correctPassword = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "0000"
 
     if (password === correctPassword) {
       // セッションストレージに認証トークンを保存

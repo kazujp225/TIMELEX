@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: timrexplus
+    runtime: node
+    plan: starter
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      # 以下の環境変数はRender Dashboardで設定してください
+      # - RESEND_API_KEY
+      # - ADMIN_EMAIL
+      # - GOOGLE_CLIENT_ID
+      # - GOOGLE_CLIENT_SECRET
+      # - NEXTAUTH_SECRET
+      # - NEXTAUTH_URL
+      # - ENCRYPTION_KEY
+      # - NEXT_PUBLIC_SUPABASE_URL
+      # - NEXT_PUBLIC_SUPABASE_ANON_KEY
+      # - SUPABASE_SERVICE_ROLE_KEY
+    healthCheckPath: /

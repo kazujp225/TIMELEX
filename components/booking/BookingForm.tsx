@@ -17,6 +17,7 @@ interface BookingFormProps {
     end_time: Date
     staff_id: string
     staff_name: string
+    consultation_type_id?: string
   }
   consultationTypes: ConsultationType[]
   onSubmit: (bookingId: string) => void
@@ -50,17 +51,6 @@ const MOCK_QUESTIONS: Question[] = [
     ],
     is_required: true,
     display_order: 1,
-    created_at: new Date(),
-    updated_at: new Date(),
-  },
-  {
-    id: "q3",
-    questionnaire_id: "questionnaire-1",
-    question_text: "当社をどこでお知りになりましたか？（複数選択可）",
-    question_type: QuestionType.CHECKBOX,
-    options: ["検索エンジン", "SNS", "知人の紹介", "広告", "その他"],
-    is_required: false,
-    display_order: 2,
     created_at: new Date(),
     updated_at: new Date(),
   },
@@ -195,7 +185,7 @@ export function BookingForm({
           duration_minutes: consultationTypes[0]?.duration_minutes || 30,
           staff_id: selectedSlot.staff_id,
           staff_name: selectedSlot.staff_name,
-          consultation_type_id: "type-1",
+          consultation_type_id: selectedSlot.consultation_type_id || consultationTypes[0]?.display_order?.toString() || "1",
           consultation_type_name: consultationTypes[0]?.name || "相談",
         }),
       })
@@ -306,9 +296,9 @@ export function BookingForm({
                 <div className="mt-2 p-3 bg-success/10 border border-success/30 rounded-lg flex items-start gap-2">
                   <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" aria-hidden="true" />
                   <div>
-                    <p className="text-sm font-bold text-text">継続顧客として認識されました</p>
+                    <p className="text-sm font-bold text-text">いつもご利用ありがとうございます</p>
                     <p className="text-xs text-muted mt-0.5">
-                      以前にもご予約いただきありがとうございます
+                      前回のご利用から30日以内のご予約です
                     </p>
                   </div>
                 </div>

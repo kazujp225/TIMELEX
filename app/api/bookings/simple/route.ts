@@ -1,11 +1,14 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendBookingNotificationToAdmin } from "@/lib/email"
-import { createBooking } from "@/lib/mock-db"
+import { supabase } from "@/lib/supabase"
+import { getConsultationTypeName, getConsultationType } from "@/lib/consultation-types"
+import { createCalendarEvent } from "@/lib/google/calendar-simple"
+import { isSlotAvailable } from "@/lib/booking/availability"
 import crypto from "crypto"
 
 /**
  * POST /api/bookings/simple
- * 予約を作成（Supabaseなしの簡易版）
+ * 予約を作成（Supabaseベース）
  */
 export async function POST(request: NextRequest) {
   try {
@@ -19,37 +22,140 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    const startTime = new Date(body.start_time)
+    const endTime = new Date(body.end_time)
+    const staffId = body.staff_id
+
+    // 相談種別から商材IDを取得（文字列IDをUUIDに変換するためのマッピング）
+    const consultationType = getConsultationType(body.consultation_type_id)
+    if (!consultationType) {
+      return NextResponse.json(
+        { error: "無効な相談種別です" },
+        { status: 400 }
+      )
+    }
+
+    // スタッフIDを取得（スタッフが指定されていない場合は最初のスタッフを取得）
+    let finalStaffId = staffId
+    if (!finalStaffId) {
+      const { data: staffList } = await supabase
+        .from("staff")
+        .select("id")
+        .eq("is_active", true)
+        .limit(1)
+        .single()
+
+      if (!staffList) {
+        return NextResponse.json(
+          { error: "利用可能なスタッフがいません" },
+          { status: 500 }
+        )
+      }
+      finalStaffId = staffList.id
+    }
+
+    // ダブルブッキングチェック
+    const available = await isSlotAvailable(startTime, endTime, finalStaffId)
+    if (!available) {
+      return NextResponse.json(
+        { error: "この時間枠はすでに予約されています" },
+        { status: 409 }
+      )
+    }
+
     // キャンセルトークン生成
     const cancelToken = crypto.randomBytes(32).toString("hex")
 
-    // インメモリDBに予約を保存
-    const booking = createBooking({
-      client_name: body.client_name,
-      client_email: body.client_email,
-      client_company: body.client_company || "",
-      client_memo: body.client_memo || "",
-      start_time: body.start_time,
-      end_time: body.end_time,
-      duration_minutes: body.duration_minutes || 30,
-      staff_id: body.staff_id,
-      staff_name: body.staff_name || "担当者",
-      consultation_type_id: body.consultation_type_id,
-      consultation_type_name: body.consultation_type_name || "",
-      status: "confirmed",
-      cancel_token: cancelToken,
-    })
+    // 相談種別IDを取得（consultation_typesテーブルから）
+    // display_orderで対応する商材を取得（商材1=display_order 1, 商材2=display_order 2, ...）
+    const displayOrder = parseInt(body.consultation_type_id, 10)
+    const { data: consultationTypeData, error: typeError } = await supabase
+      .from("consultation_types")
+      .select("id, name")
+      .eq("display_order", displayOrder)
+      .single()
+
+    if (typeError || !consultationTypeData) {
+      console.error("Failed to find consultation type:", typeError)
+      return NextResponse.json(
+        { error: "相談種別が見つかりません", details: typeError?.message },
+        { status: 500 }
+      )
+    }
+
+    console.log(`📋 Consultation type: ${consultationTypeData.name} (ID: ${consultationTypeData.id})`)
+
+    // Supabaseに予約を保存
+    const { data: booking, error: bookingError } = await supabase
+      .from("bookings")
+      .insert({
+        client_name: body.client_name,
+        client_email: body.client_email,
+        client_company: body.client_company || null,
+        client_memo: body.client_memo || null,
+        start_time: startTime.toISOString(),
+        end_time: endTime.toISOString(),
+        duration_minutes: body.duration_minutes || 30,
+        staff_id: finalStaffId,
+        consultation_type_id: consultationTypeData.id,
+        status: "confirmed",
+        cancel_token: cancelToken,
+        is_recent: false,
+      })
+      .select()
+      .single()
+
+    if (bookingError || !booking) {
+      console.error("Failed to create booking:", bookingError)
+      return NextResponse.json(
+        { error: "予約の作成に失敗しました" },
+        { status: 500 }
+      )
+    }
+
+    console.log(`📝 Booking created: ${booking.id}`)
+
+    // 商材名を自動取得
+    const consultationTypeName = getConsultationTypeName(body.consultation_type_id)
+
+    // Google Calendarにイベントを作成
+    let calendarEventId = null
+    let meetLink = null
+    try {
+      const calendarId = process.env.GOOGLE_CALENDAR_IDS?.split(",")[0]
+      if (calendarId) {
+        const calendarEvent = await createCalendarEvent(calendarId.trim(), {
+          summary: `${consultationTypeName} - ${body.client_name}様`,
+          description: `会社: ${body.client_company || "なし"}\nメール: ${body.client_email}\n\n${body.client_memo || ""}`,
+          start: new Date(body.start_time),
+          end: new Date(body.end_time),
+          attendees: [{ email: body.client_email }],
+        })
+        calendarEventId = calendarEvent.eventId
+        meetLink = calendarEvent.meetLink
+        console.log(`📅 Calendar event created: ${calendarEventId}`)
+        if (meetLink) {
+          console.log(`🎥 Meet link generated: ${meetLink}`)
+        }
+      }
+    } catch (calendarError) {
+      console.error("Calendar event creation failed:", calendarError)
+      // カレンダー作成失敗でもエラーは返さない
+    }
 
     // 管理者にメール通知
     try {
       await sendBookingNotificationToAdmin({
+        bookingId: booking.id, // Pass booking ID for logging
         clientName: body.client_name,
         clientEmail: body.client_email,
         clientCompany: body.client_company,
-        consultationType: body.consultation_type_name || "",
+        consultationType: consultationTypeName,
         startTime: new Date(body.start_time),
         endTime: new Date(body.end_time),
         staffName: body.staff_name || "担当者",
       })
+      console.log("📧 Email notification sent to admin")
     } catch (emailError) {
       console.error("Email sending failed:", emailError)
       // メール送信失敗でもエラーは返さない
@@ -58,6 +164,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       booking_id: booking.id,
       cancel_token: cancelToken,
+      google_meet_link: meetLink,
       message: "予約が完了しました",
     })
   } catch (error) {

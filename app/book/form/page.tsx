@@ -71,6 +71,7 @@ export default function BookingFormPage() {
     end_time: new Date(selectedSlot.end_time),
     staff_id: selectedSlot.staff_id,
     staff_name: selectedSlot.staff_name,
+    consultation_type_id: selectedSlot.consultation_type_id,
   }
 
   return (

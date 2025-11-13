@@ -11,7 +11,8 @@ import {
   BarChart3,
   MessageSquare,
   FileText,
-  LogOut
+  LogOut,
+  Mail
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 
@@ -41,8 +42,7 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
     { label: "予約URL", href: "/admin/booking-urls", icon: FileText },
     { label: "カレンダー", href: "/admin/calendar", icon: Calendar },
     { label: "相談種別", href: "/admin/consultation-types", icon: MessageSquare },
-    { label: "アンケート", href: "/admin/questionnaires", icon: ClipboardList },
-    { label: "レポート", href: "/admin/reports", icon: BarChart3 },
+    { label: "送信メール", href: "/admin/emails", icon: Mail },
     { label: "設定", href: "/admin/settings", icon: Settings },
   ]
 

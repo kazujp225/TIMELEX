@@ -1,8 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
-import { bookingDb } from "@/lib/supabase/database"
-import { deleteCalendarEvent } from "@/lib/google/calendar"
-import { sendCancellationEmail } from "@/lib/email/resend"
-import { bookingAudit } from "@/lib/audit-log"
+import { supabase } from "@/lib/supabase"
 
 /**
  * POST /api/bookings/:id/cancel
@@ -19,80 +16,79 @@ export async function POST(
 
     if (!cancel_token) {
       return NextResponse.json(
-        { error: "cancel_token is required" },
+        { error: "キャンセルトークンが必要です" },
         { status: 400 }
       )
     }
 
-    // 予約を取得
-    const booking = await bookingDb.getByCancelToken(cancel_token)
+    // 予約を取得してトークンを検証
+    const { data: booking, error: fetchError } = await supabase
+      .from("bookings")
+      .select("*")
+      .eq("id", id)
+      .single()
 
-    if (!booking || booking.id !== id) {
+    if (fetchError || !booking) {
+      console.error("Failed to fetch booking:", fetchError)
       return NextResponse.json(
-        { error: "Booking not found or invalid token" },
+        { error: "予約が見つかりません" },
         { status: 404 }
       )
     }
 
+    // トークンを検証
+    if (booking.cancel_token !== cancel_token) {
+      return NextResponse.json(
+        { error: "無効なキャンセルトークンです" },
+        { status: 403 }
+      )
+    }
+
+    // 既にキャンセル済みかチェック
     if (booking.status === "cancelled") {
       return NextResponse.json(
-        { error: "Booking already cancelled" },
+        { error: "この予約は既にキャンセル済みです" },
         { status: 400 }
       )
     }
 
-    // キャンセル期限チェック（デフォルト: 2時間前）
-    const now = new Date()
+    // 過去の予約かチェック
     const startTime = new Date(booking.start_time)
-    const deadlineHours = 2 // TODO: 設定から取得
-    const deadline = new Date(startTime.getTime() - deadlineHours * 60 * 60 * 1000)
-
-    if (now > deadline) {
+    if (startTime < new Date()) {
       return NextResponse.json(
-        {
-          error: "キャンセル期限を過ぎています。お手数ですがメールでご連絡ください。",
-        },
+        { error: "過去の予約はキャンセルできません" },
         { status: 400 }
       )
     }
 
-    // Google Calendarから削除
-    try {
-      await deleteCalendarEvent(booking.staff_id, booking.google_event_id)
-    } catch (error) {
-      console.error("Failed to delete Google Calendar event:", error)
-      // Google Calendar削除失敗でもキャンセル処理は続行
+    // 予約をキャンセル
+    const { error: updateError } = await supabase
+      .from("bookings")
+      .update({
+        status: "cancelled",
+        cancelled_at: new Date().toISOString(),
+        updated_at: new Date().toISOString(),
+      })
+      .eq("id", id)
+
+    if (updateError) {
+      console.error("Failed to cancel booking:", updateError)
+      return NextResponse.json(
+        { error: "キャンセル処理に失敗しました" },
+        { status: 500 }
+      )
     }
 
-    // データベースで予約をキャンセル
-    await bookingDb.cancel(id)
-
-    // キャンセル通知メール送信
-    try {
-      await sendCancellationEmail(booking)
-    } catch (emailError) {
-      console.error("Failed to send cancellation email:", emailError)
-      // メール送信失敗でもエラーは返さない
-    }
-
-    // 監査ログを記録
-    await bookingAudit.cancelled(
-      id,
-      cancel_token,
-      request.headers.get("x-forwarded-for") || undefined,
-      request.headers.get("user-agent") || undefined
-    )
+    console.log(`✅ Booking cancelled: ${id}`)
 
     return NextResponse.json({
-      message: "Booking cancelled successfully",
+      success: true,
+      message: "予約をキャンセルしました",
     })
   } catch (error) {
     console.error("Error cancelling booking:", error)
     return NextResponse.json(
-      {
-        error: "Failed to cancel booking",
-        message: error instanceof Error ? error.message : "Unknown error",
-      },
+      { error: "内部サーバーエラー" },
       { status: 500 }
     )
   }

@@ -1,0 +1,27 @@
+#!/bin/bash
+
+echo "📦 Supabaseテーブルをセットアップします..."
+echo ""
+echo "次のURLを開いて、EXECUTE_THIS.sqlの内容を実行してください："
+echo "https://supabase.com/dashboard/project/jvwdeartscnskwskubek/sql/new"
+echo ""
+echo "実行手順："
+echo "1. 上記URLをブラウザで開く"
+echo "2. supabase/EXECUTE_THIS.sql の内容をコピー"
+echo "3. SQLエディタにペースト"
+echo "4. 右上の「Run」ボタンをクリック"
+echo ""
+echo "✅ 完了したらEnterキーを押してください..."
+read
+
+echo ""
+echo "🔍 テーブルが作成されたか確認しています..."
+echo ""
+echo "次のURLで確認してください："
+echo "https://supabase.com/dashboard/project/jvwdeartscnskwskubek/editor"
+echo ""
+echo "以下のテーブルがあることを確認："
+echo "  - staff (2件のスタッフ)"
+echo "  - consultation_types (6件の商材)"
+echo "  - bookings (空のテーブル)"
+echo "  - email_logs (空のテーブル)"

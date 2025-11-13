@@ -31,6 +31,11 @@ interface AdminStats {
     totalBookings: number
     consultationTypes: number
   }
+  emails: {
+    totalSent: number
+    sentToday: number
+    failed: number
+  }
 }
 
 export default function AdminDashboard() {
@@ -55,32 +60,93 @@ export default function AdminDashboard() {
     try {
       setLoading(true)
 
-      // モックデータ（開発用）
+      // Supabaseから実データを取得
+      const { supabase } = await import("@/lib/supabase")
+
+      // 今日の日付範囲
+      const todayStart = new Date()
+      todayStart.setHours(0, 0, 0, 0)
+      const todayEnd = new Date()
+      todayEnd.setHours(23, 59, 59, 999)
+
+      // 週の日付範囲
+      const weekStart = new Date()
+      weekStart.setDate(weekStart.getDate() - 7)
+
+      // 月の日付範囲
+      const monthStart = new Date()
+      monthStart.setDate(monthStart.getDate() - 30)
+
+      // 今日の予約
+      const { data: todayBookings } = await supabase
+        .from("bookings")
+        .select("*")
+        .gte("start_time", todayStart.toISOString())
+        .lte("start_time", todayEnd.toISOString())
+
+      // 週の予約
+      const { data: weekBookings } = await supabase
+        .from("bookings")
+        .select("*")
+        .gte("start_time", weekStart.toISOString())
+
+      // 月の予約
+      const { data: monthBookings } = await supabase
+        .from("bookings")
+        .select("*")
+        .gte("start_time", monthStart.toISOString())
+
+      // 全予約
+      const { data: allBookings } = await supabase
+        .from("bookings")
+        .select("*")
+
+      // 相談種別
+      const { data: consultationTypes } = await supabase
+        .from("consultation_types")
+        .select("*")
+
+      // メール統計
+      const { data: allEmails } = await supabase
+        .from("email_logs")
+        .select("*")
+
+      const { data: todayEmails } = await supabase
+        .from("email_logs")
+        .select("*")
+        .gte("created_at", todayStart.toISOString())
+        .lte("created_at", todayEnd.toISOString())
+
       setStats({
         today: {
-          total: 5,
-          confirmed: 4,
-          cancelled: 1,
-          recent: 2,
-          new: 3,
+          total: todayBookings?.length || 0,
+          confirmed: todayBookings?.filter((b) => b.status === "confirmed").length || 0,
+          cancelled: todayBookings?.filter((b) => b.status === "cancelled").length || 0,
+          recent: todayBookings?.filter((b) => b.is_recent).length || 0,
+          new: todayBookings?.filter((b) => !b.is_recent).length || 0,
         },
         week: {
-          total: 23,
-          confirmed: 20,
-          cancelled: 3,
-          recent: 8,
-          new: 15,
+          total: weekBookings?.length || 0,
+          confirmed: weekBookings?.filter((b) => b.status === "confirmed").length || 0,
+          cancelled: weekBookings?.filter((b) => b.status === "cancelled").length || 0,
+          recent: weekBookings?.filter((b) => b.is_recent).length || 0,
+          new: weekBookings?.filter((b) => !b.is_recent).length || 0,
         },
         month: {
-          total: 87,
-          confirmed: 78,
-          cancelled: 9,
-          recent: 35,
-          new: 52,
+          total: monthBookings?.length || 0,
+          confirmed: monthBookings?.filter((b) => b.status === "confirmed").length || 0,
+          cancelled: monthBookings?.filter((b) => b.status === "cancelled").length || 0,
+          recent: monthBookings?.filter((b) => b.is_recent).length || 0,
+          new: monthBookings?.filter((b) => !b.is_recent).length || 0,
         },
         allTime: {
-          totalBookings: 342,
-          consultationTypes: 8,
+          totalBookings: allBookings?.length || 0,
+          consultationTypes: consultationTypes?.length || 0,
+        },
+        emails: {
+          totalSent: allEmails?.filter((e) => e.is_sent).length || 0,
+          sentToday: todayEmails?.filter((e) => e.is_sent).length || 0,
+          failed: allEmails?.filter((e) => !e.is_sent).length || 0,
         },
       })
     } catch (error) {
@@ -108,7 +174,7 @@ export default function AdminDashboard() {
       </div>
 
       {/* System Overview */}
-      <div className="grid gap-6 md:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-4">
         <Card className="border-2">
           <CardHeader className="pb-4">
             <CardDescription className="text-base">総予約数</CardDescription>
@@ -147,6 +213,21 @@ export default function AdminDashboard() {
           </CardHeader>
           <CardContent>
             <p className="text-sm text-muted-foreground">今月</p>
+          </CardContent>
+        </Card>
+
+        <Card className="border-2 border-[#6EC5FF]">
+          <CardHeader className="pb-4">
+            <CardDescription className="text-base">メール送信</CardDescription>
+            <CardTitle className="text-4xl text-[#6EC5FF]">
+              {stats?.emails.totalSent || 0}
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="text-sm text-muted-foreground">
+              今日: {stats?.emails.sentToday || 0}件
+              {stats?.emails.failed ? ` / 失敗: ${stats.emails.failed}件` : ""}
+            </p>
           </CardContent>
         </Card>
       </div>
@@ -290,6 +371,15 @@ export default function AdminDashboard() {
               <h3 className="font-semibold text-lg mb-2">📊 レポート</h3>
               <p className="text-base text-muted-foreground">
                 予約分析・統計データ
+              </p>
+            </a>
+            <a
+              href="/admin/emails"
+              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
+            >
+              <h3 className="font-semibold text-lg mb-2">✉️ 送信メール</h3>
+              <p className="text-base text-muted-foreground">
+                メール送信履歴を確認
               </p>
             </a>
             <a

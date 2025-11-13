@@ -20,120 +20,153 @@ export default function AdminCalendarPage() {
   const loadData = async () => {
     setLoading(true)
 
-    // モックデータ: スタッフ
-    const mockStaff: Staff[] = [
-      {
-        id: "staff-1",
-        name: "山田太郎",
-        email: "yamada@example.com",
-        is_active: true,
-        timezone: "Asia/Tokyo",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        id: "staff-2",
-        name: "佐藤花子",
-        email: "sato@example.com",
-        is_active: true,
-        timezone: "Asia/Tokyo",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      {
-        id: "staff-3",
-        name: "鈴木一郎",
-        email: "suzuki@example.com",
-        is_active: true,
-        timezone: "Asia/Tokyo",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-    ]
+    try {
+      // Supabaseから実データを取得
+      const { supabase } = await import("@/lib/supabase")
 
-    // モックデータ: 予約
-    const mockBookings: BookingWithRelations[] = []
-    const weekStart = new Date(currentDate)
-    weekStart.setDate(weekStart.getDate() - weekStart.getDay())
+      // 週の開始日と終了日を計算
+      const weekStart = new Date(currentDate)
+      weekStart.setDate(weekStart.getDate() - weekStart.getDay())
+      weekStart.setHours(0, 0, 0, 0)
 
-    // Googleカレンダー風のカラーパレット
-    const colors = [
-      "#4285f4", // 青
-      "#ea4335", // 赤
-      "#fbbc04", // 黄色
-      "#34a853", // 緑
-      "#ff6d01", // オレンジ
-      "#46bdc6", // シアン
-      "#7986cb", // 藤色
-      "#f439a0", // ピンク
-      "#e67c73", // サーモン
-      "#33b679", // ミント
-      "#8e24aa", // 紫
-      "#039be5", // 水色
-    ]
+      const weekEnd = new Date(weekStart)
+      weekEnd.setDate(weekEnd.getDate() + 7)
+      weekEnd.setHours(23, 59, 59, 999)
 
-    mockStaff.forEach((staffMember, staffIndex) => {
-      for (let i = 0; i < 7; i++) {
-        const day = new Date(weekStart)
-        day.setDate(day.getDate() + i)
+      // Googleカレンダー風のカラーパレット
+      const colors = [
+        "#4285f4", // 青
+        "#ea4335", // 赤
+        "#fbbc04", // 黄色
+        "#34a853", // 緑
+        "#ff6d01", // オレンジ
+        "#46bdc6", // シアン
+        "#7986cb", // 藤色
+        "#f439a0", // ピンク
+        "#e67c73", // サーモン
+        "#33b679", // ミント
+        "#8e24aa", // 紫
+        "#039be5", // 水色
+      ]
 
-        if (i >= 1 && i <= 5) {
-          const hours = staffIndex === 0 ? [10, 14] : staffIndex === 1 ? [11, 15] : [13, 16]
+      // スタッフを取得
+      const { data: staffData, error: staffError } = await supabase
+        .from("staff")
+        .select("*")
+        .eq("is_active", true)
+        .order("name")
 
-          hours.forEach((hour, hourIndex) => {
+      if (staffError) {
+        console.error("Failed to fetch staff:", staffError)
+        setStaff([])
+      } else {
+        // スタッフデータを型変換
+        const staffList: Staff[] = (staffData || []).map((s) => ({
+          id: s.id,
+          name: s.name,
+          email: s.email,
+          photo_url: s.photo_url,
+          is_active: s.is_active,
+          google_refresh_token: s.google_refresh_token,
+          google_token_expires_at: s.google_token_expires_at ? new Date(s.google_token_expires_at) : null,
+          timezone: s.timezone,
+          created_at: new Date(s.created_at),
+          updated_at: new Date(s.updated_at),
+        }))
+        setStaff(staffList)
+
+        // 予約を取得（週の範囲内）
+        const { data: bookingsData, error: bookingsError } = await supabase
+          .from("bookings")
+          .select("*, staff(*), consultation_type:consultation_types(*)")
+          .gte("start_time", weekStart.toISOString())
+          .lte("start_time", weekEnd.toISOString())
+          .order("start_time")
+
+        if (bookingsError) {
+          console.error("Failed to fetch bookings:", bookingsError)
+          setBookings([])
+        } else {
+          // 予約データを型変換し、スタッフごとに色を割り当て
+          const bookingsList: BookingWithRelations[] = (bookingsData || []).map((b) => {
+            const staffIndex = staffList.findIndex((s) => s.id === b.staff_id)
             const booking: BookingWithRelations = {
-              id: `booking-${staffIndex}-${i}-${hourIndex}`,
-              status: "confirmed" as any,
-              start_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour, 0),
-              end_time: new Date(day.getFullYear(), day.getMonth(), day.getDate(), hour + 1, 0),
-              duration_minutes: 60,
-              staff_id: staffMember.id,
-              consultation_type_id: "type-1",
-              inquiry_source_id: "source-1",
-              client_name: `クライアント${staffIndex}-${i}-${hourIndex}`,
-              client_email: `client${staffIndex}-${i}@example.com`,
-              client_company: `株式会社サンプル${staffIndex}`,
-              client_memo: null,
-              is_recent: Math.random() > 0.5,
-              google_event_id: `event-${staffIndex}-${i}`,
-              google_meet_link: "https://meet.google.com/xxx-yyyy-zzz",
-              cancel_token: `token-${staffIndex}-${i}`,
-              created_at: new Date(),
-              updated_at: new Date(),
-              staff: staffMember,
+              id: b.id,
+              status: b.status,
+              start_time: new Date(b.start_time),
+              end_time: new Date(b.end_time),
+              duration_minutes: b.duration_minutes,
+              staff_id: b.staff_id,
+              consultation_type_id: b.consultation_type_id,
+              inquiry_source_id: b.inquiry_source_id,
+              client_name: b.client_name,
+              client_email: b.client_email,
+              client_company: b.client_company,
+              client_memo: b.client_memo,
+              is_recent: b.is_recent,
+              google_event_id: b.google_event_id,
+              google_meet_link: b.google_meet_link,
+              cancel_token: b.cancel_token,
+              utm_source: b.utm_source,
+              utm_medium: b.utm_medium,
+              utm_campaign: b.utm_campaign,
+              utm_content: b.utm_content,
+              utm_term: b.utm_term,
+              referrer_url: b.referrer_url,
+              ip_address: b.ip_address,
+              user_agent: b.user_agent,
+              created_at: new Date(b.created_at),
+              updated_at: new Date(b.updated_at),
+              cancelled_at: b.cancelled_at ? new Date(b.cancelled_at) : null,
+              staff: {
+                id: b.staff.id,
+                name: b.staff.name,
+                email: b.staff.email,
+                photo_url: b.staff.photo_url,
+                is_active: b.staff.is_active,
+                google_refresh_token: b.staff.google_refresh_token,
+                google_token_expires_at: b.staff.google_token_expires_at ? new Date(b.staff.google_token_expires_at) : null,
+                timezone: b.staff.timezone,
+                created_at: new Date(b.staff.created_at),
+                updated_at: new Date(b.staff.updated_at),
+              },
               consultation_type: {
-                id: "type-1",
-                name: "初回相談",
-                duration_minutes: 60,
-                buffer_before_minutes: 5,
-                buffer_after_minutes: 5,
-                mode: "immediate" as any,
-                recent_mode_override: "keep" as any,
-                display_order: 0,
-                is_active: true,
-                google_meet_url: `https://meet.google.com/${['abc-defg-hij', 'xyz-uvwx-yzw', 'mno-pqrs-tuv'][staffIndex]}`,
-                created_at: new Date(),
-                updated_at: new Date(),
+                id: b.consultation_type.id,
+                name: b.consultation_type.name,
+                duration_minutes: b.consultation_type.duration_minutes,
+                buffer_before_minutes: b.consultation_type.buffer_before_minutes,
+                buffer_after_minutes: b.consultation_type.buffer_after_minutes,
+                mode: b.consultation_type.mode,
+                recent_mode_override: b.consultation_type.recent_mode_override,
+                display_order: b.consultation_type.display_order,
+                is_active: b.consultation_type.is_active,
+                google_meet_url: b.consultation_type.google_meet_url,
+                created_at: new Date(b.consultation_type.created_at),
+                updated_at: new Date(b.consultation_type.updated_at),
               },
-              inquiry_source: {
-                id: "source-1",
-                name: "自社サイト",
-                display_order: 0,
-                is_active: true,
-                created_at: new Date(),
-                updated_at: new Date(),
-              },
-              color: colors[staffIndex],
-            } as any
-            mockBookings.push(booking)
+              inquiry_source: null,
+            }
+
+            // スタッフインデックスに基づいて色を割り当て
+            if (staffIndex !== -1) {
+              (booking as any).color = colors[staffIndex % colors.length]
+            } else {
+              (booking as any).color = colors[0]
+            }
+
+            return booking
           })
+
+          setBookings(bookingsList)
         }
       }
-    })
-
-    setStaff(mockStaff)
-    setBookings(mockBookings)
-    setLoading(false)
+    } catch (error) {
+      console.error("Failed to load data:", error)
+      setStaff([])
+      setBookings([])
+    } finally {
+      setLoading(false)
+    }
   }
 
   const goToPreviousWeek = () => {
@@ -429,24 +462,13 @@ export default function AdminCalendarPage() {
                   <div className="text-lg">{selectedBooking.consultation_type.name}</div>
                 </div>
 
-                {/* Google Meet URL */}
-                {(selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link) && (
-                  <div>
-                    <div className="text-sm text-gray-500 mb-2">Google Meet</div>
-                    <Button
-                      onClick={() => {
-                        const meetUrl = selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link
-                        window.open(meetUrl, "_blank", "noopener,noreferrer")
-                      }}
-                      className="w-full h-12 text-base bg-blue-600 hover:bg-blue-700"
-                    >
-                      🎥 Google Meetに参加
-                    </Button>
-                    <div className="mt-2 p-2 bg-gray-50 rounded text-xs break-all text-gray-600">
-                      {selectedBooking.consultation_type.google_meet_url || selectedBooking.google_meet_link}
-                    </div>
+                {/* ステータス */}
+                <div>
+                  <div className="text-sm text-gray-500 mb-1">ステータス</div>
+                  <div className="inline-flex items-center px-3 py-1 bg-green-100 text-green-800 rounded-full text-sm font-medium">
+                    ✓ 確定
                   </div>
-                )}
+                </div>
 
                 {/* メモ */}
                 {selectedBooking.client_memo && (

@@ -95,9 +95,17 @@ function QuestionField({
 
       case "radio":
         return (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {question.options?.map((option, optionIndex) => (
-              <div key={optionIndex} className="flex items-center gap-2">
+              <label
+                key={optionIndex}
+                htmlFor={`${question.id}-${optionIndex}`}
+                className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                  value === option
+                    ? "border-[#6EC5FF] bg-[#F0F9FF]"
+                    : "border-[#E5E7EB] hover:border-[#6EC5FF] hover:bg-[#F9FAFB]"
+                }`}
+              >
                 <input
                   type="radio"
                   id={`${question.id}-${optionIndex}`}
@@ -105,26 +113,31 @@ function QuestionField({
                   value={option}
                   checked={value === option}
                   onChange={(e) => onChange(e.target.value)}
-                  className="h-4 w-4 text-[#6EC5FF] focus:ring-[#6EC5FF]"
+                  className="h-5 w-5 text-[#6EC5FF] focus:ring-[#6EC5FF] cursor-pointer flex-shrink-0"
                 />
-                <label
-                  htmlFor={`${question.id}-${optionIndex}`}
-                  className="text-sm text-[#2D2D2D] cursor-pointer"
-                >
+                <span className="text-base text-[#2D2D2D] font-medium flex-1">
                   {option}
-                </label>
-              </div>
+                </span>
+              </label>
             ))}
           </div>
         )
 
       case "checkbox":
         return (
-          <div className="space-y-2">
+          <div className="space-y-3">
             {question.options?.map((option, optionIndex) => {
               const isChecked = Array.isArray(value) && value.includes(option)
               return (
-                <div key={optionIndex} className="flex items-center gap-2">
+                <label
+                  key={optionIndex}
+                  htmlFor={`${question.id}-${optionIndex}`}
+                  className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
+                    isChecked
+                      ? "border-[#6EC5FF] bg-[#F0F9FF]"
+                      : "border-[#E5E7EB] hover:border-[#6EC5FF] hover:bg-[#F9FAFB]"
+                  }`}
+                >
                   <Checkbox
                     id={`${question.id}-${optionIndex}`}
                     checked={isChecked}
@@ -136,14 +149,12 @@ function QuestionField({
                         onChange(currentValues.filter((v) => v !== option))
                       }
                     }}
+                    className="h-5 w-5 flex-shrink-0"
                   />
-                  <label
-                    htmlFor={`${question.id}-${optionIndex}`}
-                    className="text-sm text-[#2D2D2D] cursor-pointer"
-                  >
+                  <span className="text-base text-[#2D2D2D] font-medium flex-1">
                     {option}
-                  </label>
-                </div>
+                  </span>
+                </label>
               )
             })}
           </div>

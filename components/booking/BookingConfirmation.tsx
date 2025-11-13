@@ -20,64 +20,53 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
     // アニメーション
     setTimeout(() => setShowCheckmark(true), 100)
 
-    // TODO: APIから予約情報を取得
-    // 仮データ
-    const now = new Date()
-    now.setHours(15, 0, 0, 0)
+    // API経由で予約情報を取得
+    const fetchBooking = async () => {
+      try {
+        const response = await fetch(`/api/bookings/${bookingId}`)
 
-    const mockBooking: BookingWithRelations = {
-      id: bookingId,
-      status: BookingStatus.CONFIRMED,
-      start_time: now,
-      end_time: new Date(now.getTime() + 30 * 60 * 1000),
-      duration_minutes: 30,
-      staff_id: "staff-1",
-      consultation_type_id: "type-1",
-      inquiry_source_id: "source-1",
-      client_name: "山田 太郎",
-      client_email: "yamada@example.com",
-      client_company: "株式会社〇〇",
-      client_memo: null,
-      is_recent: false,
-      google_event_id: "event-123",
-      google_meet_link: "https://meet.google.com/abc-defg-hij",
-      cancel_token: "token-123",
-      created_at: new Date(),
-      updated_at: new Date(),
-      staff: {
-        id: "staff-1",
-        name: "担当者A",
-        email: "staff-a@example.com",
-        is_active: true,
-        timezone: "Asia/Tokyo",
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      consultation_type: {
-        id: "type-1",
-        name: "初回相談（AI導入）",
-        duration_minutes: 30,
-        buffer_before_minutes: 5,
-        buffer_after_minutes: 5,
-        mode: ConsultationMode.IMMEDIATE,
-        recent_mode_override: RecentModeOverride.KEEP,
-        google_meet_url: "https://meet.google.com/abc-defg-hij",
-        display_order: 1,
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
-      inquiry_source: {
-        id: "source-1",
-        name: "自社コーポレートサイト",
-        display_order: 1,
-        is_active: true,
-        created_at: new Date(),
-        updated_at: new Date(),
-      },
+        if (!response.ok) {
+          console.error("Failed to fetch booking:", response.statusText)
+          return
+        }
+
+        const { booking: data } = await response.json()
+
+        if (data) {
+          console.log("✅ Booking data fetched:", data)
+
+          // Date型に変換
+          const bookingData: any = {
+            ...data,
+            start_time: new Date(data.start_time),
+            end_time: new Date(data.end_time),
+            created_at: new Date(data.created_at),
+            updated_at: new Date(data.updated_at),
+            cancelled_at: data.cancelled_at ? new Date(data.cancelled_at) : null,
+            staff: {
+              ...data.staff,
+              created_at: new Date(data.staff.created_at),
+              updated_at: new Date(data.staff.updated_at),
+              google_token_expires_at: data.staff.google_token_expires_at
+                ? new Date(data.staff.google_token_expires_at)
+                : null,
+            },
+            consultation_type: {
+              ...data.consultation_type,
+              created_at: new Date(data.consultation_type.created_at),
+              updated_at: new Date(data.consultation_type.updated_at),
+            },
+          }
+
+          console.log("✅ Processed booking data:", bookingData)
+          setBooking(bookingData)
+        }
+      } catch (error) {
+        console.error("Error fetching booking:", error)
+      }
     }
 
-    setBooking(mockBooking)
+    fetchBooking()
   }, [bookingId])
 
   if (!booking) {
@@ -122,9 +111,12 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
 
             {/* 確定メッセージ */}
             <h1 className="text-2xl sm:text-3xl font-extrabold text-text mb-2 sm:mb-3" style={{ fontVariantNumeric: "tabular-nums" }}>
-              予約が確定しました
+              ご予約ありがとうございました
             </h1>
-            <p className="text-sm sm:text-base text-muted mb-4 sm:mb-8">
+            <p className="text-sm sm:text-base text-muted mb-2">
+              予約が確定しました
+            </p>
+            <p className="text-xs sm:text-sm text-muted mb-4 sm:mb-8">
               ご登録のメールアドレスに確認メールを送信しました
             </p>
 
@@ -163,75 +155,30 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
               </CardContent>
             </Card>
 
-            {/* Google Meet URL */}
-            {booking.consultation_type.google_meet_url && (
-              <Card className="mb-4 sm:mb-6 text-left">
-                <CardContent className="space-y-2">
-                  <div className="flex items-center gap-2 text-brand-600">
-                    <Video className="w-5 h-5" aria-hidden="true" />
-                    <p className="text-sm font-bold">オンライン会議</p>
-                  </div>
-                  <p className="text-xs text-muted">
-                    以下のGoogle Meetリンクから会議に参加できます
+            {/* ミーティングURL案内 */}
+            <Card className="mb-4 sm:mb-6 text-left bg-brand-50">
+              <CardContent className="space-y-3">
+                <div className="flex items-center gap-2 text-brand-600">
+                  <Video className="w-5 h-5" aria-hidden="true" />
+                  <p className="text-sm sm:text-base font-bold">オンライン面談について</p>
+                </div>
+                <div className="bg-white rounded-lg p-4 border border-brand-200">
+                  <p className="text-sm sm:text-base text-text font-medium mb-2">
+                    📧 担当者から24時間以内にメールをお送りします
                   </p>
-                </CardContent>
-              </Card>
-            )}
+                  <p className="text-xs sm:text-sm text-muted leading-relaxed">
+                    ミーティングURLは、担当者から登録いただいたメールアドレス宛にお送りいたします。<br />
+                    当日はメールに記載されているURLからご参加ください。
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
 
             {/* アクションボタン */}
             <div className="space-y-3">
-              {booking.consultation_type.google_meet_url && (
-                <Button
-                  onClick={() =>
-                    window.open(booking.consultation_type.google_meet_url, "_blank", "noopener,noreferrer")
-                  }
-                  variant="primary"
-                  size="lg"
-                  fullWidth
-                  icon={<Video className="w-5 h-5" aria-hidden="true" />}
-                >
-                  Google Meetに参加
-                </Button>
-              )}
-
-              <Button
-                onClick={() => {
-                  const icsStart = booking.start_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
-                  const icsEnd = booking.end_time.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z"
-                  const meetUrl = booking.consultation_type.google_meet_url || booking.google_meet_link
-                  const description = `オンライン面談\\n\\n担当: ${booking.staff?.name || '担当者'}\\n相談種別: ${booking.consultation_type.name}\\n\\nGoogle Meetリンク:\\n${meetUrl}\\n\\n※予約時間になりましたら、上記リンクからご参加ください。`
-                  const icsContent = `BEGIN:VCALENDAR
-VERSION:2.0
-PRODID:-//TIMREXPLUS//Booking//JP
-BEGIN:VEVENT
-DTSTART:${icsStart}
-DTEND:${icsEnd}
-SUMMARY:【TIMREXPLUS】${booking.consultation_type.name}
-DESCRIPTION:${description}
-LOCATION:${meetUrl}
-URL:${meetUrl}
-END:VEVENT
-END:VCALENDAR`
-
-                  const blob = new Blob([icsContent], { type: "text/calendar" })
-                  const url = URL.createObjectURL(blob)
-                  const a = document.createElement("a")
-                  a.href = url
-                  a.download = "booking.ics"
-                  a.click()
-                  URL.revokeObjectURL(url)
-                }}
-                variant="secondary"
-                size="lg"
-                fullWidth
-                icon={<Calendar className="w-5 h-5" aria-hidden="true" />}
-              >
-                カレンダーに追加
-              </Button>
-
               <Button
                 onClick={() => (window.location.href = cancelUrl)}
-                variant="ghost"
+                variant="secondary"
                 size="lg"
                 fullWidth
               >
@@ -241,13 +188,13 @@ END:VCALENDAR`
 
             {/* サンキューメッセージ */}
             <div className="mt-8 sm:mt-12 pt-6 sm:pt-8 border-t border-border">
-              <div className="bg-brand-50 rounded-xl p-4 sm:p-6">
+              <div className="bg-panel-muted rounded-xl p-4 sm:p-6">
                 <h2 className="text-base sm:text-lg font-bold text-text mb-2">
                   ご予約ありがとうございます
                 </h2>
                 <p className="text-xs sm:text-sm text-muted leading-relaxed">
-                  当日はこのページからGoogle Meetに参加できます。<br />
-                  このページをブックマークしておくと便利です。
+                  ご不明な点がございましたら、お気軽にお問い合わせください。<br />
+                  お会いできることを楽しみにしております。
                 </p>
               </div>
             </div>

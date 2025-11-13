@@ -69,46 +69,34 @@ export default function SelectSlotPage() {
       return
     }
 
-    // TODO: APIから空き枠を取得
-    // モック：ランダムに空き枠を生成
-    const timeSlots = [
-      { hour: 9, minute: 0 },
-      { hour: 9, minute: 30 },
-      { hour: 10, minute: 0 },
-      { hour: 10, minute: 30 },
-      { hour: 11, minute: 0 },
-      { hour: 11, minute: 30 },
-      { hour: 13, minute: 0 },
-      { hour: 13, minute: 30 },
-      { hour: 14, minute: 0 },
-      { hour: 14, minute: 30 },
-      { hour: 15, minute: 0 },
-      { hour: 15, minute: 30 },
-      { hour: 16, minute: 0 },
-      { hour: 16, minute: 30 },
-      { hour: 17, minute: 0 },
-    ]
+    // Supabase APIから実際の空き枠を取得
+    const fetchAvailableSlots = async () => {
+      const dateStr = format(selectedDate, "yyyy-MM-dd")
+      const response = await fetch(
+        `/api/slots/simple?date=${dateStr}&consultation_type_id=${consultationType.id}`
+      )
 
-    const mockAvailableSlots: AvailableSlot[] = timeSlots.map(({ hour, minute }) => {
-      const slotTime = new Date(selectedDate)
-      slotTime.setHours(hour, minute, 0, 0)
-
-      // ランダムに空き状況を生成
-      const availableStaff: Staff[] = []
-      MOCK_STAFF.forEach((staff) => {
-        // 70%の確率で空いている
-        if (Math.random() > 0.3) {
-          availableStaff.push(staff)
-        }
-      })
-
-      return {
-        time: slotTime,
-        availableStaff,
+      if (!response.ok) {
+        console.error("Failed to fetch slots")
+        setAvailableSlots([])
+        return
       }
-    })
 
-    setAvailableSlots(mockAvailableSlots)
+      const data = await response.json()
+
+      const slots: AvailableSlot[] = data.slots.map((slot: any) => ({
+        time: new Date(slot.time),
+        availableStaff: slot.availableStaff.map((staff: any) => ({
+          id: staff.id,
+          name: staff.name,
+          color: staff.id.includes("a") ? "#6EC5FF" : "#FFC870", // 担当者Aは青、担当者Bはオレンジ
+        })),
+      }))
+
+      setAvailableSlots(slots)
+    }
+
+    fetchAvailableSlots()
   }, [selectedDate, consultationType])
 
   const handleSlotSelect = (slot: AvailableSlot, staff: Staff) => {
@@ -165,68 +153,70 @@ export default function SelectSlotPage() {
             {selectedDate && availableSlots.length > 0 && (
               <div>
                 <p className="text-base text-muted mb-4">
-                  空いているスタッフをタップすると予約情報入力へ進みます
+                  予約可能な時間帯をタップしてください
                 </p>
 
-                {/* スタッフ凡例 */}
-                <div className="flex items-center gap-5 mb-4">
-                  {MOCK_STAFF.map((staff) => (
-                    <div key={staff.id} className="flex items-center gap-2">
-                      <div
-                        className="w-5 h-5 rounded-full"
-                        style={{ backgroundColor: staff.color }}
-                      />
-                      <span className="text-base font-semibold text-text">{staff.name}</span>
-                    </div>
-                  ))}
-                </div>
+                {/* 時間帯リスト */}
+                <div className="space-y-3">
+                  {availableSlots.map((slot) => {
+                    const hasAvailability = slot.availableStaff.length > 0
 
-                {/* 時間帯別空き状況表 */}
-                <div className="border-2 border-border rounded-lg overflow-hidden">
-                  <div className="bg-panel-muted py-3 px-4 border-b-2 border-border">
-                    <div className="grid grid-cols-3 gap-2">
-                      <div className="text-base font-semibold text-text">時間</div>
-                      <div className="text-base font-semibold text-text text-center">スタッフA</div>
-                      <div className="text-base font-semibold text-text text-center">スタッフB</div>
-                    </div>
-                  </div>
-                  <div>
-                    {availableSlots.map((slot) => (
+                    return (
                       <div
                         key={slot.time.toISOString()}
-                        className="py-3 px-4 border-b border-border last:border-b-0 hover:bg-panel-muted transition-colors"
+                        className={`border-2 rounded-lg overflow-hidden transition-all ${
+                          hasAvailability
+                            ? 'border-brand-400 hover:border-brand-500 hover:shadow-md'
+                            : 'border-border bg-panel-muted opacity-60'
+                        }`}
                       >
-                        <div className="grid grid-cols-3 gap-2 items-center">
-                          {/* 時間 */}
-                          <div className="text-base font-semibold text-text">
-                            {formatDate(slot.time, "HH:mm")}
-                          </div>
-
-                          {/* スタッフ */}
-                          {MOCK_STAFF.map((staff) => {
-                            const isAvailable = slot.availableStaff.some(s => s.id === staff.id)
-                            return (
-                              <div key={staff.id} className="text-center">
-                                {isAvailable ? (
-                                  <button
-                                    onClick={() => handleSlotSelect(slot, staff)}
-                                    className="w-full py-3 px-3 rounded-md text-base font-bold text-white transition-all hover:opacity-90 active:scale-95"
-                                    style={{ backgroundColor: staff.color }}
-                                  >
-                                    ◯
-                                  </button>
-                                ) : (
-                                  <div className="w-full py-3 px-3 rounded-md text-base font-semibold text-muted bg-panel-muted">
-                                    ×
-                                  </div>
-                                )}
+                        <button
+                          onClick={() => hasAvailability && handleSlotSelect(slot, slot.availableStaff[0])}
+                          disabled={!hasAvailability}
+                          className={`w-full py-4 px-5 text-left transition-all ${
+                            hasAvailability
+                              ? 'hover:bg-brand-50 active:scale-98'
+                              : 'cursor-not-allowed'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            {/* 時間 */}
+                            <div className="flex items-center gap-3">
+                              <div className={`text-2xl font-bold ${
+                                hasAvailability ? 'text-brand-600' : 'text-muted'
+                              }`}>
+                                {formatDate(slot.time, "HH:mm")}
                               </div>
-                            )
-                          })}
-                        </div>
+                              {hasAvailability && (
+                                <div className="flex items-center gap-1.5">
+                                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
+                                  <span className="text-sm font-medium text-success">
+                                    予約可能
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* 状態表示 */}
+                            <div className="flex items-center gap-2">
+                              {hasAvailability ? (
+                                <>
+                                  <span className="text-sm text-muted">
+                                    {slot.availableStaff.length}枠
+                                  </span>
+                                  <div className="text-brand-600 text-xl">→</div>
+                                </>
+                              ) : (
+                                <span className="text-sm font-medium text-muted">
+                                  × 満席
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </button>
                       </div>
-                    ))}
-                  </div>
+                    )
+                  })}
                 </div>
               </div>
             )}
