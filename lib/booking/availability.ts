@@ -59,7 +59,7 @@ export async function getAvailableSlots(
     }> = []
 
     for (let hour = 9; hour < 18; hour++) {
-      for (let minute of [0, 30]) {
+      for (const minute of [0, 30]) {
         const slotTime = new Date(date)
         slotTime.setHours(hour, minute, 0, 0)
         const slotEnd = new Date(slotTime)
