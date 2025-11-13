@@ -724,8 +724,6 @@ export default function AdminCalendarPage() {
                     {formatDate(selectedBooking.start_time, "MM/DD(ddd)")} {formatDate(selectedBooking.start_time, "HH:mm")}
                   </div>
                   <div className="flex items-center gap-2 text-xs md:text-sm text-gray-600 flex-wrap">
-                    <span className="px-2 py-1 bg-white rounded-md font-medium">{selectedBooking.staff.name}</span>
-                    <span className="hidden md:inline">·</span>
                     <span>{selectedBooking.consultation_type.name}</span>
                     <span className="hidden md:inline">·</span>
                     <span>{selectedBooking.duration_minutes}分</span>
