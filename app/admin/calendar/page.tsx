@@ -151,7 +151,16 @@ export default function AdminCalendarPage() {
                 created_at: new Date(b.consultation_type.created_at),
                 updated_at: new Date(b.consultation_type.updated_at),
               },
-              inquiry_source: null,
+              inquiry_source: {
+                id: b.inquiry_source_id || "",
+                name: "不明",
+                slug: "unknown",
+                description: null,
+                display_order: 0,
+                is_active: true,
+                created_at: new Date(),
+                updated_at: new Date(),
+              },
             }
 
             // スタッフインデックスに基づいて色を割り当て
