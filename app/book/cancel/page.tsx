@@ -285,7 +285,7 @@ export default function CancelBookingPage() {
             <Button
               onClick={handleReschedule}
               className="w-full h-16 text-xl"
-              variant="secondary"
+              variant="outline"
               disabled={isProcessing}
             >
               <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
