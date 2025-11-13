@@ -127,16 +127,6 @@ export async function sendClientConfirmationEmail(
     </div>
 
     <div class="detail-row">
-      <div class="label">担当</div>
-      <div class="value">${booking.staff.name}</div>
-    </div>
-
-    <div class="detail-row">
-      <div class="label">相談種別</div>
-      <div class="value">${booking.consultation_type.name}</div>
-    </div>
-
-    <div class="detail-row">
       <div class="label">お問い合わせ元</div>
       <div class="value">${booking.inquiry_source.name}</div>
     </div>
