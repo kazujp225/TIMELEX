@@ -154,8 +154,6 @@ export default function AdminCalendarPage() {
               inquiry_source: {
                 id: b.inquiry_source_id || "",
                 name: "不明",
-                slug: "unknown",
-                description: null,
                 display_order: 0,
                 is_active: true,
                 created_at: new Date(),
