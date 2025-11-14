@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server"
 import { calculateAvailableSlots } from "@/lib/google/calendar"
 import { staffDb } from "@/lib/supabase/database"
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/slots
  * 空き枠を取得

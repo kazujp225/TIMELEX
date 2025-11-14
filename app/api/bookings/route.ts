@@ -7,6 +7,8 @@ import { bookingAudit } from "@/lib/audit-log"
 import { BookingStatus } from "@/types"
 import crypto from "crypto"
 
+export const dynamic = 'force-dynamic'
+
 /**
  * POST /api/bookings
  * 予約を作成
@@ -147,8 +149,7 @@ export async function POST(request: NextRequest) {
  */
 export async function GET(request: NextRequest) {
   try {
-    const url = new URL(request.url)
-    const pathSegments = url.pathname.split("/")
+    const pathSegments = request.nextUrl.pathname.split("/")
     const bookingId = pathSegments[pathSegments.length - 1]
 
     if (!bookingId || bookingId === "bookings") {

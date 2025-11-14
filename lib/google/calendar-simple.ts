@@ -267,8 +267,8 @@ export async function createCalendarEvent(
       },
     })
 
-    const eventId: string | undefined = response.data.id ?? undefined
-    const meetLink: string | undefined = (response.data.hangoutLink || response.data.conferenceData?.entryPoints?.[0]?.uri) ?? undefined
+    const eventId: string = response.data.id ?? `fallback-event-${Date.now()}`
+    const meetLink: string | undefined = response.data.hangoutLink || response.data.conferenceData?.entryPoints?.[0]?.uri || undefined
 
     console.log(`   ✅ Event created: ${eventId}`)
     if (meetLink) {

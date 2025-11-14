@@ -2,13 +2,15 @@ import { NextRequest, NextResponse } from "next/server"
 import { getAvailableSlots } from "@/lib/booking/availability"
 import { getConsultationType } from "@/lib/consultation-types"
 
+export const dynamic = 'force-dynamic'
+
 /**
  * GET /api/slots/simple?date=2025-01-15&type=1
  * 指定日の空き枠を取得（Supabaseベース）
  */
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url)
+    const searchParams = request.nextUrl.searchParams
     const dateStr = searchParams.get("date")
     const consultationTypeId = searchParams.get("type")
 
