@@ -75,13 +75,13 @@ export default function BookingFormPage() {
   }
 
   return (
-    <div className="h-screen bg-white overflow-hidden">
+    <>
       <BookingForm
         selectedSlot={slotWithDates}
         consultationTypes={consultationTypes}
         onSubmit={handleFormSubmit}
         onBack={handleBack}
       />
-    </div>
+    </>
   )
 }

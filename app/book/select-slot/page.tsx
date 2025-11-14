@@ -129,110 +129,94 @@ export default function SelectSlotPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-panel overflow-hidden">
-      {/* ヘッダー */}
-      <div className="bg-panel border-b-2 border-border">
-        <div className="w-full px-4 py-5">
-          <div className="w-full sm:max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-brand-600 mb-3">TIMREXPLUS</h1>
-            <h2 className="text-xl sm:text-2xl font-bold text-text mb-2">
-              時間を選択してください
-            </h2>
-            <p className="text-base text-muted">
-              {selectedDate && format(selectedDate, "M月d日(E)", { locale: ja })} | {consultationType.name}（{consultationType.duration_minutes}分）
-            </p>
-          </div>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
+        {/* ヘッダー */}
+        <div className="mb-8 sm:mb-12 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            時間を選択してください
+          </h1>
+          <p className="text-gray-600">
+            {selectedDate && format(selectedDate, "M月d日(E)", { locale: ja })} | {consultationType.name}（{consultationType.duration_minutes}分）
+          </p>
         </div>
-      </div>
 
-      {/* メインコンテンツ */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="w-full sm:max-w-4xl mx-auto">
+        {/* 時間選択 */}
+        {selectedDate && availableSlots.length > 0 && (
+          <div className="space-y-3 mb-8">
+            {availableSlots.map((slot) => {
+              const hasAvailability = slot.availableStaff.length > 0
 
-            {/* 時間選択 */}
-            {selectedDate && availableSlots.length > 0 && (
-              <div>
-                <p className="text-base text-muted mb-4">
-                  予約可能な時間帯をタップしてください
-                </p>
-
-                {/* 時間帯リスト */}
-                <div className="space-y-3">
-                  {availableSlots.map((slot) => {
-                    const hasAvailability = slot.availableStaff.length > 0
-
-                    return (
-                      <div
-                        key={slot.time.toISOString()}
-                        className={`border-2 rounded-lg overflow-hidden transition-all ${
-                          hasAvailability
-                            ? 'border-brand-400 hover:border-brand-500 hover:shadow-md'
-                            : 'border-border bg-panel-muted opacity-60'
-                        }`}
-                      >
-                        <button
-                          onClick={() => hasAvailability && handleSlotSelect(slot, slot.availableStaff[0])}
-                          disabled={!hasAvailability}
-                          className={`w-full py-4 px-5 text-left transition-all ${
-                            hasAvailability
-                              ? 'hover:bg-brand-50 active:scale-98'
-                              : 'cursor-not-allowed'
-                          }`}
-                        >
-                          <div className="flex items-center justify-between">
-                            {/* 時間 */}
-                            <div className="flex items-center gap-3">
-                              <div className={`text-2xl font-bold ${
-                                hasAvailability ? 'text-brand-600' : 'text-muted'
-                              }`}>
-                                {formatDate(slot.time, "HH:mm")}
-                              </div>
-                              {hasAvailability && (
-                                <div className="flex items-center gap-1.5">
-                                  <div className="w-2 h-2 rounded-full bg-success animate-pulse" />
-                                  <span className="text-sm font-medium text-success">
-                                    予約可能
-                                  </span>
-                                </div>
-                              )}
-                            </div>
-
-                            {/* 状態表示 */}
-                            <div className="flex items-center gap-2">
-                              {hasAvailability ? (
-                                <>
-                                  <span className="text-sm text-muted">
-                                    {slot.availableStaff.length}枠
-                                  </span>
-                                  <div className="text-brand-600 text-xl">→</div>
-                                </>
-                              ) : (
-                                <span className="text-sm font-medium text-muted">
-                                  × 満席
-                                </span>
-                              )}
-                            </div>
-                          </div>
-                        </button>
+              return (
+                <button
+                  key={slot.time.toISOString()}
+                  onClick={() => hasAvailability && handleSlotSelect(slot, slot.availableStaff[0])}
+                  disabled={!hasAvailability}
+                  className={`w-full py-5 px-6 rounded-lg text-left transition-all ${
+                    hasAvailability
+                      ? 'bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-500'
+                      : 'bg-gray-100 border-2 border-gray-200 opacity-60 cursor-not-allowed'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    {/* 時間 */}
+                    <div className="flex items-center gap-4">
+                      <div className={`text-2xl font-bold ${
+                        hasAvailability ? 'text-gray-900' : 'text-gray-400'
+                      }`}>
+                        {formatDate(slot.time, "HH:mm")}
                       </div>
-                    )
-                  })}
-                </div>
-              </div>
-            )}
-        </div>
-      </div>
+                      {hasAvailability && (
+                        <div className="flex items-center gap-2">
+                          <div className="w-2 h-2 rounded-full bg-green-500" />
+                          <span className="text-sm font-medium text-green-600">
+                            予約可能
+                          </span>
+                        </div>
+                      )}
+                    </div>
 
-      {/* フッター（戻るボタン） */}
-      <div className="border-t-2 border-border bg-panel px-4 py-4">
-        <div className="w-full sm:max-w-4xl mx-auto">
-          <button
-            onClick={handleBack}
-            className="w-full py-4 px-5 rounded-lg border-2 border-border text-text hover:bg-panel-muted transition-all text-lg font-medium active:scale-98"
-          >
-            ← 日付選択に戻る
-          </button>
-        </div>
+                    {/* 状態表示 */}
+                    <div className="flex items-center gap-2">
+                      {hasAvailability ? (
+                        <>
+                          <span className="text-sm text-gray-500">
+                            {slot.availableStaff.length}枠
+                          </span>
+                          <svg
+                            className="w-6 h-6 text-gray-400"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                          >
+                            <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              strokeWidth={2}
+                              d="M9 5l7 7-7 7"
+                            />
+                          </svg>
+                        </>
+                      ) : (
+                        <span className="text-sm font-medium text-gray-500">
+                          満席
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        )}
+
+        {/* 戻るボタン */}
+        <button
+          onClick={handleBack}
+          className="w-full py-4 px-6 bg-white hover:bg-gray-50 border-2 border-gray-200 rounded-lg text-gray-700 font-medium transition-all"
+        >
+          ← 日付選択に戻る
+        </button>
       </div>
     </div>
   )

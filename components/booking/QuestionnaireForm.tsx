@@ -31,26 +31,28 @@ export function QuestionnaireForm({
   }
 
   return (
-    <div className="space-y-6">
-      <div className="pb-4 border-b">
-        <h2 className="text-lg font-semibold text-[#2D2D2D]">
-          📋 事前アンケート
-        </h2>
-        <p className="text-sm text-[#666666] mt-1">
+    <div className="py-8 border-t border-b border-gray-200">
+      <div className="mb-6">
+        <h3 className="text-lg font-semibold text-gray-900 mb-2">
+          事前アンケート
+        </h3>
+        <p className="text-sm text-gray-600">
           より良いサポートのため、事前に以下の質問にお答えください
         </p>
       </div>
 
-      {questions.map((question, index) => (
-        <QuestionField
-          key={question.id}
-          question={question}
-          index={index}
-          value={answers[question.id]}
-          onChange={(value) => onChange(question.id, value)}
-          error={errors[question.id]}
-        />
-      ))}
+      <div className="space-y-6">
+        {questions.map((question, index) => (
+          <QuestionField
+            key={question.id}
+            question={question}
+            index={index}
+            value={answers[question.id]}
+            onChange={(value) => onChange(question.id, value)}
+            error={errors[question.id]}
+          />
+        ))}
+      </div>
     </div>
   )
 }
@@ -102,8 +104,8 @@ function QuestionField({
                 htmlFor={`${question.id}-${optionIndex}`}
                 className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                   value === option
-                    ? "border-[#6EC5FF] bg-[#F0F9FF]"
-                    : "border-[#E5E7EB] hover:border-[#6EC5FF] hover:bg-[#F9FAFB]"
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                 }`}
               >
                 <input
@@ -113,9 +115,9 @@ function QuestionField({
                   value={option}
                   checked={value === option}
                   onChange={(e) => onChange(e.target.value)}
-                  className="h-5 w-5 text-[#6EC5FF] focus:ring-[#6EC5FF] cursor-pointer flex-shrink-0"
+                  className="h-5 w-5 text-blue-600 focus:ring-blue-500 cursor-pointer flex-shrink-0"
                 />
-                <span className="text-base text-[#2D2D2D] font-medium flex-1">
+                <span className="text-base text-gray-900 font-medium flex-1">
                   {option}
                 </span>
               </label>
@@ -134,8 +136,8 @@ function QuestionField({
                   htmlFor={`${question.id}-${optionIndex}`}
                   className={`flex items-center gap-4 p-4 border-2 rounded-lg cursor-pointer transition-all ${
                     isChecked
-                      ? "border-[#6EC5FF] bg-[#F0F9FF]"
-                      : "border-[#E5E7EB] hover:border-[#6EC5FF] hover:bg-[#F9FAFB]"
+                      ? "border-blue-500 bg-blue-50"
+                      : "border-gray-200 hover:border-blue-300 hover:bg-gray-50"
                   }`}
                 >
                   <Checkbox
@@ -151,7 +153,7 @@ function QuestionField({
                     }}
                     className="h-5 w-5 flex-shrink-0"
                   />
-                  <span className="text-base text-[#2D2D2D] font-medium flex-1">
+                  <span className="text-base text-gray-900 font-medium flex-1">
                     {option}
                   </span>
                 </label>
@@ -186,15 +188,15 @@ function QuestionField({
 
   return (
     <div>
-      <Label htmlFor={question.id} className="text-base">
+      <Label htmlFor={question.id} className="text-base font-medium text-gray-900">
         Q{index + 1}. {question.question_text}
-        {question.is_required && <span className="text-[#FF7676] ml-1">*</span>}
+        {question.is_required && <span className="text-red-500 ml-1">*</span>}
       </Label>
       {question.help_text && (
-        <p className="text-xs text-[#999999] mt-1 mb-2">{question.help_text}</p>
+        <p className="text-xs text-gray-500 mt-1 mb-2">{question.help_text}</p>
       )}
       <div className="mt-2">{renderInput()}</div>
-      {error && <p className="mt-1 text-sm text-[#FF7676]">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   )
 }

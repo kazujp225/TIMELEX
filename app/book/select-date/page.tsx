@@ -53,59 +53,46 @@ export default function SelectDatePage() {
   }
 
   return (
-    <div className="h-screen flex flex-col bg-panel overflow-hidden">
-      {/* ヘッダー */}
-      <div className="bg-panel border-b-2 border-border">
-        <div className="w-full px-4 py-5">
-          <div className="w-full sm:max-w-4xl mx-auto text-center">
-            <h1 className="text-2xl sm:text-3xl font-bold text-brand-600 mb-3">TIMREXPLUS</h1>
-            <h2 className="text-xl sm:text-2xl font-bold text-text mb-2">
-              日付を選択してください
-            </h2>
-            <p className="text-base text-muted">
-              {consultationType.name}（{consultationType.duration_minutes}分）
-            </p>
-          </div>
+    <div className="min-h-screen bg-white">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12">
+        {/* ヘッダー */}
+        <div className="mb-8 sm:mb-12 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            日付を選択してください
+          </h1>
+          <p className="text-gray-600">
+            {consultationType.name}（{consultationType.duration_minutes}分）
+          </p>
         </div>
-      </div>
 
-      {/* メインコンテンツ */}
-      <div className="flex-1 overflow-y-auto px-4 py-4">
-        <div className="w-full sm:max-w-4xl mx-auto">
-          {/* 日付選択 */}
-          <div className="mb-4">
-            <label className="block text-lg font-semibold text-text mb-4">
-              日付を選択 <span className="text-danger">*</span>
-            </label>
-            <div className="grid grid-cols-1 gap-3">
-              {dates.map((date) => (
-                <button
-                  key={date.toISOString()}
-                  onClick={() => handleDateSelect(date)}
-                  className="w-full py-4 px-5 rounded-lg border-2 text-left transition-all border-border hover:border-brand-600/50 hover:bg-brand-600/10 active:scale-98"
+        {/* 日付選択 */}
+        <div className="space-y-3">
+          {dates.map((date) => (
+            <button
+              key={date.toISOString()}
+              onClick={() => handleDateSelect(date)}
+              className="w-full py-5 px-6 bg-white hover:bg-gray-50 border-2 border-gray-200 hover:border-blue-500 rounded-lg text-left transition-all"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-lg font-semibold text-gray-900">
+                  {format(date, "M月d日", { locale: ja })}（{getWeekday(date)}）
+                </span>
+                <svg
+                  className="w-6 h-6 text-gray-400"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
                 >
-                  <div className="flex items-center justify-between">
-                    <span className="text-lg font-medium">
-                      {format(date, "M月d日", { locale: ja })}（{getWeekday(date)}）
-                    </span>
-                    <svg
-                      className="w-6 h-6 text-muted"
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M9 5l7 7-7 7"
-                      />
-                    </svg>
-                  </div>
-                </button>
-              ))}
-            </div>
-          </div>
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M9 5l7 7-7 7"
+                  />
+                </svg>
+              </div>
+            </button>
+          ))}
         </div>
       </div>
     </div>

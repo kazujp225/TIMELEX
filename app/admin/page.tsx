@@ -2,7 +2,6 @@
 
 import { useSession } from "next-auth/react"
 import { useEffect, useState } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDate } from "@/lib/utils"
 
 interface AdminStats {
@@ -165,209 +164,183 @@ export default function AdminDashboard() {
   }
 
   return (
-    <div className="space-y-4 sm:space-y-8">
+    <div className="space-y-10">
       <div>
-        <h1 className="text-4xl font-bold">管理者ダッシュボード</h1>
-        <p className="text-muted-foreground mt-3 text-lg">
+        <h1 className="text-3xl font-bold text-gray-900">管理者ダッシュボード</h1>
+        <p className="text-gray-600 mt-2">
           システム全体の状況を確認できます
         </p>
       </div>
 
       {/* System Overview */}
-      <div className="grid gap-3 md:gap-6 grid-cols-3 md:grid-cols-4">
-        <Card className="border-2">
-          <CardHeader className="pb-2 md:pb-4">
-            <CardDescription className="text-xs md:text-base">総予約数</CardDescription>
-            <CardTitle className="text-2xl md:text-4xl">
+      <div>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">システム概要</h2>
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-xs text-gray-500 mb-1">総予約数</div>
+            <div className="text-4xl font-bold text-gray-900">
               {stats?.allTime.totalBookings || 0}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xs md:text-sm text-muted-foreground">全期間</p>
-          </CardContent>
-        </Card>
+            </div>
+            <div className="text-sm text-gray-500 mt-1">全期間</div>
+          </div>
 
-        <Card className="border-2">
-          <CardHeader className="pb-2 md:pb-4">
-            <CardDescription className="text-xs md:text-base">相談種別</CardDescription>
-            <CardTitle className="text-2xl md:text-4xl">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-xs text-gray-500 mb-1">相談種別</div>
+            <div className="text-4xl font-bold text-gray-900">
               {stats?.allTime.consultationTypes || 0}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xs md:text-sm text-muted-foreground">種類</p>
-          </CardContent>
-        </Card>
+            </div>
+            <div className="text-sm text-gray-500 mt-1">種類</div>
+          </div>
 
-        <Card className="border-2 border-[#6EC5FF] col-span-3 md:col-span-1">
-          <CardHeader className="pb-2 md:pb-4">
-            <CardDescription className="text-xs md:text-base">メール送信</CardDescription>
-            <CardTitle className="text-2xl md:text-4xl text-[#6EC5FF]">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-xs text-gray-500 mb-1">メール送信</div>
+            <div className="text-4xl font-bold text-gray-900">
               {stats?.emails.totalSent || 0}
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="pt-0">
-            <p className="text-xs md:text-sm text-muted-foreground">
+            </div>
+            <div className="text-sm text-gray-500 mt-1">
               今日: {stats?.emails.sentToday || 0}件
               {stats?.emails.failed ? ` / 失敗: ${stats.emails.failed}件` : ""}
-            </p>
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Today's Stats */}
-      <Card className="border-2">
-        <CardHeader className="pb-3 md:pb-6">
-          <CardTitle className="text-xl md:text-2xl">今日の予約</CardTitle>
-          <CardDescription className="text-sm md:text-base">
-            {formatDate(new Date(), "YYYY/MM/DD")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:gap-6 grid-cols-3">
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold">{stats?.today.total || 0}</div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">総予約数</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-success">
-                {stats?.today.confirmed || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">確定</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-destructive">
-                {stats?.today.cancelled || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">キャンセル</div>
-            </div>
+      <div>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">今日の予約</h2>
+        <div className="text-sm text-gray-500 mb-4">
+          {formatDate(new Date(), "YYYY/MM/DD")}
+        </div>
+        <div className="grid gap-6 grid-cols-3">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-gray-900">{stats?.today.total || 0}</div>
+            <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-        </CardContent>
-      </Card>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-green-600">
+              {stats?.today.confirmed || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">確定</div>
+          </div>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-red-600">
+              {stats?.today.cancelled || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+          </div>
+        </div>
+      </div>
 
       {/* Weekly Stats */}
-      <Card className="border-2">
-        <CardHeader className="pb-3 md:pb-6">
-          <CardTitle className="text-xl md:text-2xl">今週の予約</CardTitle>
-          <CardDescription className="text-sm md:text-base">過去7日間の統計</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:gap-6 grid-cols-3">
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold">{stats?.week.total || 0}</div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">総予約数</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-success">
-                {stats?.week.confirmed || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">確定</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-destructive">
-                {stats?.week.cancelled || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">キャンセル</div>
-            </div>
+      <div>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">今週の予約</h2>
+        <div className="text-sm text-gray-500 mb-4">過去7日間の統計</div>
+        <div className="grid gap-6 grid-cols-3">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-gray-900">{stats?.week.total || 0}</div>
+            <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-        </CardContent>
-      </Card>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-green-600">
+              {stats?.week.confirmed || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">確定</div>
+          </div>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-red-600">
+              {stats?.week.cancelled || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+          </div>
+        </div>
+      </div>
 
       {/* Monthly Stats */}
-      <Card className="border-2">
-        <CardHeader className="pb-3 md:pb-6">
-          <CardTitle className="text-xl md:text-2xl">今月の予約</CardTitle>
-          <CardDescription className="text-sm md:text-base">
-            {formatDate(new Date(), "YYYY年MM月")}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:gap-6 grid-cols-3">
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold">{stats?.month.total || 0}</div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">総予約数</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-success">
-                {stats?.month.confirmed || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">確定</div>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-2xl md:text-3xl font-bold text-destructive">
-                {stats?.month.cancelled || 0}
-              </div>
-              <div className="text-xs md:text-base text-muted-foreground mt-1 md:mt-2">キャンセル</div>
-            </div>
+      <div>
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">今月の予約</h2>
+        <div className="text-sm text-gray-500 mb-4">
+          {formatDate(new Date(), "YYYY年MM月")}
+        </div>
+        <div className="grid gap-6 grid-cols-3">
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-gray-900">{stats?.month.total || 0}</div>
+            <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-        </CardContent>
-      </Card>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-green-600">
+              {stats?.month.confirmed || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">確定</div>
+          </div>
+          <div className="py-4 border-b border-gray-200">
+            <div className="text-3xl font-bold text-red-600">
+              {stats?.month.cancelled || 0}
+            </div>
+            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+          </div>
+        </div>
+      </div>
 
-      {/* Quick Actions - デスクトップのみ表示 */}
-      <Card className="border-2 hidden md:block">
-        <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">クイックアクション</CardTitle>
-          <CardDescription className="text-base">よく使う管理機能へのショートカット</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="grid gap-4 md:grid-cols-3">
-            <a
-              href="/admin/booking-urls"
-              className="p-6 border-2 border-brand-600 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">📧 予約URL</h3>
-              <p className="text-base text-muted-foreground">
-                お客様に送る予約URLを取得
-              </p>
-            </a>
-            <a
-              href="/admin/calendar"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">📅 予約カレンダー</h3>
-              <p className="text-base text-muted-foreground">
-                全予約を一覧で確認
-              </p>
-            </a>
-            <a
-              href="/admin/reports"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">📊 レポート</h3>
-              <p className="text-base text-muted-foreground">
-                予約分析・統計データ
-              </p>
-            </a>
-            <a
-              href="/admin/emails"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">✉️ 送信メール</h3>
-              <p className="text-base text-muted-foreground">
-                メール送信履歴を確認
-              </p>
-            </a>
-            <a
-              href="/admin/consultation-types"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">💬 相談種別管理</h3>
-              <p className="text-base text-muted-foreground">
-                相談種別の設定・編集
-              </p>
-            </a>
-            <a
-              href="/admin/settings"
-              className="p-6 border-2 rounded-lg hover:bg-accent transition-colors"
-            >
-              <h3 className="font-semibold text-lg mb-2">⚙️ システム設定</h3>
-              <p className="text-base text-muted-foreground">
-                グローバル設定の変更
-              </p>
-            </a>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Quick Actions */}
+      <div className="hidden md:block">
+        <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">クイックアクション</h2>
+        <div className="grid gap-6 md:grid-cols-3">
+          <a
+            href="/admin/booking-urls"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">予約URL</h3>
+            <p className="text-sm text-gray-600">
+              お客様に送る予約URLを取得
+            </p>
+          </a>
+          <a
+            href="/admin/calendar"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">予約カレンダー</h3>
+            <p className="text-sm text-gray-600">
+              全予約を一覧で確認
+            </p>
+          </a>
+          <a
+            href="/admin/reports"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">レポート</h3>
+            <p className="text-sm text-gray-600">
+              予約分析・統計データ
+            </p>
+          </a>
+          <a
+            href="/admin/emails"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">送信メール</h3>
+            <p className="text-sm text-gray-600">
+              メール送信履歴を確認
+            </p>
+          </a>
+          <a
+            href="/admin/consultation-types"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">相談種別管理</h3>
+            <p className="text-sm text-gray-600">
+              相談種別の設定・編集
+            </p>
+          </a>
+          <a
+            href="/admin/settings"
+            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+          >
+            <h3 className="font-semibold text-lg text-gray-900 mb-1">システム設定</h3>
+            <p className="text-sm text-gray-600">
+              グローバル設定の変更
+            </p>
+          </a>
+        </div>
+      </div>
     </div>
   )
 }

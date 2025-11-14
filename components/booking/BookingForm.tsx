@@ -1,15 +1,12 @@
 "use client"
 
 import { useState } from "react"
-import { Button } from "@/src/components/ui/Button"
 import { Field, Input, Textarea } from "@/src/components/ui/Field"
-import { Card, CardContent } from "@/src/components/ui/Card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { validateEmail, formatDate, getWeekday } from "@/lib/utils"
 import { QuestionnaireForm } from "@/components/booking/QuestionnaireForm"
 import { QuestionType } from "@/types"
 import type { ConsultationType, Question } from "@/types"
-import { Check, Clock, Mail } from "lucide-react"
 
 interface BookingFormProps {
   selectedSlot: {
@@ -206,239 +203,214 @@ export function BookingForm({
   }
 
   return (
-    <div className="h-screen flex flex-col bg-panel overflow-hidden">
-      <div className="flex-1 overflow-y-auto py-4 px-4">
-        <div className="w-full sm:max-w-3xl mx-auto">
-          {/* ステップインジケーター */}
-          <div className="flex items-center justify-center mb-5">
-            <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
-                  <Check className="w-4 h-4" aria-hidden="true" />
-                </div>
-                <span className="text-sm text-muted hidden sm:inline">日時選択</span>
+    <div style={{ minHeight: '100vh', height: 'auto', position: 'relative' }} className="bg-white">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12" style={{ paddingBottom: '120px', position: 'relative', zIndex: 1 }}>
+        {/* ヘッダー */}
+        <div className="mb-8 sm:mb-12 text-center">
+          <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            予約情報の入力
+          </h1>
+          <p className="text-gray-600 text-sm sm:text-base">
+            お客様の情報をご入力ください
+          </p>
+        </div>
+
+        {/* 選択した日時の表示 */}
+        <div className="mb-8 pb-6 border-b-2 border-gray-100">
+          <div className="text-sm text-gray-500 mb-2">ご予約日時</div>
+          <p className="text-xl sm:text-2xl font-bold text-gray-900 mb-1">
+            {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（{getWeekday(selectedSlot.start_time)}）
+          </p>
+          <p className="text-lg text-gray-700">
+            {formatDate(selectedSlot.start_time, "HH:mm")}〜{formatDate(selectedSlot.end_time, "HH:mm")}
+          </p>
+          <p className="text-sm text-gray-500 mt-2">
+            担当：{selectedSlot.staff_name}
+          </p>
+        </div>
+
+        {/* フォーム */}
+        <form onSubmit={handleSubmit} className="space-y-6" style={{ position: 'relative', zIndex: 1 }}>
+          {/* お名前 */}
+          <Field
+            label="お名前"
+            required
+            error={errors.client_name}
+          >
+            <Input
+              id="client_name"
+              type="text"
+              value={formData.client_name}
+              onChange={(e) => handleChange("client_name", e.target.value)}
+              placeholder="山田 太郎"
+              error={!!errors.client_name}
+            />
+          </Field>
+
+          {/* メールアドレス */}
+          <Field
+            label="メールアドレス"
+            required
+            error={errors.client_email}
+          >
+            <Input
+              id="client_email"
+              type="email"
+              value={formData.client_email}
+              onChange={(e) => handleChange("client_email", e.target.value)}
+              placeholder="yamada@example.com"
+              error={!!errors.client_email}
+            />
+            {isCheckingEmail && (
+              <p className="mt-2 text-sm text-gray-500 flex items-center gap-2">
+                <svg className="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
+                </svg>
+                確認中...
+              </p>
+            )}
+            {isReturningCustomer && !isCheckingEmail && (
+              <div className="mt-3 p-4 bg-green-50 border-l-4 border-green-500">
+                <p className="text-sm font-medium text-green-900">
+                  いつもご利用ありがとうございます
+                </p>
+                <p className="text-xs text-green-700 mt-1">
+                  前回のご利用から30日以内のご予約です
+                </p>
               </div>
-              <div className="w-8 h-0.5 bg-brand-600" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-brand-600 text-white flex items-center justify-center text-sm font-bold">
-                  2
+            )}
+          </Field>
+
+          {/* 会社名（任意） */}
+          <Field
+            label="会社名（任意）"
+            error={errors.client_company}
+          >
+            <Input
+              id="client_company"
+              type="text"
+              value={formData.client_company}
+              onChange={(e) => handleChange("client_company", e.target.value)}
+              placeholder="株式会社〇〇"
+              error={!!errors.client_company}
+            />
+          </Field>
+
+          {/* メモ（任意） */}
+          <Field
+            label="メモ（任意）"
+            error={errors.client_memo}
+            help={`${formData.client_memo.length}/500文字`}
+          >
+            <Textarea
+              id="client_memo"
+              value={formData.client_memo}
+              onChange={(e) => handleChange("client_memo", e.target.value)}
+              placeholder="ご質問やご要望などがあればご記入ください"
+              error={!!errors.client_memo}
+            />
+          </Field>
+
+          {/* リマインダー設定 */}
+          <div className="py-8 border-t border-b border-gray-200">
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                リマインドメール
+              </h3>
+              <p className="text-sm text-gray-600">
+                予約日時前にお知らせメールをお送りします
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="reminder_24h"
+                  checked={formData.reminder_24h_enabled}
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, reminder_24h_enabled: !!checked }))
+                  }
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <label
+                    htmlFor="reminder_24h"
+                    className="text-sm font-medium text-gray-900 cursor-pointer block"
+                  >
+                    24時間前にリマインド
+                  </label>
+                  <p className="text-xs text-gray-600 mt-1">
+                    予約日の前日に、予約内容とGoogle Meetリンクをお送りします
+                  </p>
                 </div>
-                <span className="text-sm font-bold text-text hidden sm:inline">情報入力</span>
               </div>
-              <div className="w-8 h-0.5 bg-border" />
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-full bg-border text-muted flex items-center justify-center text-sm font-medium">
-                  3
+
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="reminder_30m"
+                  checked={formData.reminder_30m_enabled}
+                  onCheckedChange={(checked) =>
+                    setFormData((prev) => ({ ...prev, reminder_30m_enabled: !!checked }))
+                  }
+                  className="mt-1"
+                />
+                <div className="flex-1">
+                  <label
+                    htmlFor="reminder_30m"
+                    className="text-sm font-medium text-gray-900 cursor-pointer block"
+                  >
+                    30分前にリマインド
+                  </label>
+                  <p className="text-xs text-gray-600 mt-1">
+                    予約時刻の30分前に、最終リマインドをお送りします
+                  </p>
                 </div>
-                <span className="text-sm text-muted hidden sm:inline">確認</span>
               </div>
             </div>
           </div>
 
-          {/* 選択した日時の表示 */}
-          <Card className="mb-4">
-            <CardContent className="space-y-1 py-3">
-              <div className="flex items-center gap-2 text-muted text-sm font-medium">
-                <Clock className="w-4 h-4" aria-hidden="true" />
-                <span>予約日時</span>
-              </div>
-              <p className="text-base font-bold text-text">
-                {formatDate(selectedSlot.start_time, "YYYY/MM/DD")}（{getWeekday(selectedSlot.start_time)}） {formatDate(selectedSlot.start_time, "HH:mm")}〜{formatDate(selectedSlot.end_time, "HH:mm")}
-              </p>
-              <p className="text-sm text-muted">
-                担当：{selectedSlot.staff_name}
-              </p>
-            </CardContent>
-          </Card>
+          {/* 事前アンケート */}
+          <QuestionnaireForm
+            questions={MOCK_QUESTIONS}
+            answers={questionnaireAnswers}
+            onChange={(questionId, answer) => {
+              setQuestionnaireAnswers((prev) => ({
+                ...prev,
+                [questionId]: answer,
+              }))
+              // エラーをクリア
+              if (errors[questionId]) {
+                setErrors((prev) => {
+                  const newErrors = { ...prev }
+                  delete newErrors[questionId]
+                  return newErrors
+                })
+              }
+            }}
+            errors={errors}
+          />
 
-          {/* フォーム */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* お名前 */}
-            <Field
-              label="お名前"
-              required
-              error={errors.client_name}
+          {/* ボタン */}
+          <div className="mt-12 mb-8 space-y-4">
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className="w-full py-5 px-6 bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold rounded-lg transition-colors text-lg"
             >
-              <Input
-                id="client_name"
-                type="text"
-                value={formData.client_name}
-                onChange={(e) => handleChange("client_name", e.target.value)}
-                placeholder="山田 太郎"
-                error={!!errors.client_name}
-              />
-            </Field>
+              {isSubmitting ? "予約を確定しています..." : "この内容で予約を確定する"}
+            </button>
 
-            {/* メールアドレス */}
-            <Field
-              label="メールアドレス"
-              required
-              error={errors.client_email}
+            <button
+              type="button"
+              onClick={onBack}
+              disabled={isSubmitting}
+              className="w-full py-4 px-6 bg-white hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed text-gray-700 font-medium border-2 border-gray-300 rounded-lg transition-colors"
             >
-              <Input
-                id="client_email"
-                type="email"
-                value={formData.client_email}
-                onChange={(e) => handleChange("client_email", e.target.value)}
-                placeholder="yamada@example.com"
-                error={!!errors.client_email}
-              />
-              {isCheckingEmail && (
-                <p className="mt-2 text-sm text-muted flex items-center gap-2">
-                  <svg className="w-4 h-4 animate-spin" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
-                  </svg>
-                  確認中...
-                </p>
-              )}
-              {isReturningCustomer && !isCheckingEmail && (
-                <div className="mt-2 p-3 bg-success/10 border border-success/30 rounded-lg flex items-start gap-2">
-                  <Check className="w-5 h-5 text-success mt-0.5 flex-shrink-0" aria-hidden="true" />
-                  <div>
-                    <p className="text-sm font-bold text-text">いつもご利用ありがとうございます</p>
-                    <p className="text-xs text-muted mt-0.5">
-                      前回のご利用から30日以内のご予約です
-                    </p>
-                  </div>
-                </div>
-              )}
-            </Field>
-
-            {/* 会社名（任意） */}
-            <Field
-              label="会社名（任意）"
-              error={errors.client_company}
-            >
-              <Input
-                id="client_company"
-                type="text"
-                value={formData.client_company}
-                onChange={(e) => handleChange("client_company", e.target.value)}
-                placeholder="株式会社〇〇"
-                error={!!errors.client_company}
-              />
-            </Field>
-
-            {/* メモ（任意） */}
-            <Field
-              label="メモ（任意）"
-              error={errors.client_memo}
-              help={`${formData.client_memo.length}/500文字`}
-            >
-              <Textarea
-                id="client_memo"
-                value={formData.client_memo}
-                onChange={(e) => handleChange("client_memo", e.target.value)}
-                placeholder="ご質問やご要望などがあればご記入ください"
-                error={!!errors.client_memo}
-              />
-            </Field>
-
-            {/* リマインダー設定 */}
-            <Card>
-              <CardContent className="space-y-4">
-                <div className="flex items-center gap-2">
-                  <Mail className="w-5 h-5 text-brand-600" aria-hidden="true" />
-                  <p className="text-base font-bold text-text">リマインドメール設定</p>
-                </div>
-                <p className="text-sm text-muted">
-                  予約日時前にリマインドメールをお送りします
-                </p>
-
-                <div className="space-y-3">
-                  <div className="flex items-start gap-3">
-                    <Checkbox
-                      id="reminder_24h"
-                      checked={formData.reminder_24h_enabled}
-                      onCheckedChange={(checked) =>
-                        setFormData((prev) => ({ ...prev, reminder_24h_enabled: !!checked }))
-                      }
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor="reminder_24h"
-                        className="text-sm font-bold text-text cursor-pointer"
-                      >
-                        24時間前にリマインド
-                      </label>
-                      <p className="text-xs text-muted mt-0.5">
-                        予約日の前日に、予約内容とGoogle Meetリンクをお送りします
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="flex items-start gap-3">
-                    <Checkbox
-                      id="reminder_30m"
-                      checked={formData.reminder_30m_enabled}
-                      onCheckedChange={(checked) =>
-                        setFormData((prev) => ({ ...prev, reminder_30m_enabled: !!checked }))
-                      }
-                    />
-                    <div className="flex-1">
-                      <label
-                        htmlFor="reminder_30m"
-                        className="text-sm font-bold text-text cursor-pointer"
-                      >
-                        30分前にリマインド
-                      </label>
-                      <p className="text-xs text-muted mt-0.5">
-                        予約時刻の30分前に、最終リマインドをお送りします
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* 事前アンケート */}
-            <QuestionnaireForm
-              questions={MOCK_QUESTIONS}
-              answers={questionnaireAnswers}
-              onChange={(questionId, answer) => {
-                setQuestionnaireAnswers((prev) => ({
-                  ...prev,
-                  [questionId]: answer,
-                }))
-                // エラーをクリア
-                if (errors[questionId]) {
-                  setErrors((prev) => {
-                    const newErrors = { ...prev }
-                    delete newErrors[questionId]
-                    return newErrors
-                  })
-                }
-              }}
-              errors={errors}
-            />
-
-            {/* ボタン */}
-            <div className="flex flex-col gap-3 mt-8 pb-4">
-              <Button
-                type="submit"
-                variant="primary"
-                size="lg"
-                fullWidth
-                loading={isSubmitting}
-                className="!py-4 !text-lg"
-              >
-                {isSubmitting ? "予約を確定しています..." : "この内容で予約を確定する"}
-              </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                size="lg"
-                fullWidth
-                onClick={onBack}
-                disabled={isSubmitting}
-                className="!py-4 !text-lg"
-              >
-                戻る
-              </Button>
-            </div>
-          </form>
-        </div>
+              ← 時間選択に戻る
+            </button>
+          </div>
+        </form>
       </div>
     </div>
   )
