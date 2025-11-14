@@ -1,5 +1,5 @@
 import { supabase, supabaseAdmin } from "./client"
-import { encrypt, decrypt, encryptFields, decryptFields } from "@/lib/encryption"
+import { encryptFields, decryptFields } from "@/lib/encryption"
 import type {
   Staff,
   ConsultationType,
@@ -8,7 +8,6 @@ import type {
   BookingWithRelations,
   StaffWorkingHours,
   StaffVacation,
-  GlobalSetting,
 } from "@/types"
 
 // 暗号化対象フィールド

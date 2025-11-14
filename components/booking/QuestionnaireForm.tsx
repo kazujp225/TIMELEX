@@ -11,7 +11,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import type { Question, QuestionType } from "@/types"
+import type { Question } from "@/types"
+import { QuestionType } from "@/types"
 
 interface QuestionnaireFormProps {
   questions: Question[]

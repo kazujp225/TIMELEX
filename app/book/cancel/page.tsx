@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { formatDate, getWeekday } from "@/lib/utils"
-import { BookingStatus, ConsultationMode, RecentModeOverride } from "@/types"
+import { BookingStatus } from "@/types"
 import type { BookingWithRelations } from "@/types"
 
 type ActionType = "cancel" | "reschedule" | null

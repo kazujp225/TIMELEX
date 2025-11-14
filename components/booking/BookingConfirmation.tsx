@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import { formatDate, getWeekday } from "@/lib/utils"
-import { BookingStatus, ConsultationMode, RecentModeOverride } from "@/types"
 import type { BookingWithRelations } from "@/types"
 
 interface BookingConfirmationProps {
@@ -33,7 +32,7 @@ export function BookingConfirmation({ bookingId }: BookingConfirmationProps) {
           console.log("✅ Booking data fetched:", data)
 
           // Date型に変換
-          const bookingData: any = {
+          const bookingData: BookingWithRelations = {
             ...data,
             start_time: new Date(data.start_time),
             end_time: new Date(data.end_time),

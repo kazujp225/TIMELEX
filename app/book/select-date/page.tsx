@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { format, addDays, startOfDay } from "date-fns"
 import { ja } from "date-fns/locale"
 import { getWeekday } from "@/lib/utils"
+import { ConsultationMode, RecentModeOverride } from "@/types"
 import type { ConsultationType } from "@/types"
 
 export default function SelectDatePage() {
@@ -29,8 +30,8 @@ export default function SelectDatePage() {
       duration_minutes: 30,
       buffer_before_minutes: 5,
       buffer_after_minutes: 5,
-      mode: "immediate" as any,
-      recent_mode_override: "keep" as any,
+      mode: ConsultationMode.IMMEDIATE,
+      recent_mode_override: RecentModeOverride.KEEP,
       display_order: 1,
       is_active: true,
       created_at: new Date(),

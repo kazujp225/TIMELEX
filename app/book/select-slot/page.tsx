@@ -5,6 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { format } from "date-fns"
 import { ja } from "date-fns/locale"
 import { formatDate } from "@/lib/utils"
+import { ConsultationMode, RecentModeOverride } from "@/types"
 import type { ConsultationType } from "@/types"
 
 // スタッフデータの型
@@ -30,6 +31,8 @@ export default function SelectSlotPage() {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
   const [isLoading, setIsLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [retryCount, setRetryCount] = useState(0)
 
   // 相談種別データと日付取得
   useEffect(() => {
@@ -49,8 +52,8 @@ export default function SelectSlotPage() {
       duration_minutes: 30,
       buffer_before_minutes: 5,
       buffer_after_minutes: 5,
-      mode: "immediate" as any,
-      recent_mode_override: "keep" as any,
+      mode: ConsultationMode.IMMEDIATE,
+      recent_mode_override: RecentModeOverride.KEEP,
       display_order: 1,
       is_active: true,
       created_at: new Date(),
@@ -58,7 +61,7 @@ export default function SelectSlotPage() {
     })
   }, [consultationTypeId, dateParam, router])
 
-  // 空き枠を取得
+  // 空き枠を取得（リトライ機能付き）
   useEffect(() => {
     if (!selectedDate || !consultationType) {
       setAvailableSlots([])
@@ -67,25 +70,35 @@ export default function SelectSlotPage() {
     }
 
     // Supabase APIから実際の空き枠を取得
-    const fetchAvailableSlots = async () => {
+    const fetchAvailableSlots = async (attempt = 0): Promise<void> => {
       setIsLoading(true)
+      setError(null)
+
       try {
         const dateStr = format(selectedDate, "yyyy-MM-dd")
         const response = await fetch(
-          `/api/slots/simple?date=${dateStr}&consultation_type_id=${consultationType.id}`
+          `/api/slots/simple?date=${dateStr}&type=${consultationType.id}`,
+          {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          }
         )
 
         if (!response.ok) {
-          console.error("Failed to fetch slots")
-          setAvailableSlots([])
-          return
+          throw new Error(`HTTP error! status: ${response.status}`)
         }
 
         const data = await response.json()
 
-        const slots: AvailableSlot[] = data.slots.map((slot: any) => ({
+        interface SlotResponse {
+          time: string
+          availableStaff: Array<{ id: string; name: string }>
+        }
+
+        const slots: AvailableSlot[] = data.slots.map((slot: SlotResponse) => ({
           time: new Date(slot.time),
-          availableStaff: slot.availableStaff.map((staff: any) => ({
+          availableStaff: slot.availableStaff.map((staff) => ({
             id: staff.id,
             name: staff.name,
             color: staff.id.includes("a") ? "#6EC5FF" : "#FFC870", // 担当者Aは青、担当者Bはオレンジ
@@ -93,8 +106,20 @@ export default function SelectSlotPage() {
         }))
 
         setAvailableSlots(slots)
-      } catch (error) {
-        console.error("Error fetching slots:", error)
+        setError(null)
+      } catch (err) {
+        console.error("Error fetching slots:", err)
+
+        // 最大3回までリトライ
+        if (attempt < 2) {
+          console.log(`Retrying... (attempt ${attempt + 2}/3)`)
+          setTimeout(() => {
+            fetchAvailableSlots(attempt + 1)
+          }, 1000 * (attempt + 1)) // 1秒、2秒と徐々に遅延
+          return
+        }
+
+        setError("空き枠の取得に失敗しました。ネットワーク接続を確認して、再度お試しください。")
         setAvailableSlots([])
       } finally {
         setIsLoading(false)
@@ -102,7 +127,7 @@ export default function SelectSlotPage() {
     }
 
     fetchAvailableSlots()
-  }, [selectedDate, consultationType])
+  }, [selectedDate, consultationType, retryCount])
 
   const handleSlotSelect = (slot: AvailableSlot, staff: Staff) => {
     if (!consultationType) return
@@ -129,6 +154,10 @@ export default function SelectSlotPage() {
     router.push(`/book/select-date?type=${consultationTypeId}`)
   }
 
+  const handleRetry = () => {
+    setRetryCount((prev) => prev + 1)
+  }
+
   if (!consultationType) {
     return null
   }
@@ -145,6 +174,27 @@ export default function SelectSlotPage() {
             {selectedDate && format(selectedDate, "M月d日(E)", { locale: ja })} | {consultationType.name}（{consultationType.duration_minutes}分）
           </p>
         </div>
+
+        {/* エラー表示 */}
+        {error && (
+          <div className="mb-8 p-6 bg-red-50 border-l-4 border-red-500 rounded-lg">
+            <div className="flex items-start gap-3">
+              <svg className="w-6 h-6 text-red-500 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <div className="flex-1">
+                <h3 className="text-red-800 font-semibold mb-1">エラーが発生しました</h3>
+                <p className="text-red-700 text-sm mb-3">{error}</p>
+                <button
+                  onClick={handleRetry}
+                  className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-md transition-colors"
+                >
+                  再試行する
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* 時間選択 */}
         {isLoading ? (
@@ -168,7 +218,7 @@ export default function SelectSlotPage() {
               </div>
             ))}
           </div>
-        ) : selectedDate && availableSlots.length > 0 ? (
+        ) : error ? null : selectedDate && availableSlots.length > 0 ? (
           <div className="space-y-3 mb-8">
             {availableSlots.map((slot) => {
               const hasAvailability = slot.availableStaff.length > 0
