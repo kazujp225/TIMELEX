@@ -203,8 +203,8 @@ export function BookingForm({
   }
 
   return (
-    <div style={{ minHeight: '100vh', height: 'auto', position: 'relative' }} className="bg-gray-50">
-      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12" style={{ paddingBottom: '120px', position: 'relative', zIndex: 1 }}>
+    <div className="min-h-screen h-auto relative bg-gray-50">
+      <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12 pb-[120px] relative z-[1]">
         {/* ヘッダー */}
         <div className="mb-8 sm:mb-12 text-center">
           <h1 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
@@ -230,7 +230,7 @@ export function BookingForm({
         </div>
 
         {/* フォーム */}
-        <form onSubmit={handleSubmit} className="space-y-6" style={{ position: 'relative', zIndex: 1 }}>
+        <form onSubmit={handleSubmit} className="space-y-6 relative z-[1]">
           {/* お名前 */}
           <Field
             label="お名前"

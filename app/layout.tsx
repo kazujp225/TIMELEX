@@ -38,27 +38,29 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ja" className={`${notoSansJP.variable} ${inter.variable}`}>
-      <head>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              // ビューポート高さの動的設定（iOS対応）
-              function setVH() {
-                const vh = window.innerHeight * 0.01;
-                document.documentElement.style.setProperty('--vh', \`\${vh}px\`);
-              }
-              setVH();
-              window.addEventListener('resize', setVH);
-              window.addEventListener('orientationchange', setVH);
-            `,
-          }}
-        />
-      </head>
       <body className={notoSansJP.className}>
         <AuthSessionProvider>
           {children}
           <Toaster />
         </AuthSessionProvider>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              // ビューポート高さの動的設定（iOS対応）
+              (function() {
+                function setVH() {
+                  const vh = window.innerHeight * 0.01;
+                  document.documentElement.style.setProperty('--vh', \`\${vh}px\`);
+                }
+                if (typeof window !== 'undefined') {
+                  setVH();
+                  window.addEventListener('resize', setVH);
+                  window.addEventListener('orientationchange', setVH);
+                }
+              })();
+            `,
+          }}
+        />
       </body>
     </html>
   )
