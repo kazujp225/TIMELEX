@@ -1,4 +1,4 @@
-import { supabase, type Booking, type Staff } from "@/lib/supabase"
+import { supabase, type Booking } from "@/lib/supabase"
 
 /**
  * 指定日の空き枠を取得（Supabaseベース）
@@ -17,38 +17,42 @@ export async function getAvailableSlots(
   }>
 > {
   try {
-    // 1. アクティブなスタッフを取得
-    const { data: staffList, error: staffError } = await supabase
-      .from("staff")
-      .select("*")
-      .eq("is_active", true)
-      .order("name")
-
-    if (staffError) {
-      console.error("Failed to fetch staff:", staffError)
-      return []
-    }
-
-    if (!staffList || staffList.length === 0) {
-      console.warn("No active staff found")
-      return []
-    }
-
-    // 2. 指定日の予約を取得
+    // 対象日の範囲を設定
     const dayStart = new Date(date)
     dayStart.setHours(0, 0, 0, 0)
     const dayEnd = new Date(date)
     dayEnd.setHours(23, 59, 59, 999)
 
-    const { data: bookings, error: bookingsError } = await supabase
-      .from("bookings")
-      .select("*")
-      .gte("start_time", dayStart.toISOString())
-      .lte("start_time", dayEnd.toISOString())
-      .in("status", ["confirmed", "completed"])
+    // 1. スタッフと予約を並列取得してパフォーマンス向上
+    const [staffResult, bookingsResult] = await Promise.all([
+      supabase
+        .from("staff")
+        .select("id, name")  // 必要なフィールドのみ取得
+        .eq("is_active", true)
+        .order("name"),
+      supabase
+        .from("bookings")
+        .select("staff_id, start_time, end_time")  // 必要なフィールドのみ取得
+        .gte("start_time", dayStart.toISOString())
+        .lte("start_time", dayEnd.toISOString())
+        .in("status", ["confirmed", "completed"])
+    ])
 
-    if (bookingsError) {
-      console.error("Failed to fetch bookings:", bookingsError)
+    if (staffResult.error) {
+      console.error("Failed to fetch staff:", staffResult.error)
+      return []
+    }
+
+    if (bookingsResult.error) {
+      console.error("Failed to fetch bookings:", bookingsResult.error)
+      return []
+    }
+
+    const staffList = staffResult.data
+    const bookings = bookingsResult.data
+
+    if (!staffList || staffList.length === 0) {
+      console.warn("No active staff found")
       return []
     }
 

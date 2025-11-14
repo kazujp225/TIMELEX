@@ -251,12 +251,59 @@
     @apply border-2 border-primary text-primary bg-transparent hover:bg-primary hover:text-primary-foreground;
   }
 
-  /* 入力フィールドスタイル */
+  /* 入力フィールドスタイル - ニューモーフィズム（くぼみ効果） */
   .input {
-    @apply flex h-12 w-full rounded-md border border-border bg-panel px-4 py-2 text-base;
+    @apply flex h-12 w-full rounded-md px-4 py-2 text-base;
     @apply placeholder:text-muted;
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-600 focus-visible:ring-offset-2;
     @apply disabled:cursor-not-allowed disabled:opacity-50;
+
+    /* ニューモーフィズムのくぼみ効果 */
+    background-color: #f3f4f6; /* より明るいグレー背景でくぼみ効果を強調 */
+    border: none;
+    box-shadow:
+      inset 2px 2px 4px rgba(0, 0, 0, 0.08),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+    transition: all 0.2s ease;
+  }
+
+  .input:focus {
+    outline: none;
+    box-shadow:
+      inset 3px 3px 6px rgba(0, 0, 0, 0.1),
+      inset -2px -2px 5px rgba(255, 255, 255, 0.9),
+      0 0 0 3px rgba(110, 197, 255, 0.15);
+  }
+
+  .input:hover:not(:disabled):not(:focus) {
+    box-shadow:
+      inset 2px 2px 5px rgba(0, 0, 0, 0.09),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.85);
+  }
+
+  /* Textarea専用のニューモーフィズム調整 */
+  textarea.input {
+    min-height: 100px;
+    resize: vertical;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    line-height: 1.5;
+  }
+
+  /* エラー状態のニューモーフィズム */
+  .input.border-danger,
+  .input[aria-invalid="true"] {
+    box-shadow:
+      inset 2px 2px 4px rgba(239, 68, 68, 0.15),
+      inset -2px -2px 4px rgba(255, 255, 255, 0.8),
+      0 0 0 1px rgba(239, 68, 68, 0.3);
+  }
+
+  .input.border-danger:focus,
+  .input[aria-invalid="true"]:focus {
+    box-shadow:
+      inset 3px 3px 6px rgba(239, 68, 68, 0.2),
+      inset -2px -2px 5px rgba(255, 255, 255, 0.9),
+      0 0 0 3px rgba(239, 68, 68, 0.15);
   }
 
   /* カードスタイル */

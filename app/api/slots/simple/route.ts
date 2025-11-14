@@ -43,7 +43,12 @@ export async function GET(request: NextRequest) {
     const availableCount = slots.filter(s => s.availableStaff.length > 0).length
     console.log(`   ✅ Found ${availableCount} available slots (${slots.length} total slots)`)
 
-    return NextResponse.json({ slots })
+    // キャッシュヘッダーを追加してパフォーマンス向上（60秒間キャッシュ）
+    return NextResponse.json({ slots }, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=120',
+      },
+    })
   } catch (error) {
     console.error("Error fetching slots:", error)
     return NextResponse.json(

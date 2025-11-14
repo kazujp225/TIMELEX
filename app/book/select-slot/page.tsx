@@ -2,22 +2,17 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { format, addDays, startOfDay, isSameDay } from "date-fns"
+import { format } from "date-fns"
 import { ja } from "date-fns/locale"
-import { formatDate, getWeekday } from "@/lib/utils"
+import { formatDate } from "@/lib/utils"
 import type { ConsultationType } from "@/types"
 
-// モックスタッフデータ
+// スタッフデータの型
 interface Staff {
   id: string
   name: string
   color: string
 }
-
-const MOCK_STAFF: Staff[] = [
-  { id: "staff-1", name: "スタッフA", color: "#6EC5FF" },
-  { id: "staff-2", name: "スタッフB", color: "#FFC870" },
-]
 
 // 空き枠データの型
 interface AvailableSlot {
@@ -34,6 +29,7 @@ export default function SelectSlotPage() {
   const [consultationType, setConsultationType] = useState<ConsultationType | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [availableSlots, setAvailableSlots] = useState<AvailableSlot[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   // 相談種別データと日付取得
   useEffect(() => {
@@ -66,34 +62,43 @@ export default function SelectSlotPage() {
   useEffect(() => {
     if (!selectedDate || !consultationType) {
       setAvailableSlots([])
+      setIsLoading(false)
       return
     }
 
     // Supabase APIから実際の空き枠を取得
     const fetchAvailableSlots = async () => {
-      const dateStr = format(selectedDate, "yyyy-MM-dd")
-      const response = await fetch(
-        `/api/slots/simple?date=${dateStr}&consultation_type_id=${consultationType.id}`
-      )
+      setIsLoading(true)
+      try {
+        const dateStr = format(selectedDate, "yyyy-MM-dd")
+        const response = await fetch(
+          `/api/slots/simple?date=${dateStr}&consultation_type_id=${consultationType.id}`
+        )
 
-      if (!response.ok) {
-        console.error("Failed to fetch slots")
+        if (!response.ok) {
+          console.error("Failed to fetch slots")
+          setAvailableSlots([])
+          return
+        }
+
+        const data = await response.json()
+
+        const slots: AvailableSlot[] = data.slots.map((slot: any) => ({
+          time: new Date(slot.time),
+          availableStaff: slot.availableStaff.map((staff: any) => ({
+            id: staff.id,
+            name: staff.name,
+            color: staff.id.includes("a") ? "#6EC5FF" : "#FFC870", // 担当者Aは青、担当者Bはオレンジ
+          })),
+        }))
+
+        setAvailableSlots(slots)
+      } catch (error) {
+        console.error("Error fetching slots:", error)
         setAvailableSlots([])
-        return
+      } finally {
+        setIsLoading(false)
       }
-
-      const data = await response.json()
-
-      const slots: AvailableSlot[] = data.slots.map((slot: any) => ({
-        time: new Date(slot.time),
-        availableStaff: slot.availableStaff.map((staff: any) => ({
-          id: staff.id,
-          name: staff.name,
-          color: staff.id.includes("a") ? "#6EC5FF" : "#FFC870", // 担当者Aは青、担当者Bはオレンジ
-        })),
-      }))
-
-      setAvailableSlots(slots)
     }
 
     fetchAvailableSlots()
@@ -142,7 +147,28 @@ export default function SelectSlotPage() {
         </div>
 
         {/* 時間選択 */}
-        {selectedDate && availableSlots.length > 0 && (
+        {isLoading ? (
+          // ローディングスケルトン
+          <div className="space-y-3 mb-8">
+            {[...Array(6)].map((_, i) => (
+              <div
+                key={i}
+                className="w-full py-5 px-6 bg-gray-100 border-2 border-gray-200 rounded-lg animate-pulse"
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-4">
+                    <div className="w-20 h-8 bg-gray-300 rounded" />
+                    <div className="flex items-center gap-2">
+                      <div className="w-2 h-2 rounded-full bg-gray-300" />
+                      <div className="w-16 h-4 bg-gray-300 rounded" />
+                    </div>
+                  </div>
+                  <div className="w-12 h-4 bg-gray-300 rounded" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : selectedDate && availableSlots.length > 0 ? (
           <div className="space-y-3 mb-8">
             {availableSlots.map((slot) => {
               const hasAvailability = slot.availableStaff.length > 0
@@ -207,6 +233,11 @@ export default function SelectSlotPage() {
                 </button>
               )
             })}
+          </div>
+        ) : (
+          // 空き枠がない場合
+          <div className="mb-8 text-center py-12">
+            <p className="text-gray-500">この日は予約可能な時間がありません</p>
           </div>
         )}
 

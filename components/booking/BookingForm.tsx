@@ -203,7 +203,7 @@ export function BookingForm({
   }
 
   return (
-    <div style={{ minHeight: '100vh', height: 'auto', position: 'relative' }} className="bg-white">
+    <div style={{ minHeight: '100vh', height: 'auto', position: 'relative' }} className="bg-gray-50">
       <div className="max-w-2xl mx-auto px-4 py-8 sm:py-12" style={{ paddingBottom: '120px', position: 'relative', zIndex: 1 }}>
         {/* ヘッダー */}
         <div className="mb-8 sm:mb-12 text-center">

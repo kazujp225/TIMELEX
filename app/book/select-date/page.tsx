@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { format, addDays, startOfDay, isSameDay } from "date-fns"
+import { format, addDays, startOfDay } from "date-fns"
 import { ja } from "date-fns/locale"
 import { getWeekday } from "@/lib/utils"
 import type { ConsultationType } from "@/types"
@@ -41,9 +41,18 @@ export default function SelectDatePage() {
   // 今日から7日分の日付を生成
   const dates = Array.from({ length: 7 }, (_, i) => addDays(startOfDay(new Date()), i))
 
-  const handleDateSelect = (date: Date) => {
+  const handleDateSelect = async (date: Date) => {
     // 日付情報をセッションストレージに保存
     sessionStorage.setItem("selected_date", date.toISOString())
+
+    // データをプリフェッチして次ページでのローディング時間を短縮
+    if (consultationType) {
+      const dateStr = format(date, "yyyy-MM-dd")
+      // バックグラウンドでデータをフェッチ（結果は待たずに遷移）
+      fetch(`/api/slots/simple?date=${dateStr}&consultation_type_id=${consultationType.id}`)
+        .catch((err) => console.error("Prefetch failed:", err))
+    }
+
     // スタッフ選択ページに遷移
     router.push(`/book/select-slot?type=${consultationTypeId}&date=${date.toISOString()}`)
   }
