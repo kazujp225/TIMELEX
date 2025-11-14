@@ -99,7 +99,7 @@ export async function getAvailableSlots(
  */
 function getMockAvailableSlots(
   date: Date,
-  duration: number = 30
+  _duration: number = 30
 ): Array<{ time: Date; available: boolean }> {
   const slots: Array<{ time: Date; available: boolean }> = []
 

@@ -22,7 +22,7 @@ const createQuestionnaireSchema = z.object({
  * GET /api/admin/questionnaires
  * アンケート一覧取得（質問付き）
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     // 認証チェック
     const session = await getServerSession(authOptions)

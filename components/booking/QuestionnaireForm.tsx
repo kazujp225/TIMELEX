@@ -12,7 +12,6 @@ import {
   SelectValue,
 } from "@/components/ui/select"
 import type { Question } from "@/types"
-import { QuestionType } from "@/types"
 
 interface QuestionnaireFormProps {
   questions: Question[]

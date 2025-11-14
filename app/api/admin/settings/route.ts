@@ -17,7 +17,7 @@ const updateSettingsSchema = z.object({
  * GET /api/admin/settings
  * 全設定を取得
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 

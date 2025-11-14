@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server"
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/lib/auth/options"
 import { supabaseAdmin } from "@/lib/supabase/client"
-import { consultationTypeDb } from "@/lib/supabase/database"
 import { z } from "zod"
 
 const createConsultationTypeSchema = z.object({
@@ -26,7 +25,7 @@ const createConsultationTypeSchema = z.object({
  * GET /api/admin/consultation-types
  * 全相談種別を取得（管理者用）
  */
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 

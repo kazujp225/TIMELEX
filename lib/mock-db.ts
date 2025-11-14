@@ -62,7 +62,7 @@ export function createBooking(data: Omit<Booking, "id" | "created_at">): Booking
 /**
  * 指定日の空き枠を取得
  */
-export function getAvailableSlots(date: Date, consultationTypeId: string): TimeSlot[] {
+export function getAvailableSlots(date: Date, _consultationTypeId: string): TimeSlot[] {
   const slots: TimeSlot[] = []
   const targetDate = new Date(date)
   targetDate.setHours(0, 0, 0, 0)

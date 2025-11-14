@@ -4,7 +4,6 @@
  */
 
 import { supabaseAdmin } from "@/lib/supabase/client"
-import { staffDb } from "@/lib/supabase/database"
 import { decrypt } from "@/lib/encryption"
 import { Resend } from "resend"
 import {
