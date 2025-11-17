@@ -14,7 +14,7 @@ export function DashboardLayout({ children, role, userEmail }: DashboardLayoutPr
       <DarkSidebar role={role} userEmail={userEmail} />
 
       {/* Main Content Area */}
-      <main className="lg:pl-64 pb-16 lg:pb-0">
+      <main className="lg:pl-64 pt-16 lg:pt-0">
         <div className="p-3 sm:p-4 md:p-6 lg:p-8 max-w-full">
           {children}
         </div>
