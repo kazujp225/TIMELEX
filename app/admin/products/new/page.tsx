@@ -360,33 +360,35 @@ export default function NewProductPage() {
                         </div>
 
                         {["radio", "checkbox", "select"].includes(question.question_type) && (
-                          <div className="space-y-2">
+                          <div className="space-y-3">
                             <Label className="text-base font-semibold">選択肢</Label>
-                            {question.options.map((option, optionIndex) => (
-                              <div key={optionIndex} className="flex gap-2">
-                                <Input
-                                  value={option}
-                                  onChange={(e) => updateOption(question.id, optionIndex, e.target.value)}
-                                  placeholder={`選択肢 ${optionIndex + 1}`}
-                                  className="h-10 text-base"
-                                />
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeOption(question.id, optionIndex)}
-                                  className="h-10 px-3"
-                                >
-                                  <Trash2 className="w-4 h-4" />
-                                </Button>
-                              </div>
-                            ))}
+                            <div className="space-y-2">
+                              {question.options.map((option, optionIndex) => (
+                                <div key={optionIndex} className="flex gap-2">
+                                  <Input
+                                    value={option}
+                                    onChange={(e) => updateOption(question.id, optionIndex, e.target.value)}
+                                    placeholder={`選択肢 ${optionIndex + 1}`}
+                                    className="h-10 text-base"
+                                  />
+                                  <Button
+                                    type="button"
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={() => removeOption(question.id, optionIndex)}
+                                    className="h-10 px-3"
+                                  >
+                                    <Trash2 className="w-4 h-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
                             <Button
                               type="button"
                               variant="outline"
                               size="sm"
                               onClick={() => addOption(question.id)}
-                              className="h-10 px-4"
+                              className="h-10 px-4 w-full sm:w-auto"
                             >
                               <Plus className="w-4 h-4 mr-2" />
                               選択肢を追加
