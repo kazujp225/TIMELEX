@@ -21,10 +21,24 @@ export async function GET(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.staffId) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
+      )
+    }
+
+    // スタッフ確認
+    const { data: staff } = await supabaseAdmin
+      .from("staff")
+      .select("id")
+      .eq("email", session.user.email)
+      .single()
+
+    if (!staff) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       )
     }
 
@@ -58,10 +72,24 @@ export async function POST(request: NextRequest) {
   try {
     const session = await getServerSession(authOptions)
 
-    if (!session?.staffId) {
+    if (!session?.user?.email) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
+      )
+    }
+
+    // スタッフ確認
+    const { data: staff } = await supabaseAdmin
+      .from("staff")
+      .select("id")
+      .eq("email", session.user.email)
+      .single()
+
+    if (!staff) {
+      return NextResponse.json(
+        { error: "Forbidden" },
+        { status: 403 }
       )
     }
 
