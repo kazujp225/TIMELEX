@@ -82,7 +82,7 @@ export default function ProductsPage() {
         </Button>
       </div>
 
-      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
+      <div className="grid gap-4 grid-cols-2">
         {products.length === 0 ? (
           <Card className="border-2 col-span-full">
             <CardContent className="py-16 text-center">
