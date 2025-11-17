@@ -10,7 +10,8 @@ import {
   MessageSquare,
   FileText,
   LogOut,
-  Mail
+  Mail,
+  Users
 } from "lucide-react"
 import { signOut } from "next-auth/react"
 
@@ -37,6 +38,7 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
 
   const adminNavItems: NavItem[] = [
     { label: "ダッシュボード", href: "/admin", icon: LayoutDashboard },
+    { label: "クライアント", href: "/admin/clients", icon: Users },
     { label: "予約URL", href: "/admin/booking-urls", icon: FileText },
     { label: "カレンダー", href: "/admin/calendar", icon: Calendar },
     { label: "相談種別", href: "/admin/consultation-types", icon: MessageSquare },
