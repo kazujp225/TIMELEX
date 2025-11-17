@@ -27,15 +27,6 @@ const createConsultationTypeSchema = z.object({
  */
 export async function GET(_request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.staffId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
     // 全相談種別を取得（アクティブ・非アクティブ両方）
     const { data: consultationTypes, error } = await supabaseAdmin
       .from("consultation_types")
@@ -65,15 +56,6 @@ export async function GET(_request: NextRequest) {
  */
 export async function POST(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.staffId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
     const body = await request.json()
 
     // バリデーション
@@ -91,6 +73,20 @@ export async function POST(request: NextRequest) {
 
     if (error) {
       throw error
+    }
+
+    // 予約URLを自動生成
+    const { error: urlError } = await supabaseAdmin
+      .from("booking_urls")
+      .insert({
+        consultation_type_id: newType.id,
+        url_path: newType.id, // IDをそのままURL pathとして使用
+        is_active: true,
+      })
+
+    if (urlError) {
+      console.error("Failed to create booking URL:", urlError)
+      // URLの作成に失敗してもエラーにはしない（商材は作成済み）
     }
 
     return NextResponse.json({ consultationType: newType }, { status: 201 })

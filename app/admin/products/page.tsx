@@ -27,10 +27,10 @@ export default function ProductsPage() {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch("/api/admin/products")
+      const response = await fetch("/api/admin/consultation-types")
       if (response.ok) {
         const data = await response.json()
-        setProducts(data.products || [])
+        setProducts(data.consultationTypes || [])
       }
     } catch (error) {
       console.error("Failed to fetch products:", error)
@@ -45,7 +45,7 @@ export default function ProductsPage() {
     }
 
     try {
-      const response = await fetch(`/api/admin/products/${id}`, {
+      const response = await fetch(`/api/admin/consultation-types/${id}`, {
         method: "DELETE",
       })
 

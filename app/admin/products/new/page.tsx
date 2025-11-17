@@ -24,9 +24,11 @@ export default function NewProductPage() {
   const [formData, setFormData] = useState({
     name: "",
     description: "",
-    duration: 30,
-    color: "#6EC5FF",
-    is_active: true,
+    duration_minutes: 30,
+    buffer_before_minutes: 5,
+    buffer_after_minutes: 5,
+    display_order: 0,
+    google_meet_url: "",
   })
   const [questions, setQuestions] = useState<Question[]>([])
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -104,7 +106,7 @@ export default function NewProductPage() {
       newErrors.name = "商材名を入力してください"
     }
 
-    if (formData.duration < 15 || formData.duration > 480) {
+    if (formData.duration_minutes < 15 || formData.duration_minutes > 480) {
       newErrors.duration = "所要時間は15分〜480分の範囲で入力してください"
     }
 
@@ -122,8 +124,8 @@ export default function NewProductPage() {
     try {
       setSaving(true)
 
-      // 商材を作成
-      const productResponse = await fetch("/api/admin/products", {
+      // 商材を作成（consultation_types API使用）
+      const productResponse = await fetch("/api/admin/consultation-types", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -135,11 +137,11 @@ export default function NewProductPage() {
         return
       }
 
-      const { product } = await productResponse.json()
+      const { consultationType } = await productResponse.json()
 
-      // 質問を作成
+      // 質問を作成（product_questionsテーブルに保存）
       if (questions.length > 0) {
-        const questionsResponse = await fetch(`/api/admin/products/${product.id}/questions`, {
+        const questionsResponse = await fetch(`/api/admin/consultation-types/${consultationType.id}/questions`, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ questions }),
@@ -203,7 +205,7 @@ export default function NewProductPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="duration" className="text-base font-semibold">
                   所要時間（分） <span className="text-destructive">*</span>
@@ -211,8 +213,8 @@ export default function NewProductPage() {
                 <Input
                   id="duration"
                   type="number"
-                  value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
+                  value={formData.duration_minutes}
+                  onChange={(e) => setFormData({ ...formData, duration_minutes: parseInt(e.target.value) })}
                   min="15"
                   max="480"
                   className={`h-14 text-base ${errors.duration ? "border-destructive" : ""}`}
@@ -223,30 +225,67 @@ export default function NewProductPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="color" className="text-base font-semibold">
-                  カラー
+                <Label htmlFor="buffer_before" className="text-base font-semibold">
+                  前バッファ（分）
                 </Label>
                 <Input
-                  id="color"
-                  type="color"
-                  value={formData.color}
-                  onChange={(e) => setFormData({ ...formData, color: e.target.value })}
-                  className="h-14"
+                  id="buffer_before"
+                  type="number"
+                  value={formData.buffer_before_minutes}
+                  onChange={(e) => setFormData({ ...formData, buffer_before_minutes: parseInt(e.target.value) })}
+                  min="0"
+                  max="60"
+                  className="h-14 text-base"
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="buffer_after" className="text-base font-semibold">
+                  後バッファ（分）
+                </Label>
+                <Input
+                  id="buffer_after"
+                  type="number"
+                  value={formData.buffer_after_minutes}
+                  onChange={(e) => setFormData({ ...formData, buffer_after_minutes: parseInt(e.target.value) })}
+                  min="0"
+                  max="60"
+                  className="h-14 text-base"
                 />
               </div>
             </div>
 
-            <div className="flex items-center gap-3">
-              <input
-                type="checkbox"
-                id="is_active"
-                checked={formData.is_active}
-                onChange={(e) => setFormData({ ...formData, is_active: e.target.checked })}
-                className="h-5 w-5 rounded border-gray-300"
-              />
-              <Label htmlFor="is_active" className="cursor-pointer text-base">
-                この商材を有効にする
+            <div className="space-y-2">
+              <Label htmlFor="google_meet_url" className="text-base font-semibold">
+                Google Meet URL
               </Label>
+              <Input
+                id="google_meet_url"
+                value={formData.google_meet_url}
+                onChange={(e) => setFormData({ ...formData, google_meet_url: e.target.value })}
+                placeholder="https://meet.google.com/xxx-xxxx-xxx"
+                className="h-14 text-base"
+              />
+              <p className="text-sm text-muted-foreground">
+                形式: https://meet.google.com/xxx-xxxx-xxx（任意）
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="display_order" className="text-base font-semibold">
+                表示順序
+              </Label>
+              <Input
+                id="display_order"
+                type="number"
+                value={formData.display_order}
+                onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                min="0"
+                className="h-14 text-base"
+              />
+              <p className="text-sm text-muted-foreground">
+                小さい数字ほど上に表示されます
+              </p>
             </div>
           </CardContent>
         </Card>

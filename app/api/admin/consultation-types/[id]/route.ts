@@ -32,15 +32,6 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.staffId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
     const consultationType = await consultationTypeDb.getById(params.id)
 
     if (!consultationType) {
@@ -72,15 +63,6 @@ export async function PATCH(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
-
-    if (!session?.staffId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
     const body = await request.json()
 
     // バリデーション
@@ -128,33 +110,30 @@ export async function PATCH(
 
 /**
  * DELETE /api/admin/consultation-types/:id
- * 相談種別を削除（論理削除）
+ * 相談種別を削除（物理削除 + 関連booking_urlsも削除）
  */
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getServerSession(authOptions)
+    // 関連するbooking_urlsを削除
+    await supabaseAdmin
+      .from("booking_urls")
+      .delete()
+      .eq("consultation_type_id", params.id)
 
-    if (!session?.staffId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      )
-    }
-
-    // 論理削除
+    // 相談種別を削除
     const { error } = await supabaseAdmin
       .from("consultation_types")
-      .update({ is_active: false })
+      .delete()
       .eq("id", params.id)
 
     if (error) {
       throw error
     }
 
-    return NextResponse.json({ message: "Consultation type deleted successfully" })
+    return NextResponse.json({ message: "Consultation type and related URLs deleted successfully" })
   } catch (error) {
     console.error("Error deleting consultation type:", error)
     return NextResponse.json(

@@ -27,20 +27,6 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // スタッフ確認
-    const { data: staff } = await supabaseAdmin
-      .from("staff")
-      .select("id")
-      .eq("email", session.user.email)
-      .single()
-
-    if (!staff) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      )
-    }
-
     const { data: products, error } = await supabaseAdmin
       .from("products")
       .select("*")
@@ -75,20 +61,6 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         { error: "Unauthorized" },
         { status: 401 }
-      )
-    }
-
-    // スタッフ確認
-    const { data: staff } = await supabaseAdmin
-      .from("staff")
-      .select("id")
-      .eq("email", session.user.email)
-      .single()
-
-    if (!staff) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
       )
     }
 
