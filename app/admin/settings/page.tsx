@@ -161,8 +161,8 @@ export default function SettingsPage() {
       {/* Google Calendar Integration */}
       <Card className="border-2 border-brand-600">
         <CardHeader className="pb-6">
-          <CardTitle className="text-2xl">Google カレンダー連携（オプション）</CardTitle>
-          <CardDescription>Google Meet URLを手動発行する場合は不要です</CardDescription>
+          <CardTitle className="text-lg md:text-2xl break-words">Google カレンダー連携<span className="block md:inline">（オプション）</span></CardTitle>
+          <CardDescription className="text-sm">Google Meet URLを手動発行する場合は不要です</CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           {googleStatus.isConnected ? (

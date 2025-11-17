@@ -6,19 +6,9 @@ import { z } from "zod"
 
 const createConsultationTypeSchema = z.object({
   name: z.string().min(1).max(50),
-  description: z.string().max(200).optional(),
+  description: z.string().max(200).optional().or(z.literal("")).nullable(),
   duration_minutes: z.number().int().min(1).max(480).default(30),
-  buffer_before_minutes: z.number().int().min(0).max(60).default(5),
-  buffer_after_minutes: z.number().int().min(0).max(60).default(5),
   display_order: z.number().int().min(0).default(0),
-  google_meet_url: z
-    .string()
-    .url()
-    .regex(/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/, {
-      message: "Invalid Google Meet URL format. Expected: https://meet.google.com/xxx-xxxx-xxx",
-    })
-    .optional()
-    .nullable(),
 })
 
 /**

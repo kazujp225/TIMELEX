@@ -175,29 +175,29 @@ export default function AdminDashboard() {
       {/* System Overview */}
       <div>
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">システム概要</h2>
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
+        <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-xs text-gray-500 mb-1">総予約数</div>
-            <div className="text-4xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-bold text-gray-900">
               {stats?.allTime.totalBookings || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">全期間</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">全期間</div>
           </div>
 
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-xs text-gray-500 mb-1">相談種別</div>
-            <div className="text-4xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-bold text-gray-900">
               {stats?.allTime.consultationTypes || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">種類</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">種類</div>
           </div>
 
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm col-span-2 md:col-span-1">
             <div className="text-xs text-gray-500 mb-1">メール送信</div>
-            <div className="text-4xl font-bold text-gray-900">
+            <div className="text-3xl md:text-4xl font-bold text-gray-900">
               {stats?.emails.totalSent || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">
+            <div className="text-xs md:text-sm text-gray-500 mt-1">
               今日: {stats?.emails.sentToday || 0}件
               {stats?.emails.failed ? ` / 失敗: ${stats.emails.failed}件` : ""}
             </div>
@@ -211,22 +211,22 @@ export default function AdminDashboard() {
         <div className="text-sm text-gray-500 mb-4">
           {formatDate(new Date(), "YYYY/MM/DD")}
         </div>
-        <div className="grid gap-6 grid-cols-3">
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-gray-900">{stats?.today.total || 0}</div>
-            <div className="text-sm text-gray-500 mt-1">総予約数</div>
+        <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats?.today.total || 0}</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-green-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-green-600">
               {stats?.today.confirmed || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">確定</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-red-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm col-span-2 md:col-span-1">
+            <div className="text-2xl md:text-3xl font-bold text-red-600">
               {stats?.today.cancelled || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">キャンセル</div>
           </div>
         </div>
       </div>
@@ -235,22 +235,22 @@ export default function AdminDashboard() {
       <div>
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">今週の予約</h2>
         <div className="text-sm text-gray-500 mb-4">過去7日間の統計</div>
-        <div className="grid gap-6 grid-cols-3">
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-gray-900">{stats?.week.total || 0}</div>
-            <div className="text-sm text-gray-500 mt-1">総予約数</div>
+        <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats?.week.total || 0}</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-green-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-green-600">
               {stats?.week.confirmed || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">確定</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-red-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm col-span-2 md:col-span-1">
+            <div className="text-2xl md:text-3xl font-bold text-red-600">
               {stats?.week.cancelled || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">キャンセル</div>
           </div>
         </div>
       </div>
@@ -261,22 +261,22 @@ export default function AdminDashboard() {
         <div className="text-sm text-gray-500 mb-4">
           {formatDate(new Date(), "YYYY年MM月")}
         </div>
-        <div className="grid gap-6 grid-cols-3">
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-gray-900">{stats?.month.total || 0}</div>
-            <div className="text-sm text-gray-500 mt-1">総予約数</div>
+        <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-gray-900">{stats?.month.total || 0}</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-green-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm">
+            <div className="text-2xl md:text-3xl font-bold text-green-600">
               {stats?.month.confirmed || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">確定</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
-            <div className="text-3xl font-bold text-red-600">
+          <div className="p-4 border border-gray-200 rounded-lg bg-white shadow-sm col-span-2 md:col-span-1">
+            <div className="text-2xl md:text-3xl font-bold text-red-600">
               {stats?.month.cancelled || 0}
             </div>
-            <div className="text-sm text-gray-500 mt-1">キャンセル</div>
+            <div className="text-xs md:text-sm text-gray-500 mt-1">キャンセル</div>
           </div>
         </div>
       </div>

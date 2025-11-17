@@ -7,20 +7,10 @@ import { z } from "zod"
 
 const updateConsultationTypeSchema = z.object({
   name: z.string().min(1).max(50).optional(),
-  description: z.string().max(200).optional(),
+  description: z.string().max(200).optional().or(z.literal("")).nullable(),
   duration_minutes: z.number().int().min(1).max(480).optional(),
-  buffer_before_minutes: z.number().int().min(0).max(60).optional(),
-  buffer_after_minutes: z.number().int().min(0).max(60).optional(),
   display_order: z.number().int().min(0).optional(),
   is_active: z.boolean().optional(),
-  google_meet_url: z
-    .string()
-    .url()
-    .regex(/^https:\/\/meet\.google\.com\/[a-z]{3}-[a-z]{4}-[a-z]{3}$/, {
-      message: "Invalid Google Meet URL format. Expected: https://meet.google.com/xxx-xxxx-xxx",
-    })
-    .optional()
-    .nullable(),
 })
 
 /**

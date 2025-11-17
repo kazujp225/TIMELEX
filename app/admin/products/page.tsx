@@ -82,9 +82,9 @@ export default function ProductsPage() {
         </Button>
       </div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4 grid-cols-1 md:grid-cols-2">
         {products.length === 0 ? (
-          <Card className="border-2">
+          <Card className="border-2 col-span-full">
             <CardContent className="py-16 text-center">
               <p className="text-muted-foreground text-lg">
                 商材が登録されていません
@@ -102,54 +102,53 @@ export default function ProductsPage() {
           products.map((product) => (
             <Card key={product.id} className="border-2">
               <CardHeader className="pb-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-center gap-3">
-                    <div
-                      className="w-4 h-4 rounded-full"
-                      style={{ backgroundColor: product.color }}
-                    />
-                    <div>
-                      <CardTitle className="text-2xl">{product.name}</CardTitle>
-                      <div className="flex items-center gap-3 mt-2">
-                        <span className="text-sm text-muted-foreground">
-                          {product.duration}分
-                        </span>
-                        {product.is_active ? (
-                          <span className="px-2 py-1 text-xs font-semibold text-green-700 bg-green-100 rounded">
-                            有効
-                          </span>
-                        ) : (
-                          <span className="px-2 py-1 text-xs font-semibold text-gray-700 bg-gray-100 rounded">
-                            無効
-                          </span>
-                        )}
-                      </div>
+                <div className="flex flex-col gap-3">
+                  <div className="flex items-start justify-between">
+                    <div className="flex items-center gap-2">
+                      <div
+                        className="w-3 h-3 rounded-full flex-shrink-0"
+                        style={{ backgroundColor: product.color }}
+                      />
+                      <CardTitle className="text-lg md:text-xl">{product.name}</CardTitle>
+                    </div>
+                    <div className="flex gap-1">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => router.push(`/admin/products/${product.id}`)}
+                        className="h-8 px-2 md:px-3"
+                      >
+                        <Edit className="w-3 h-3 md:w-4 md:h-4" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleDelete(product.id)}
+                        className="h-8 px-2 text-destructive hover:bg-destructive/10"
+                      >
+                        <Trash2 className="w-3 h-3 md:w-4 md:h-4" />
+                      </Button>
                     </div>
                   </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => router.push(`/admin/products/${product.id}`)}
-                      className="h-10 px-4"
-                    >
-                      <Edit className="w-4 h-4 mr-2" />
-                      編集
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(product.id)}
-                      className="h-10 px-4 text-destructive hover:bg-destructive/10"
-                    >
-                      <Trash2 className="w-4 h-4" />
-                    </Button>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs md:text-sm text-muted-foreground">
+                      {product.duration}分
+                    </span>
+                    {product.is_active ? (
+                      <span className="px-2 py-0.5 text-xs font-semibold text-green-700 bg-green-100 rounded">
+                        有効
+                      </span>
+                    ) : (
+                      <span className="px-2 py-0.5 text-xs font-semibold text-gray-700 bg-gray-100 rounded">
+                        無効
+                      </span>
+                    )}
                   </div>
                 </div>
               </CardHeader>
               {product.description && (
                 <CardContent>
-                  <p className="text-muted-foreground">{product.description}</p>
+                  <p className="text-xs md:text-sm text-muted-foreground line-clamp-2">{product.description}</p>
                 </CardContent>
               )}
             </Card>

@@ -25,10 +25,7 @@ export default function NewProductPage() {
     name: "",
     description: "",
     duration_minutes: 30,
-    buffer_before_minutes: 5,
-    buffer_after_minutes: 5,
     display_order: 0,
-    google_meet_url: "",
   })
   const [questions, setQuestions] = useState<Question[]>([])
   const [errors, setErrors] = useState<Record<string, string>>({})
@@ -205,7 +202,7 @@ export default function NewProductPage() {
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div className="space-y-2">
                 <Label htmlFor="duration" className="text-base font-semibold">
                   所要時間（分） <span className="text-destructive">*</span>
@@ -225,67 +222,21 @@ export default function NewProductPage() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="buffer_before" className="text-base font-semibold">
-                  前バッファ（分）
+                <Label htmlFor="display_order" className="text-base font-semibold">
+                  表示順序
                 </Label>
                 <Input
-                  id="buffer_before"
+                  id="display_order"
                   type="number"
-                  value={formData.buffer_before_minutes}
-                  onChange={(e) => setFormData({ ...formData, buffer_before_minutes: parseInt(e.target.value) })}
+                  value={formData.display_order}
+                  onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
                   min="0"
-                  max="60"
                   className="h-14 text-base"
                 />
+                <p className="text-sm text-muted-foreground">
+                  小さい数字ほど上に表示されます
+                </p>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="buffer_after" className="text-base font-semibold">
-                  後バッファ（分）
-                </Label>
-                <Input
-                  id="buffer_after"
-                  type="number"
-                  value={formData.buffer_after_minutes}
-                  onChange={(e) => setFormData({ ...formData, buffer_after_minutes: parseInt(e.target.value) })}
-                  min="0"
-                  max="60"
-                  className="h-14 text-base"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="google_meet_url" className="text-base font-semibold">
-                Google Meet URL
-              </Label>
-              <Input
-                id="google_meet_url"
-                value={formData.google_meet_url}
-                onChange={(e) => setFormData({ ...formData, google_meet_url: e.target.value })}
-                placeholder="https://meet.google.com/xxx-xxxx-xxx"
-                className="h-14 text-base"
-              />
-              <p className="text-sm text-muted-foreground">
-                形式: https://meet.google.com/xxx-xxxx-xxx（任意）
-              </p>
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="display_order" className="text-base font-semibold">
-                表示順序
-              </Label>
-              <Input
-                id="display_order"
-                type="number"
-                value={formData.display_order}
-                onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
-                min="0"
-                className="h-14 text-base"
-              />
-              <p className="text-sm text-muted-foreground">
-                小さい数字ほど上に表示されます
-              </p>
             </div>
           </CardContent>
         </Card>

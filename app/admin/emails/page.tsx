@@ -147,28 +147,28 @@ export default function EmailLogsPage() {
       </div>
 
       {/* Stats Overview */}
-      <div className="grid gap-3 sm:gap-6 grid-cols-3">
+      <div className="grid gap-3 grid-cols-2 md:grid-cols-3">
         <Card className="border-2">
           <CardHeader className="pb-2 sm:pb-3">
-            <CardDescription className="text-xs sm:text-base font-semibold">総送信数</CardDescription>
-            <CardTitle className="text-2xl sm:text-4xl">
+            <CardDescription className="text-xs sm:text-sm font-semibold">総送信数</CardDescription>
+            <CardTitle className="text-2xl md:text-3xl">
               {emailLogs.length}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs sm:text-sm text-muted-foreground font-medium">全期間</p>
+            <p className="text-xs text-muted-foreground font-medium">全期間</p>
           </CardContent>
         </Card>
 
         <Card className="border-2 border-green-500/20">
           <CardHeader className="pb-2 sm:pb-3">
-            <CardDescription className="text-xs sm:text-base font-semibold">送信成功</CardDescription>
-            <CardTitle className="text-2xl sm:text-4xl text-green-600">
+            <CardDescription className="text-xs sm:text-sm font-semibold">送信成功</CardDescription>
+            <CardTitle className="text-2xl md:text-3xl text-green-600">
               {sentCount}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+            <p className="text-xs text-muted-foreground font-medium">
               {emailLogs.length > 0
                 ? Math.round((sentCount / emailLogs.length) * 100)
                 : 0}
@@ -177,15 +177,15 @@ export default function EmailLogsPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-2 border-red-500/20">
+        <Card className="border-2 border-red-500/20 col-span-2 md:col-span-1">
           <CardHeader className="pb-2 sm:pb-3">
-            <CardDescription className="text-xs sm:text-base font-semibold">送信失敗</CardDescription>
-            <CardTitle className="text-2xl sm:text-4xl text-red-600">
+            <CardDescription className="text-xs sm:text-sm font-semibold">送信失敗</CardDescription>
+            <CardTitle className="text-2xl md:text-3xl text-red-600">
               {failedCount}
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-xs sm:text-sm text-muted-foreground font-medium">
+            <p className="text-xs text-muted-foreground font-medium">
               {failedCount > 0 ? "要確認" : "問題なし"}
             </p>
           </CardContent>
