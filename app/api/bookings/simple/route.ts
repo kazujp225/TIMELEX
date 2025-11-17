@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from "next/server"
 import { sendBookingNotificationToAdmin } from "@/lib/email"
-import { supabase } from "@/lib/supabase"
 import { getConsultationTypeName, getConsultationType } from "@/lib/consultation-types"
 import { createCalendarEvent } from "@/lib/google/calendar-simple"
 import { isSlotAvailable } from "@/lib/booking/availability"
@@ -12,6 +11,9 @@ import crypto from "crypto"
  */
 export async function POST(request: NextRequest) {
   try {
+    // 動的インポートでビルド時エラーを回避
+    const { supabase } = await import("@/lib/supabase")
+
     const body = await request.json()
 
     // 必須フィールドのチェック

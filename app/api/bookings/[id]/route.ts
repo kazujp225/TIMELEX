@@ -1,11 +1,13 @@
 import { NextRequest, NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
 
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
+    // 動的インポートでビルド時エラーを回避
+    const { supabase } = await import("@/lib/supabase")
+
     const { id } = params
 
     const { data, error } = await supabase

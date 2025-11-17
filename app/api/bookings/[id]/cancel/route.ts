@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
 
 /**
  * POST /api/bookings/:id/cancel
@@ -10,6 +9,9 @@ export async function POST(
   { params }: { params: { id: string } }
 ) {
   try {
+    // 動的インポートでビルド時エラーを回避
+    const { supabase } = await import("@/lib/supabase")
+
     const { id } = params
     const body = await request.json()
     const { cancel_token } = body
