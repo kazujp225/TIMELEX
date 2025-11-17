@@ -466,7 +466,7 @@ export default function AdminCalendarPage() {
                 </div>
 
                 {/* ヘッダー: 日付（モバイル） */}
-                <div className="grid grid-cols-[56px_repeat(7,1fr)] border-b bg-white z-10 md:hidden">
+                <div className="grid grid-cols-[56px_repeat(7,minmax(60px,1fr))] border-b bg-white z-10 md:hidden">
                   <div className="border-r"></div>
                   {weekDays.map((day, index) => {
                     const today = isToday(day)
@@ -496,7 +496,7 @@ export default function AdminCalendarPage() {
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="grid grid-cols-[56px_repeat(7,1fr)] md:grid-cols-[64px_repeat(7,minmax(140px,1fr))] border-b h-[60px]"
+                  className="grid grid-cols-[56px_repeat(7,minmax(60px,1fr))] md:grid-cols-[64px_repeat(7,minmax(140px,1fr))] border-b h-[60px]"
                 >
                   {/* 時間表示 */}
                   <div className="border-r p-2 text-sm md:text-base text-gray-500 text-right pr-2 md:pr-3 w-14 md:w-16 flex-shrink-0">
@@ -509,7 +509,7 @@ export default function AdminCalendarPage() {
                     return (
                       <div
                         key={dayIndex}
-                        className={`border-r relative min-w-[50px] ${today ? "bg-blue-50/30" : ""}`}
+                        className={`border-r relative min-w-[60px] ${today ? "bg-blue-50/30" : ""}`}
                       >
                         {/* 予定を表示 */}
                         {getBookingsForDate(day)
