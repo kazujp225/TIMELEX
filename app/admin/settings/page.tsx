@@ -180,7 +180,7 @@ export default function SettingsPage() {
               </div>
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
                 <p className="text-sm text-blue-900">
-                  <strong>✅ Google Calendar連携が有効です</strong><br />
+                  <strong>Google Calendar連携が有効です</strong><br />
                   将来的にGoogle Meet URLの自動発行やカレンダー同期を有効化できます。
                 </p>
               </div>
@@ -200,7 +200,7 @@ export default function SettingsPage() {
               </div>
               <div className="bg-gray-50 border border-gray-200 rounded-lg p-4">
                 <p className="text-sm text-gray-700 mb-2">
-                  <strong>💡 Google Calendarと連携すると（将来機能）：</strong>
+                  <strong>Google Calendarと連携すると（将来機能）：</strong>
                 </p>
                 <ul className="text-sm text-gray-700 space-y-2 ml-4 list-disc">
                   <li>Google Meet URLの自動生成</li>

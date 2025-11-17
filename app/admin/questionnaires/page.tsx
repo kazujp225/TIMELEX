@@ -328,11 +328,11 @@ export default function QuestionnairesPage() {
 
                     <div className="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-[#999999]">
                       <span>
-                        📋 質問数: {questionnaire.questions.length}
+                        質問数: {questionnaire.questions.length}
                       </span>
                       <span className="hidden sm:inline">•</span>
                       <span>
-                        🎯 対象:{" "}
+                        対象:{" "}
                         {questionnaire.consultation_type
                           ? questionnaire.consultation_type.name
                           : "全種別"}

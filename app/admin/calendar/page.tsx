@@ -318,7 +318,8 @@ export default function AdminCalendarPage() {
   }
 
   const weekDays = getWeekDays()
-  const hours = Array.from({ length: 13 }, (_, i) => i + 8) // 8:00 - 20:00
+  // 8:00 - 20:00 (13時間分)
+  const hours = [8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]
 
   if (loading) {
     return (
@@ -437,11 +438,10 @@ export default function AdminCalendarPage() {
             onTouchEnd={onTouchEnd}
           >
             {viewMode === "week" ? (
-              /* 週表示 */
-              <>
+              <div className="border border-gray-200 rounded-lg overflow-hidden bg-white">
                 {/* ヘッダー: 日付（デスクトップ） */}
-                <div className="grid grid-cols-[60px_repeat(7,minmax(140px,1fr))] border-b sticky top-0 bg-white z-10 hidden md:grid">
-                  <div className="border-r p-4"></div>
+                <div className="grid grid-cols-[64px_repeat(7,minmax(140px,1fr))] border-b bg-white z-10 hidden md:grid">
+                  <div className="border-r"></div>
                   {weekDays.map((day, index) => {
                     const today = isToday(day)
                     const dayName = ["日", "月", "火", "水", "木", "金", "土"][day.getDay()]
@@ -466,15 +466,15 @@ export default function AdminCalendarPage() {
                 </div>
 
                 {/* ヘッダー: 日付（モバイル） */}
-                <div className="grid grid-cols-[40px_repeat(7,1fr)] border-b sticky top-0 bg-white z-10 md:hidden overflow-x-auto">
-                  <div className="border-r p-2"></div>
+                <div className="grid grid-cols-[56px_repeat(7,1fr)] border-b bg-white z-10 md:hidden">
+                  <div className="border-r"></div>
                   {weekDays.map((day, index) => {
                     const today = isToday(day)
                     const dayName = ["日", "月", "火", "水", "木", "金", "土"][day.getDay()]
                     return (
                       <div
                         key={index}
-                        className={`p-2 text-center border-r min-w-[50px] ${today ? "bg-blue-50" : ""}`}
+                        className={`p-2 text-center border-r ${today ? "bg-blue-50" : ""}`}
                       >
                         <div className={`text-xs font-medium ${
                           index === 0 ? "text-red-500" : index === 6 ? "text-blue-500" : "text-gray-500"
@@ -496,10 +496,10 @@ export default function AdminCalendarPage() {
               {hours.map((hour) => (
                 <div
                   key={hour}
-                  className="grid grid-cols-[40px_repeat(7,1fr)] md:grid-cols-[60px_repeat(7,minmax(140px,1fr))] border-b h-[60px] overflow-x-auto"
+                  className="grid grid-cols-[56px_repeat(7,1fr)] md:grid-cols-[64px_repeat(7,minmax(140px,1fr))] border-b h-[60px]"
                 >
                   {/* 時間表示 */}
-                  <div className="border-r p-2 text-xs text-gray-500 text-right pr-2 md:pr-3">
+                  <div className="border-r p-2 text-sm md:text-base text-gray-500 text-right pr-2 md:pr-3 w-14 md:w-16 flex-shrink-0">
                     {hour}:00
                   </div>
 
@@ -568,9 +568,8 @@ export default function AdminCalendarPage() {
                 </div>
               ))}
             </div>
-              </>
+              </div>
             ) : (
-              /* 日表示 */
               <div className="relative">
                 {/* 日付ヘッダー */}
                 <div className="sticky top-0 bg-gradient-to-r from-blue-50 to-purple-50 p-4 border-b z-10">
@@ -601,7 +600,7 @@ export default function AdminCalendarPage() {
                         className="flex border-b min-h-[80px] md:min-h-[60px]"
                       >
                         {/* 時間表示 */}
-                        <div className="w-16 md:w-20 border-r p-2 md:p-3 text-xs md:text-sm text-gray-500 text-right pr-2 md:pr-3 flex-shrink-0">
+                        <div className="w-14 md:w-16 border-r p-2 md:p-3 text-sm md:text-base text-gray-500 text-right pr-2 md:pr-3 flex-shrink-0">
                           {hour}:00
                         </div>
 

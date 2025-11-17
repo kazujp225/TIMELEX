@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Field, Input, Textarea } from "@/src/components/ui/Field"
 import { Checkbox } from "@/components/ui/checkbox"
 import { validateEmail, formatDate, getWeekday } from "@/lib/utils"
@@ -76,6 +76,45 @@ export function BookingForm({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isReturningCustomer, setIsReturningCustomer] = useState(false)
   const [isCheckingEmail, setIsCheckingEmail] = useState(false)
+  const [questions, setQuestions] = useState<Question[]>([])
+  const [loadingQuestions, setLoadingQuestions] = useState(false)
+
+  useEffect(() => {
+    fetchQuestionnaire()
+  }, [selectedSlot.consultation_type_id])
+
+  const fetchQuestionnaire = async () => {
+    if (!selectedSlot.consultation_type_id) {
+      setQuestions([])
+      return
+    }
+
+    try {
+      setLoadingQuestions(true)
+      const response = await fetch("/api/admin/questionnaires")
+      if (response.ok) {
+        const data = await response.json()
+        const linkedQuestionnaire = data.questionnaires.find(
+          (q: any) => q.consultation_type_id === selectedSlot.consultation_type_id
+        )
+
+        if (linkedQuestionnaire && linkedQuestionnaire.id) {
+          const detailResponse = await fetch(`/api/admin/questionnaires/${linkedQuestionnaire.id}`)
+          if (detailResponse.ok) {
+            const detailData = await detailResponse.json()
+            setQuestions(detailData.questionnaire?.questions || [])
+          }
+        } else {
+          setQuestions([])
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch questionnaire:", error)
+      setQuestions([])
+    } finally {
+      setLoadingQuestions(false)
+    }
+  }
 
   const checkReturningCustomer = async (email: string) => {
     if (!validateEmail(email)) {
@@ -141,7 +180,7 @@ export function BookingForm({
     }
 
     // アンケート回答のバリデーション
-    MOCK_QUESTIONS.forEach((question) => {
+    questions.forEach((question) => {
       if (question.is_required) {
         const answer = questionnaireAnswers[question.id]
         if (!answer || (Array.isArray(answer) && answer.length === 0)) {
@@ -184,6 +223,7 @@ export function BookingForm({
           staff_name: selectedSlot.staff_name,
           consultation_type_id: selectedSlot.consultation_type_id || consultationTypes[0]?.display_order?.toString() || "1",
           consultation_type_name: consultationTypes[0]?.name || "相談",
+          questionnaire_answers: questionnaireAnswers,
         }),
       })
 
@@ -371,25 +411,27 @@ export function BookingForm({
           </div>
 
           {/* 事前アンケート */}
-          <QuestionnaireForm
-            questions={MOCK_QUESTIONS}
-            answers={questionnaireAnswers}
-            onChange={(questionId, answer) => {
-              setQuestionnaireAnswers((prev) => ({
-                ...prev,
-                [questionId]: answer,
-              }))
-              // エラーをクリア
-              if (errors[questionId]) {
-                setErrors((prev) => {
-                  const newErrors = { ...prev }
-                  delete newErrors[questionId]
-                  return newErrors
-                })
-              }
-            }}
-            errors={errors}
-          />
+          {questions.length > 0 && (
+            <QuestionnaireForm
+              questions={questions}
+              answers={questionnaireAnswers}
+              onChange={(questionId, answer) => {
+                setQuestionnaireAnswers((prev) => ({
+                  ...prev,
+                  [questionId]: answer,
+                }))
+                // エラーをクリア
+                if (errors[questionId]) {
+                  setErrors((prev) => {
+                    const newErrors = { ...prev }
+                    delete newErrors[questionId]
+                    return newErrors
+                  })
+                }
+              }}
+              errors={errors}
+            />
+          )}
 
           {/* ボタン */}
           <div className="mt-12 mb-8 space-y-4">

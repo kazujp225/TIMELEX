@@ -27,9 +27,13 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
     google_meet_url: "",
   })
   const [errors, setErrors] = useState<Record<string, string>>({})
+  const [questionnaires, setQuestionnaires] = useState<Array<{ id: string; name: string; consultation_type_id: string | null }>>([])
+  const [selectedQuestionnaireId, setSelectedQuestionnaireId] = useState<string>("")
+  const [loadingQuestionnaires, setLoadingQuestionnaires] = useState(false)
 
   useEffect(() => {
     fetchConsultationType()
+    fetchQuestionnaires()
   }, [params.id])
 
   const fetchConsultationType = async () => {
@@ -60,6 +64,27 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
       router.push("/admin/consultation-types")
     } finally {
       setLoading(false)
+    }
+  }
+
+  const fetchQuestionnaires = async () => {
+    try {
+      setLoadingQuestionnaires(true)
+      const response = await fetch("/api/admin/questionnaires")
+      if (response.ok) {
+        const data = await response.json()
+        setQuestionnaires(data.questionnaires || [])
+
+        // Find questionnaire linked to this consultation type
+        const linked = data.questionnaires.find((q: any) => q.consultation_type_id === params.id)
+        if (linked) {
+          setSelectedQuestionnaireId(linked.id)
+        }
+      }
+    } catch (error) {
+      console.error("Failed to fetch questionnaires:", error)
+    } finally {
+      setLoadingQuestionnaires(false)
     }
   }
 
@@ -112,18 +137,39 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
     try {
       setSaving(true)
 
+      // Update consultation type
       const response = await fetch(`/api/admin/consultation-types/${params.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       })
 
-      if (response.ok) {
-        router.push("/admin/consultation-types")
-      } else {
+      if (!response.ok) {
         const data = await response.json()
         setErrors({ submit: data.error || "相談種別の更新に失敗しました" })
+        return
       }
+
+      // Update questionnaire association
+      if (selectedQuestionnaireId) {
+        await fetch(`/api/admin/questionnaires/${selectedQuestionnaireId}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ consultation_type_id: params.id }),
+        })
+      }
+
+      // Remove previous questionnaire association if changed
+      const previousLinked = questionnaires.find((q) => q.consultation_type_id === params.id)
+      if (previousLinked && previousLinked.id !== selectedQuestionnaireId) {
+        await fetch(`/api/admin/questionnaires/${previousLinked.id}`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ consultation_type_id: null }),
+        })
+      }
+
+      router.push("/admin/consultation-types")
     } catch (error) {
       console.error("Failed to update consultation type:", error)
       setErrors({ submit: "相談種別の更新に失敗しました" })
@@ -339,7 +385,36 @@ export default function EditConsultationTypePage({ params }: { params: { id: str
                 この商材専用の固定Google Meet URLを設定します（任意）
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                💡 Google Meetで会議室を作成し、固定URLをコピーしてください
+                Google Meetで会議室を作成し、固定URLをコピーしてください
+              </p>
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="questionnaire_id" className="text-base font-semibold">
+                アンケート選択
+              </Label>
+              <Select
+                value={selectedQuestionnaireId}
+                onValueChange={(value) => setSelectedQuestionnaireId(value)}
+              >
+                <SelectTrigger className="h-14 text-base">
+                  <SelectValue placeholder="アンケートなし" />
+                </SelectTrigger>
+                <SelectContent className="w-full max-w-[calc(100vw-2rem)] max-h-[200px] overflow-y-auto">
+                  <SelectItem value="">アンケートなし</SelectItem>
+                  {loadingQuestionnaires ? (
+                    <SelectItem value="loading" disabled>読み込み中...</SelectItem>
+                  ) : (
+                    questionnaires.map((q) => (
+                      <SelectItem key={q.id} value={q.id}>
+                        {q.name}
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+              <p className="text-sm text-muted-foreground mt-2">
+                この商材に紐づけるアンケートを選択します（任意）
               </p>
             </div>
 

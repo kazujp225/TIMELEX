@@ -86,7 +86,7 @@ export default function GoogleAuthPage() {
               </p>
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
                 <p className="text-sm text-yellow-900">
-                  <strong>⚠️ 注意</strong><br />
+                  <strong>注意</strong><br />
                   この操作は初回のみ必要です。取得したリフレッシュトークンを<code className="bg-yellow-100 px-1 py-0.5 rounded">.env.local</code>に保存してください。
                 </p>
               </div>
@@ -108,7 +108,7 @@ export default function GoogleAuthPage() {
           {status === "success" && (
             <div className="space-y-4">
               <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <p className="text-base font-semibold text-green-900">✅ {message}</p>
+                <p className="text-base font-semibold text-green-900">{message}</p>
               </div>
 
               <div className="space-y-2">
@@ -145,7 +145,7 @@ GOOGLE_REFRESH_TOKEN=ここにコピーしたトークンを貼り付け
           {status === "error" && (
             <div className="space-y-4">
               <div className="bg-red-50 border border-red-200 rounded-lg p-4">
-                <p className="text-base font-semibold text-red-900">❌ {message}</p>
+                <p className="text-base font-semibold text-red-900">{message}</p>
               </div>
               <Button
                 onClick={handleStartAuth}

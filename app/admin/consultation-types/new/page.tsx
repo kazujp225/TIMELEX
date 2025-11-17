@@ -263,7 +263,7 @@ export default function NewConsultationTypePage() {
                 この商材専用の固定Google Meet URLを設定します（任意）
               </p>
               <p className="text-xs text-muted-foreground mt-1">
-                💡 Google Meetで会議室を作成し、固定URLをコピーしてください
+                Google Meetで会議室を作成し、固定URLをコピーしてください
               </p>
             </div>
 

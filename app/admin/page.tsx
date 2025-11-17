@@ -176,7 +176,7 @@ export default function AdminDashboard() {
       <div>
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-4">システム概要</h2>
         <div className="grid gap-6 grid-cols-1 md:grid-cols-3">
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-xs text-gray-500 mb-1">総予約数</div>
             <div className="text-4xl font-bold text-gray-900">
               {stats?.allTime.totalBookings || 0}
@@ -184,7 +184,7 @@ export default function AdminDashboard() {
             <div className="text-sm text-gray-500 mt-1">全期間</div>
           </div>
 
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-xs text-gray-500 mb-1">相談種別</div>
             <div className="text-4xl font-bold text-gray-900">
               {stats?.allTime.consultationTypes || 0}
@@ -192,7 +192,7 @@ export default function AdminDashboard() {
             <div className="text-sm text-gray-500 mt-1">種類</div>
           </div>
 
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-xs text-gray-500 mb-1">メール送信</div>
             <div className="text-4xl font-bold text-gray-900">
               {stats?.emails.totalSent || 0}
@@ -212,17 +212,17 @@ export default function AdminDashboard() {
           {formatDate(new Date(), "YYYY/MM/DD")}
         </div>
         <div className="grid gap-6 grid-cols-3">
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-gray-900">{stats?.today.total || 0}</div>
             <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-green-600">
               {stats?.today.confirmed || 0}
             </div>
             <div className="text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-red-600">
               {stats?.today.cancelled || 0}
             </div>
@@ -236,17 +236,17 @@ export default function AdminDashboard() {
         <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wider mb-1">今週の予約</h2>
         <div className="text-sm text-gray-500 mb-4">過去7日間の統計</div>
         <div className="grid gap-6 grid-cols-3">
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-gray-900">{stats?.week.total || 0}</div>
             <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-green-600">
               {stats?.week.confirmed || 0}
             </div>
             <div className="text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-red-600">
               {stats?.week.cancelled || 0}
             </div>
@@ -262,17 +262,17 @@ export default function AdminDashboard() {
           {formatDate(new Date(), "YYYY年MM月")}
         </div>
         <div className="grid gap-6 grid-cols-3">
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-gray-900">{stats?.month.total || 0}</div>
             <div className="text-sm text-gray-500 mt-1">総予約数</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-green-600">
               {stats?.month.confirmed || 0}
             </div>
             <div className="text-sm text-gray-500 mt-1">確定</div>
           </div>
-          <div className="py-4 border-b border-gray-200">
+          <div className="p-6 border border-gray-200 rounded-lg bg-white shadow-sm">
             <div className="text-3xl font-bold text-red-600">
               {stats?.month.cancelled || 0}
             </div>
@@ -287,7 +287,7 @@ export default function AdminDashboard() {
         <div className="grid gap-6 md:grid-cols-3">
           <a
             href="/admin/booking-urls"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">予約URL</h3>
             <p className="text-sm text-gray-600">
@@ -296,7 +296,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/calendar"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">予約カレンダー</h3>
             <p className="text-sm text-gray-600">
@@ -305,7 +305,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/reports"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">レポート</h3>
             <p className="text-sm text-gray-600">
@@ -314,7 +314,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/emails"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">送信メール</h3>
             <p className="text-sm text-gray-600">
@@ -323,7 +323,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/consultation-types"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">相談種別管理</h3>
             <p className="text-sm text-gray-600">
@@ -332,7 +332,7 @@ export default function AdminDashboard() {
           </a>
           <a
             href="/admin/settings"
-            className="group py-4 border-b border-gray-200 hover:border-gray-900 transition-colors"
+            className="group p-6 border border-gray-200 rounded-lg bg-white shadow-sm hover:border-gray-400 hover:shadow-md transition-all"
           >
             <h3 className="font-semibold text-lg text-gray-900 mb-1">システム設定</h3>
             <p className="text-sm text-gray-600">

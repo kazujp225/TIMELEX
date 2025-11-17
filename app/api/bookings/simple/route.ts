@@ -115,6 +115,27 @@ export async function POST(request: NextRequest) {
 
     console.log(`📝 Booking created: ${booking.id}`)
 
+    // アンケート回答を保存
+    if (body.questionnaire_answers && Object.keys(body.questionnaire_answers).length > 0) {
+      const answerInserts = Object.entries(body.questionnaire_answers).map(([questionId, answer]) => ({
+        booking_id: booking.id,
+        question_id: questionId,
+        answer_text: typeof answer === "string" ? answer : null,
+        answer_json: Array.isArray(answer) ? answer : null,
+      }))
+
+      const { error: answersError } = await supabase
+        .from("booking_answers")
+        .insert(answerInserts)
+
+      if (answersError) {
+        console.error("Failed to save questionnaire answers:", answersError)
+        // アンケート保存失敗でもエラーは返さない（予約は成功）
+      } else {
+        console.log(`📋 Questionnaire answers saved: ${answerInserts.length} answers`)
+      }
+    }
+
     // 商材名を自動取得
     const consultationTypeName = getConsultationTypeName(body.consultation_type_id)
 

@@ -37,7 +37,7 @@ export default function BookingPage() {
 
     // デバッグログ（開発時のみ）
     if (process.env.NODE_ENV === "development") {
-      console.log("📊 Tracking data captured:", tracking)
+      console.log("Tracking data captured:", tracking)
     }
 
     // 相談種別IDがない場合はエラーページへ
