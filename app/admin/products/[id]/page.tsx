@@ -49,23 +49,38 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
   const fetchProduct = async () => {
     try {
-      const response = await fetch(`/api/admin/products/${params.id}`)
+      // 商材情報を取得
+      const response = await fetch(`/api/admin/consultation-types/${params.id}`)
       if (response.ok) {
         const data = await response.json()
-        const product: Product = data.product
+        const consultationType = data.consultationType
         setFormData({
-          name: product.name,
-          description: product.description || "",
-          duration: product.duration,
-          color: product.color,
-          is_active: product.is_active,
+          name: consultationType.name,
+          description: consultationType.description || "",
+          duration: consultationType.duration_minutes || 30,
+          color: consultationType.color || "#6EC5FF",
+          is_active: consultationType.is_active,
         })
-        if (product.questions) {
-          setQuestions(product.questions.map(q => ({
-            ...q,
+      }
+
+      // 質問を取得
+      const questionsResponse = await fetch(`/api/admin/consultation-types/${params.id}/questions`)
+      if (questionsResponse.ok) {
+        const questionsData = await questionsResponse.json()
+        console.log("Fetched questions:", questionsData) // デバッグ用
+        if (questionsData.questions && questionsData.questions.length > 0) {
+          setQuestions(questionsData.questions.map((q: any) => ({
+            id: q.id,
+            question_text: q.question_text,
+            question_type: q.question_type,
             options: q.options || [],
+            is_required: q.is_required,
+            order_index: q.order_index,
           })))
         }
+      } else {
+        const errorData = await questionsResponse.json()
+        console.error("Failed to fetch questions:", errorData)
       }
     } catch (error) {
       console.error("Failed to fetch product:", error)
@@ -164,10 +179,17 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
       setSaving(true)
 
       // 商材を更新
-      const productResponse = await fetch(`/api/admin/products/${params.id}`, {
+      const updateData = {
+        name: formData.name,
+        description: formData.description,
+        duration_minutes: formData.duration,
+        is_active: formData.is_active,
+      }
+
+      const productResponse = await fetch(`/api/admin/consultation-types/${params.id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(updateData),
       })
 
       if (!productResponse.ok) {
@@ -176,23 +198,33 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
         return
       }
 
-      // 質問を更新
-      const questionsToSave = questions.map((q, index) => ({
-        question_text: q.question_text,
-        question_type: q.question_type,
-        options: ["radio", "checkbox", "select"].includes(q.question_type) ? q.options : [],
-        is_required: q.is_required,
-        order_index: index,
-      }))
+      // 既存の質問を削除してから新しい質問を追加
+      // TODO: より効率的な更新方法を実装
 
-      const questionsResponse = await fetch(`/api/admin/products/${params.id}/questions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ questions: questionsToSave }),
-      })
+      // 質問を保存
+      if (questions.length > 0) {
+        const questionsToSave = questions.map((q, index) => ({
+          question_text: q.question_text,
+          question_type: q.question_type,
+          options: ["radio", "checkbox", "select"].includes(q.question_type) ? q.options : [],
+          is_required: q.is_required,
+          order_index: index,
+        }))
 
-      if (!questionsResponse.ok) {
-        console.error("Failed to update questions")
+        console.log("Saving questions:", questionsToSave) // デバッグ用
+
+        const questionsResponse = await fetch(`/api/admin/consultation-types/${params.id}/questions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ questions: questionsToSave }),
+        })
+
+        if (!questionsResponse.ok) {
+          const errorData = await questionsResponse.json()
+          console.error("Failed to update questions:", errorData)
+          setErrors({ submit: `質問の更新に失敗しました: ${errorData.error || errorData.message}` })
+          return
+        }
       }
 
       router.push("/admin/products")
@@ -261,7 +293,7 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
                   id="duration"
                   type="number"
                   value={formData.duration}
-                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) })}
+                  onChange={(e) => setFormData({ ...formData, duration: parseInt(e.target.value) || 30 })}
                   min="15"
                   max="480"
                   className={`h-14 text-base ${errors.duration ? "border-destructive" : ""}`}

@@ -92,27 +92,35 @@ export function BookingForm({
     try {
       setLoadingQuestions(true)
       // 商材の質問を取得
-      const response = await fetch(`/api/admin/products/${selectedSlot.consultation_type_id}`)
+      console.log("Fetching questions for consultation_type_id:", selectedSlot.consultation_type_id) // デバッグ
+      const response = await fetch(`/api/admin/consultation-types/${selectedSlot.consultation_type_id}/questions`)
+      console.log("Questions API response status:", response.status) // デバッグ
       if (response.ok) {
         const data = await response.json()
-        if (data.product?.questions) {
+        console.log("Questions API response data:", data) // デバッグ
+        if (data.questions && data.questions.length > 0) {
           // product_questions形式からQuestion形式に変換
-          const convertedQuestions = data.product.questions.map((q: any, index: number) => ({
+          const convertedQuestions = data.questions.map((q: any) => ({
             id: q.id,
-            questionnaire_id: data.product.id,
+            questionnaire_id: q.consultation_type_id,
             question_text: q.question_text,
             question_type: q.question_type as QuestionType,
             options: q.options || undefined,
             is_required: q.is_required,
             display_order: q.order_index,
+            placeholder: q.placeholder,
+            help_text: q.help_text,
             created_at: new Date(q.created_at),
             updated_at: new Date(q.updated_at),
           }))
+          console.log("Converted questions:", convertedQuestions) // デバッグ
           setQuestions(convertedQuestions)
         } else {
+          console.log("No questions found") // デバッグ
           setQuestions([])
         }
       } else {
+        console.error("Failed to fetch questions, status:", response.status) // デバッグ
         setQuestions([])
       }
     } catch (error) {

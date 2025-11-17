@@ -42,9 +42,23 @@ export async function POST(
       )
     }
 
+    // 既存の質問を削除
+    console.log("Deleting existing questions for product_id:", params.id) // デバッグ用
+    const { error: deleteError } = await supabaseAdmin
+      .from("product_questions")
+      .delete()
+      .eq("product_id", params.id)
+
+    if (deleteError) {
+      console.error("Failed to delete existing questions:", deleteError)
+      // 削除失敗してもエラーにはしない（質問が存在しない場合もある）
+    } else {
+      console.log("Successfully deleted existing questions") // デバッグ用
+    }
+
     // 質問を一括作成
     const questionsToInsert = validated.questions.map((q) => ({
-      consultation_type_id: params.id,
+      product_id: params.id,
       question_text: q.question_text,
       question_type: q.question_type,
       options: q.options,
@@ -52,13 +66,25 @@ export async function POST(
       order_index: q.order_index,
     }))
 
+    console.log("Inserting questions:", questionsToInsert) // デバッグ用
+
     const { data: createdQuestions, error: insertError } = await supabaseAdmin
       .from("product_questions")
       .insert(questionsToInsert)
       .select()
 
     if (insertError) {
-      throw insertError
+      console.error("Insert error details:", insertError)
+      return NextResponse.json(
+        {
+          error: "Failed to insert questions",
+          message: insertError.message,
+          details: insertError.details,
+          hint: insertError.hint,
+          code: insertError.code,
+        },
+        { status: 500 }
+      )
     }
 
     return NextResponse.json({ questions: createdQuestions }, { status: 201 })
@@ -94,7 +120,7 @@ export async function GET(
     const { data: questions, error } = await supabaseAdmin
       .from("product_questions")
       .select("*")
-      .eq("consultation_type_id", params.id)
+      .eq("product_id", params.id)
       .order("order_index", { ascending: true })
 
     if (error) {

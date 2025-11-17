@@ -26,14 +26,7 @@ export async function POST(request: NextRequest) {
     const endTime = new Date(body.end_time)
     const staffId = body.staff_id
 
-    // 相談種別から商材IDを取得（文字列IDをUUIDに変換するためのマッピング）
-    const consultationType = getConsultationType(body.consultation_type_id)
-    if (!consultationType) {
-      return NextResponse.json(
-        { error: "無効な相談種別です" },
-        { status: 400 }
-      )
-    }
+    // consultation_type_idの検証は後で行う（データベースから取得時に確認）
 
     // スタッフIDを取得（スタッフが指定されていない場合は最初のスタッフを取得）
     let finalStaffId = staffId
@@ -67,19 +60,17 @@ export async function POST(request: NextRequest) {
     const cancelToken = crypto.randomBytes(32).toString("hex")
 
     // 相談種別IDを取得（consultation_typesテーブルから）
-    // display_orderで対応する商材を取得（商材1=display_order 1, 商材2=display_order 2, ...）
-    const displayOrder = parseInt(body.consultation_type_id, 10)
     const { data: consultationTypeData, error: typeError } = await supabase
       .from("consultation_types")
       .select("id, name")
-      .eq("display_order", displayOrder)
+      .eq("id", body.consultation_type_id)
       .single()
 
     if (typeError || !consultationTypeData) {
       console.error("Failed to find consultation type:", typeError)
       return NextResponse.json(
-        { error: "相談種別が見つかりません", details: typeError?.message },
-        { status: 500 }
+        { error: "無効な相談種別です", details: typeError?.message },
+        { status: 400 }
       )
     }
 
