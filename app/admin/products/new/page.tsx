@@ -198,7 +198,7 @@ export default function NewProductPage() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 placeholder="商材の説明"
-                className="min-h-[100px] text-base"
+                className="min-h-[100px] text-base bg-white"
               />
             </div>
 

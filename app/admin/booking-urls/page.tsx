@@ -30,22 +30,32 @@ export default function BookingUrlsPage() {
 
   const fetchBookingUrls = async () => {
     try {
+      setLoading(true)
       const { supabase } = await import("@/lib/supabase")
-      const { data, error } = await supabase
-        .from("booking_urls")
-        .select(`
-          *,
-          consultation_type:consultation_types(id, name, description)
-        `)
-        .eq("is_active", true)
-        .order("created_at", { ascending: true })
 
-      if (error) {
-        console.error("Failed to fetch booking URLs:", error)
+      // consultation_types を取得（有効なもののみ）
+      const { data: types, error: typeError } = await supabase
+        .from("consultation_types")
+        .select("id, name, description")
+        .eq("is_active", true)
+        .order("display_order", { ascending: true })
+
+      if (typeError) {
+        console.error("Failed to fetch consultation types:", typeError)
+        setLoading(false)
         return
       }
 
-      setBookingUrls(data || [])
+      // 各商材に対して予約URLを作成（consultation_type.id をそのまま使用）
+      const urlsData = (types || []).map((type) => ({
+        id: type.id,
+        consultation_type_id: type.id,
+        url_path: type.id,
+        is_active: true,
+        consultation_type: type
+      }))
+
+      setBookingUrls(urlsData)
     } catch (error) {
       console.error("Failed to fetch booking URLs:", error)
     } finally {
