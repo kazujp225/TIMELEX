@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server"
-import { supabase } from "@/lib/supabase"
 
 export async function DELETE() {
   try {
+    // 動的インポートでビルド時エラーを回避
+    const { supabase } = await import("@/lib/supabase")
+
     // 全ての予約を削除
     const { error } = await supabase
       .from("bookings")
