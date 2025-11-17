@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -53,6 +54,8 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
     }
     return pathname?.startsWith(href)
   }
+
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
   return (
     <>
@@ -110,30 +113,96 @@ export function DarkSidebar({ role, userEmail }: DarkSidebarProps) {
         </div>
       </aside>
 
-      {/* Mobile Bottom Navigation */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-gray-200">
-        <div className="flex justify-around items-center h-16 px-2">
-          {navItems.slice(0, 4).map((item) => {
-            const Icon = item.icon
-            const active = isActive(item.href)
-
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={`flex flex-col items-center justify-center gap-1 px-3 py-2 rounded-md transition-colors flex-1 ${
-                  active
-                    ? "text-gray-900"
-                    : "text-gray-500 hover:text-gray-900"
-                }`}
-              >
-                <Icon className="w-5 h-5" />
-                <span className="text-xs font-medium">{item.label.split(" ")[0]}</span>
-              </Link>
-            )
-          })}
+      {/* Mobile Sidebar */}
+      <div className="lg:hidden">
+        {/* Mobile Header */}
+        <div className="fixed top-0 left-0 right-0 z-50 bg-white border-b border-gray-200 h-16 flex items-center justify-between px-4">
+          <Link href={`/${role}`}>
+            <h1 className="text-lg font-semibold text-gray-900">
+              TIMREXPLUS
+            </h1>
+          </Link>
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-md text-gray-600 hover:bg-gray-50"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              {mobileMenuOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+              )}
+            </svg>
+          </button>
         </div>
-      </nav>
+
+        {/* Mobile Sidebar Overlay */}
+        {mobileMenuOpen && (
+          <div
+            className="fixed inset-0 bg-black bg-opacity-50 z-40"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+        )}
+
+        {/* Mobile Sidebar */}
+        <aside
+          className={`fixed top-0 left-0 bottom-0 z-50 w-64 bg-white border-r border-gray-200 transform transition-transform duration-300 ${
+            mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
+          }`}
+        >
+          {/* Logo Area */}
+          <div className="flex items-center h-16 px-6 border-b border-gray-200">
+            <Link href={`/${role}`} onClick={() => setMobileMenuOpen(false)}>
+              <h1 className="text-lg font-semibold text-gray-900">
+                TIMREXPLUS
+              </h1>
+            </Link>
+          </div>
+
+          {/* Navigation */}
+          <nav className="flex-1 overflow-y-auto py-6 px-4">
+            <div className="space-y-1">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const active = isActive(item.href)
+
+                return (
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMobileMenuOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2 rounded-md transition-colors ${
+                      active
+                        ? "bg-gray-100 text-gray-900"
+                        : "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+                    }`}
+                  >
+                    <Icon className="w-5 h-5" />
+                    <span className="text-sm font-medium">{item.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
+          </nav>
+
+          {/* User Info & Logout */}
+          <div className="border-t border-gray-200 p-4">
+            {userEmail && (
+              <div className="mb-3 px-3 py-2">
+                <p className="text-xs text-gray-500 mb-0.5">ログイン中</p>
+                <p className="text-sm text-gray-900 truncate">{userEmail}</p>
+              </div>
+            )}
+            <button
+              onClick={() => signOut({ callbackUrl: `/${role}/login` })}
+              className="flex items-center gap-3 px-3 py-2 rounded-md text-gray-600 hover:bg-gray-50 hover:text-gray-900 transition-colors w-full"
+            >
+              <LogOut className="w-5 h-5" />
+              <span className="text-sm font-medium">ログアウト</span>
+            </button>
+          </div>
+        </aside>
+      </div>
     </>
   )
 }
