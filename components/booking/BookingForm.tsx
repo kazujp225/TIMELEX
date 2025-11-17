@@ -80,10 +80,10 @@ export function BookingForm({
   const [loadingQuestions, setLoadingQuestions] = useState(false)
 
   useEffect(() => {
-    fetchQuestionnaire()
+    fetchProductQuestions()
   }, [selectedSlot.consultation_type_id])
 
-  const fetchQuestionnaire = async () => {
+  const fetchProductQuestions = async () => {
     if (!selectedSlot.consultation_type_id) {
       setQuestions([])
       return
@@ -91,25 +91,32 @@ export function BookingForm({
 
     try {
       setLoadingQuestions(true)
-      const response = await fetch("/api/admin/questionnaires")
+      // 商材の質問を取得
+      const response = await fetch(`/api/admin/products/${selectedSlot.consultation_type_id}`)
       if (response.ok) {
         const data = await response.json()
-        const linkedQuestionnaire = data.questionnaires.find(
-          (q: any) => q.consultation_type_id === selectedSlot.consultation_type_id
-        )
-
-        if (linkedQuestionnaire && linkedQuestionnaire.id) {
-          const detailResponse = await fetch(`/api/admin/questionnaires/${linkedQuestionnaire.id}`)
-          if (detailResponse.ok) {
-            const detailData = await detailResponse.json()
-            setQuestions(detailData.questionnaire?.questions || [])
-          }
+        if (data.product?.questions) {
+          // product_questions形式からQuestion形式に変換
+          const convertedQuestions = data.product.questions.map((q: any, index: number) => ({
+            id: q.id,
+            questionnaire_id: data.product.id,
+            question_text: q.question_text,
+            question_type: q.question_type as QuestionType,
+            options: q.options || undefined,
+            is_required: q.is_required,
+            display_order: q.order_index,
+            created_at: new Date(q.created_at),
+            updated_at: new Date(q.updated_at),
+          }))
+          setQuestions(convertedQuestions)
         } else {
           setQuestions([])
         }
+      } else {
+        setQuestions([])
       }
     } catch (error) {
-      console.error("Failed to fetch questionnaire:", error)
+      console.error("Failed to fetch product questions:", error)
       setQuestions([])
     } finally {
       setLoadingQuestions(false)

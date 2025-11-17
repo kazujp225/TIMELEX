@@ -115,7 +115,7 @@ export async function POST(request: NextRequest) {
 
     console.log(`📝 Booking created: ${booking.id}`)
 
-    // アンケート回答を保存
+    // 商材質問の回答を保存
     if (body.questionnaire_answers && Object.keys(body.questionnaire_answers).length > 0) {
       const answerInserts = Object.entries(body.questionnaire_answers).map(([questionId, answer]) => ({
         booking_id: booking.id,
@@ -125,14 +125,14 @@ export async function POST(request: NextRequest) {
       }))
 
       const { error: answersError } = await supabase
-        .from("booking_answers")
+        .from("product_booking_answers")
         .insert(answerInserts)
 
       if (answersError) {
-        console.error("Failed to save questionnaire answers:", answersError)
-        // アンケート保存失敗でもエラーは返さない（予約は成功）
+        console.error("Failed to save product answers:", answersError)
+        // 回答保存失敗でもエラーは返さない（予約は成功）
       } else {
-        console.log(`📋 Questionnaire answers saved: ${answerInserts.length} answers`)
+        console.log(`📋 Product answers saved: ${answerInserts.length} answers`)
       }
     }
 
