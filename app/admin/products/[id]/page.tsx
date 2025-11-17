@@ -384,17 +384,28 @@ export default function EditProductPage({ params }: { params: { id: string } }) 
 
                         <div className="space-y-2">
                           <Label className="text-base font-semibold">回答形式</Label>
-                          <select
-                            value={question.question_type}
-                            onChange={(e) => updateQuestion(index, "question_type", e.target.value)}
-                            className="w-full h-12 px-3 border border-gray-300 rounded-md text-base"
-                          >
-                            <option value="text">短文テキスト</option>
-                            <option value="textarea">長文テキスト</option>
-                            <option value="radio">ラジオボタン</option>
-                            <option value="checkbox">チェックボックス</option>
-                            <option value="select">プルダウン</option>
-                          </select>
+                          <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                            {[
+                              { value: "text", label: "短文テキスト" },
+                              { value: "textarea", label: "長文テキスト" },
+                              { value: "radio", label: "ラジオボタン" },
+                              { value: "checkbox", label: "チェックボックス" },
+                              { value: "select", label: "プルダウン" },
+                            ].map((type) => (
+                              <button
+                                key={type.value}
+                                type="button"
+                                onClick={() => updateQuestion(index, "question_type", type.value)}
+                                className={`px-4 py-3 text-sm font-medium rounded-md border-2 transition-colors ${
+                                  question.question_type === type.value
+                                    ? "border-blue-500 bg-blue-50 text-blue-700"
+                                    : "border-gray-200 bg-white text-gray-700 hover:border-gray-300 hover:bg-gray-50"
+                                }`}
+                              >
+                                {type.label}
+                              </button>
+                            ))}
+                          </div>
                         </div>
 
                         {["radio", "checkbox", "select"].includes(question.question_type) && (
